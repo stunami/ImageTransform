@@ -1,0 +1,31 @@
+<?php
+
+/*
+ * This file is part of the sfImageTransformPlugin package.
+ * (c) 2007 Stuart Lowes <stuart.lowes@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/**
+ * sfImageTransformException is thrown when an fatal error occurs while manipulating a image.
+ *
+ * @package   sfImageTransform
+  * @author   Stuart Lowes <stuart.lowes@gmail.com>
+ * @version   SVN: $Id$
+ */
+class sfImageTransformException extends sfException
+{
+  /**
+   * Class constructor.
+   *
+   * @param string  the error message
+   * @param int   the error code
+   */
+  public function __construct($message = null, $code = 0)
+  {
+    $this->setName('sfImageTransformException');
+    parent::__construct($message, $code);
+  }
+}
