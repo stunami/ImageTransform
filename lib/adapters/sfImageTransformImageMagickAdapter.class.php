@@ -30,12 +30,23 @@ class sfImageTransformImageMagickAdapter extends sfImageTransformAdapterAbstract
   */
   protected $holder;
   
+  /*
+   * Supported MIME types for the sfImageImageMagickAdapter
+   * and their associated file extensions
+   * @var array
+   */
+  protected $types = array(
+    'image/jpeg' => array('jpeg','jpg'),
+    'image/gif' => array('gif'),    
+    'image/png' => array('png')
+  );
+  
   public function __construct()
   {
     // Check that the GD extension is installed and configured
     if (!extension_loaded('imagick'))
     {
-      throw new sfImageTransformException('The image processing library ImageMagick  is not enabled. See PHP Manual for installation instructions.');
+      throw new sfImageTransformException('The image processing library ImageMagick is not enabled. See PHP Manual for installation instructions.');
     }
     
     $this->setHolder(new Imagick());    
@@ -185,7 +196,7 @@ class sfImageTransformImageMagickAdapter extends sfImageTransformAdapterAbstract
   {
     if ($this->hasHolder())
     {
-      return $this->getHolder()->getImageWidth();
+      return $this->getHolder()->getImageHeight();
     }
     return 0;
   }
@@ -244,6 +255,10 @@ class sfImageTransformImageMagickAdapter extends sfImageTransformAdapterAbstract
   public function setMimeType($mime)
   {
     $this->mime_type = $mime;
+    if ($this->hasHolder() && isset($this->types[$mime]))
+    {
+        $this->getHolder()->setImageFormat($mime);
+    }
   }
   
   public function getAdapterName()
