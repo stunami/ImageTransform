@@ -58,8 +58,7 @@ class sfImage
    */
   public function __construct($filename='', $mime='', $adapter='')
   {
-
-    $this->setAdapter($adapter);
+    $this->setAdapter($this->createAdapter($adapter));
     
     // Set the Image source if passed
     if($filename !== '')
@@ -88,31 +87,19 @@ class sfImage
   /**
    * Sets the adapter to be used, i.e. GD or ImageMagick
    *
-   * Default is GD but can be set by app_sfImageTransformPlugin_adapter
-   *
    * @access public
-   * @param string $adapter Name of the adadpter to be used
+   * @param object $adapter Instance of adapter object to be used
    */
-  public function setAdapter($adapter='')
+  public function setAdapter($adapter)
   {
-    // No adapter set so use default 
-    if($adapter == '')
+    
+    if(is_object($adapter))
     {
-      $adapter = sfConfig::get('app_sfImageTransformPlugin_default_adapter','GD');    
+      $this->adapter = $adapter;
+      return true;
     }
     
-    $adapter_class = 'sfImageTransform' . $adapter . 'Adapter';
-
-    if(class_exists($adapter_class))
-    {
-      $this->adapter = new $adapter_class;
-    } 
-    
-    // Cannot find the adapter class so throw an exception
-    else 
-    {
-        throw new sfImageTransformException(sprintf('Unsupported adapter: %s',$adapter_class));
-    }
+    return false;
   }
   
   /**
@@ -220,7 +207,7 @@ class sfImage
   public function copy()
   {
     $copy = clone $this;
-    $copy->getAdapter()->setHolder($this->getAdapter()->copy());
+    $copy->setAdapter($this->getAdapter()->copy());
 
     return $copy;
   }
@@ -260,30 +247,43 @@ class sfImage
    */
   public function __call($name, $arguments)
   {
-    $class = 'sfImage'.ucfirst($name) . $this->getAdapter()->getAdapterName();
+    $class_generic = 'sfImage'.ucfirst($name) . 'Generic';
+    $class_adapter = 'sfImage'.ucfirst($name) . $this->getAdapter()->getAdapterName();
+
+    $class = null;
     
-    // Make sure the class exists, otherwise throw an exception
-    if(class_exists($class,true))
-    {   
-      $reflectionObj = new ReflectionClass($class);
-      if(is_array($arguments) && count($arguments) > 0)
-      {
-        $transform = $reflectionObj->newInstanceArgs($arguments); 
-      } 
-      
-      else
-      {
-        $transform = $reflectionObj->newInstance();
-      }
-      
-      $transform->execute($this);
+    // Make sure a transform class exists, either generic or adapter specific, otherwise throw an exception
+    
+    // Defaults to adapter transform
+    if(class_exists($class_adapter,true))
+    {
+      $class = $class_adapter;
+    }
+    
+    // No adapter specific transform so look for a generic transform
+    elseif(class_exists($class_generic,true))
+    {
+      $class = $class_generic;
     }
 
     // Cannot find the transform class so throw an exception
     else
     {
-        throw new sfImageTransformException(sprintf('Unsupported transform: %s using %s adapter',$name, $this->getAdapter()->getAdapterName()));
+        throw new sfImageTransformException(sprintf('Unsupported transform %s. Cannot find %s adapter or generic transform class',$name, $this->getAdapter()->getAdapterName()));
     }
+  
+    $reflectionObj = new ReflectionClass($class);
+    if(is_array($arguments) && count($arguments) > 0)
+    {
+      $transform = $reflectionObj->newInstanceArgs($arguments); 
+    } 
+    
+    else
+    {
+      $transform = $reflectionObj->newInstance();
+    }
+    
+    $transform->execute($this);
 
     // Tidy up
     unset($transform);
@@ -370,5 +370,31 @@ class sfImage
   public function getQuality()
   {
     return $this->getAdapter()->getQuality();
+  }
+  
+  protected function createAdapter($name)
+  {
+  
+    // No adapter set so use default 
+    if($name == '')
+    {
+      $name = sfConfig::get('app_sfImageTransformPlugin_default_adapter','GD');    
+    }
+        
+    $adapter_class = 'sfImageTransform' . $name . 'Adapter';
+
+    if(class_exists($adapter_class))
+    {
+      $adapter = new $adapter_class;
+    } 
+    
+    // Cannot find the adapter class so throw an exception
+    else 
+    {
+        throw new sfImageTransformException(sprintf('Unsupported adapter: %s',$adapter_class));
+    }
+    
+    return $adapter;
+  
   }
 }

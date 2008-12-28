@@ -19,43 +19,58 @@
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @version SVN: $Id$
  */
-class sfImageOverlayGD extends sfImageTransformAbstract
+class sfImageOverlayImageMagick extends sfImageTransformAbstract
 {
-
+  /**
+   * The composite operator
+   */
+  protected $compose = IMagick::COMPOSITE_DEFAULT;
+  
   /**
    * The overlay sfImage.
-  */
+   */
   protected $overlay;
 
   /**
-   * The left coordinate for the overlay position.
-  */
-  protected $left = 0;
+   * The opacity applied to the overlay.
+   */
+  protected $opacity = null;
 
   /**
+   * The left coordinate for the overlay position.
+   */
+  protected $left = 0;
+  
+  /**
    * The top coordinate for the overlay position.
-  */
+   */
   protected $top = 0;
 
   /**
-   * The named position for the overlay
+   * The named position of for the overlay
    */
   protected $position = null;
+
   /**
    * Construct an sfImageOverlay object.
    *
-   * @param array mixed
+   * @param sfImage $overlay  - the image for the overlay
+   * @param mixed   $position - the named position as string, or the array of exact coordinates
+   * @param float   $opacity  - the opacity for the overlay image
+   * @param integer $compose  - the composite operator
+   * 
+   * @return void
    */
-  public function __construct(sfImage $overlay, $position=array(0,0)) {
-
+  public function __construct(sfImage $overlay, $position=array(0, 0), $opacity=null, $compose=IMagick::COMPOSITE_DEFAULT)
+  {
     $this->setOverlay($overlay);
-    if (is_array($position) && count($position))
+    $this->setOpacity($opacity);
+    $this->setCompose($compose);
+    
+    if (is_array($position) && count($position)==2)
     {
       $this->setLeft($position[0]);
-      if (isset($position[1]))
-      {
-        $this->setTop($position[1]);
-      }
+      $this->setTop($position[1]);
     }
     else
     {
@@ -73,7 +88,6 @@ class sfImageOverlayGD extends sfImageTransformAbstract
     $this->overlay = $overlay;
 
   }
-
   /**
    * returns the overlay sfImage object.
    *
@@ -123,9 +137,9 @@ class sfImageOverlayGD extends sfImageTransformAbstract
   {
     return $this->top;
   }
-
+  
   /**
-   * set the named position
+   * Set named position
    * 
    * @param string $position named position. Possible named positions:
    *                - middle - overlay in the middle
@@ -138,11 +152,11 @@ class sfImageOverlayGD extends sfImageTransformAbstract
    *                - south west combination of south and west
    *                - south east combination of south and east
    * 
-   * @return void 
+   * @return void                       
    */
   public function setPosition($position)
   {
-    $this->position = $position;
+    $this->position = $position;    
   }
   
   /**
@@ -156,28 +170,29 @@ class sfImageOverlayGD extends sfImageTransformAbstract
   }
   
   /**
-   * Computes the offset of the overlayed image and sets
-   * the top and left coordinates based on the named position
+   * Computes the offset of the overlayed image 
+   * and sets the top and left coordinates based on the named position
    * 
    * @param sfImage $image canvas image
    * 
    * @return void
    */
-  public function computeCoordinates(sfImage $image)
+  protected function computeCoordinates(sfImage $image)
   {
     $position = $this->getPosition();
-    
+
+    // no named position nothing to compute
     if (is_null($position)) return;
     
     $resource   = $image->getAdapter()->getHolder();
-    $resource_x = ImageSX($resource);
-    $resource_y = ImageSY($resource);
+    $resource_x = $resource->getImageWidth();
+    $resource_y = $resource->getImageHeight();
     
-    $overlay    = $this->getOverlay()->getAdapter()->getHolder();
-    $overlay_x  = ImageSX($overlay);
-    $overlay_y  = ImageSY($overlay);
+    $overlay    = $this->getOverlay()->getAdapter()->getHolder(); 
+    $overlay_x  = $overlay->getImageWidth();
+    $overlay_y  = $overlay->getImageHeight();
     
-    switch (strtolower($position))
+    switch ($position)
     {
       case 'north':
         $this->setLeft(round(($resource_x - $overlay_x)/2));
@@ -211,18 +226,74 @@ class sfImageOverlayGD extends sfImageTransformAbstract
         $this->setLeft(0);
         $this->setTop($resource_y - $overlay_y);
         break;
-     
+      case 'center':
       default:
         $this->setLeft(round(($resource_x - $overlay_x)/2));
         $this->setTop(round(($resource_y - $overlay_y)/2));  
         break;
     }
   }
+  
+  /**
+   * sets the opacity used for the overlay.
+   *
+   * @param integer
+   */
+  function setOpacity($opacity)
+  {
+    if(is_numeric($opacity) && $opacity > 1)
+    {
+      $this->opacity = $opacity/100;
+    }
+    elseif(is_float($opacity))
+    {
+      $this->opacity = abs($opacity);
+    }
+    else
+    {
+      $this->opacity = $opacity;
+    }
+  }
+
+  /**
+   * returns the opacity used for the overlay.
+   *
+   * @return mixed
+   */
+  function getOpacity()
+  {
+    return $this->opacity;
+  }
+  
+  /**
+   * Sets the composite operator
+   * 
+   * @param integer valid IMagick composite opeator
+   * 
+   * @return void
+   * @see http://php.net/manual/en/imagick.constants.php#imagick.constants.compositeop
+   */
+  public function setCompose($compose=IMagick::COMPOSITE_DEFAULT)
+  {
+      $this->compose = $compose;
+  }
+  
+  /**
+   * return the composite opeator
+   * 
+   * @return integer composite operator
+   */
+  public function getCompose()
+  {
+      return $this->compose;
+  }
+
 
   /**
    * Apply the transform to the sfImage object.
    *
-   * @param integer
+   * @param sfImage
+   * 
    * @return sfImage
    */
   protected function transform(sfImage $image)
@@ -231,34 +302,17 @@ class sfImageOverlayGD extends sfImageTransformAbstract
     $this->computeCoordinates($image);
     
     $resource = $image->getAdapter()->getHolder();
-
-    // create true color canvas image:
-    $canvas_w = $image->getWidth();
-    $canvas_h = $image->getHeight();
+    $overlay = $this->getOverlay();
     
-    $canvas_img = imagecreatetruecolor($canvas_w, $canvas_h);
-    imagealphablending($canvas_img, true);
-    imagecopy($canvas_img, $resource, 0,0,0,0, $canvas_w, $canvas_h);
-    
-    // Check we have a valid image resource
-    if(false === $this->overlay->getAdapter()->getHolder())
+    if (!is_null($this->getOpacity()))
     {
-      throw new sfImageTransformException(sprintf('Cannot perform transform: %s',get_class($this)));
+      $overlay->getAdapter()->getHolder()->setImageOpacity($this->getOpacity());
     }
 
-    // create true color overlay image:
-    $overlay_w   = $this->overlay->getWidth();
-    $overlay_h   = $this->overlay->getHeight();
-    $overlay_img = $this->overlay->getAdapter()->getHolder(); 
+    $resource->compositeImage($overlay->getAdapter()->getHolder(), $this->getCompose(), $this->getLeft(), $this->getTop());
     
-
-    // copy and merge the overlay image and the canvas image:
-    imagecopy($canvas_img, $overlay_img, $this->left,$this->top,0,0, $overlay_w, $overlay_h);
-
-    // tidy up
-    imagedestroy($resource);
-
-    $image->getAdapter()->setHolder($canvas_img);
+    $image->getAdapter()->setHolder($resource);
+    
     return $image;
 
   }

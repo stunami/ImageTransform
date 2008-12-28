@@ -71,7 +71,7 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
     // Check that the GD extension is installed and configured
     if (!extension_loaded('gd'))
     {
-      throw new sfImageTransformException('The image processing library GD  is not enabled. See PHP Manual for installation instructions.');
+      throw new sfImageTransformException('The image processing library GD is not enabled. See PHP Manual for installation instructions.');
     }
   }
   
@@ -188,7 +188,7 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
   }
 
   /**
-   * Returns a copy of the sfImage object
+   * Returns a copy of the adapter object
    *
    * @return sfImage
    */    

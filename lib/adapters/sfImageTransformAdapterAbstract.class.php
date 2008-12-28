@@ -29,13 +29,6 @@ abstract class  sfImageTransformAdapterAbstract
   protected $filename = 'Untitled.png';
 
   /**
-   * Path to image file.
-   * @access protected
-   * @var string
-  */
-  protected $path = './';
-
-  /**
    * Default ouput mime type.
    * @access protected
    * @var string

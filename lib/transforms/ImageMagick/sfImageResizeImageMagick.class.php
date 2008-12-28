@@ -112,6 +112,5 @@ class sfImageResizeImageMagick extends sfImageTransformAbstract
     $resource->resizeImage($this->width, $this->height, Imagick::FILTER_LANCZOS, 1);
 
     return $image;
-
   }
 }

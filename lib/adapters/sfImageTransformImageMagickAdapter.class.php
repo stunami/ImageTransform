@@ -163,7 +163,7 @@ class sfImageTransformImageMagickAdapter extends sfImageTransformAdapterAbstract
   }
 
   /**
-   * Returns a copy of the sfImage
+   * Returns a copy of the adapter object
    *
    * @return sfImage
    */    

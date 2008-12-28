@@ -45,13 +45,13 @@ class sfImageOpacityGD extends sfImageTransformAbstract
     {
       if ($opacity < 1)
       {
-        $this->opacity  = $opacity*100;
+        $this->opacity  = $opacity * 100;
       }
       else
       {
         $this->opacity = $opacity;
       }
-      $this->opacity   = 100-$opacity; z
+      $this->opacity   = 100 - $opacity;
     }
   }
   

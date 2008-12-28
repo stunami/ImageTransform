@@ -132,11 +132,11 @@ GD
   * line
   * mirror
   * negate, noise
-  * overlay
+  * opacity, overlay
   * pixelBlur, pixelize
   * rectangle, resize, rotate
   * scale, scatter, selectiveBlur, sketchy, smooth
-  * text, transparency
+  * text, transparency, thumbnail
 
 
 ImageMagick
@@ -147,4 +147,5 @@ ImageMagick
   * prettyThumbnail
   * rectangle, resize, rotate
   * scale
-  * text, trim
+  * text, thumbnail, trim
+  * opacity
