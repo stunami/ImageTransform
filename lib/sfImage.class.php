@@ -49,6 +49,18 @@ class sfImage
   */
   protected $adapter;
   
+  /*
+   * MIME type map and their associated file extension(s)
+   * @var array
+   */
+  protected $types = array(
+    'image/gif' => array('gif'),
+    'image/jpeg' => array('jpg', 'jpeg'),
+    'image/png' => array('png'),
+    'image/svg' => array('svg'),    
+    'image/tiff' => array('tiff')
+  );
+  
   /**
    * Construct an sfImage object.
    * @access public
@@ -131,15 +143,19 @@ class sfImage
    *
    * return boolean
    */  
-  public function load($filename, $mime)
+  public function load($filename, $mime='')
   {
-  
     if(file_exists($filename))
     {
+    	
+      if('' == $mime)
+      {
+        $mime = $this->autoDetectMIMETypeFromFile($filename);
+      }
       
       if('' == $mime)
       {
-        throw new sfImageTransformException(sprintf('You must specify the MIME type for %s',$filename));
+        throw new sfImageTransformException(sprintf('You must either specify the MIME type for file %s or enable mime detection',$filename));
       }
 
       $this->getAdapter()->load($filename,$mime);
@@ -185,15 +201,23 @@ class sfImage
    * @param string Filename
    * @param string MIME type
    */   
-  public function saveAs($filename, $mime)
+  public function saveAs($filename, $mime='')
   {
     if('' === $mime)
     {
-      return false;
+      $mime = $this->autoDetectMIMETypeFromFilename($filename);
     }
-    $this->getAdapter()->saveAs($filename, $mime);
+        
+    if(!$mime)
+    {
+      throw new sfImageTransformException(sprintf('Unsupported file %s',$filename));
+    }
     
-    return true;
+    $copy = $this->copy();
+    
+    $copy->getAdapter()->saveAs($filename, $mime);
+    
+    return $copy;
   }
   
   /**
@@ -372,6 +396,77 @@ class sfImage
     return $this->getAdapter()->getQuality();
   }
   
+  /**
+   * Returns mime type from the specified file type. Returns false for unsupported types
+   * @access protected
+   * @return string or boolean
+   */
+  protected function autoDetectMIMETypeFromFilename($filename)
+  {
+    $pathinfo = pathinfo($filename);
+    
+    foreach($this->types as $mime => $extension)
+    {
+      if(in_array($pathinfo['extension'],$extension))
+      {
+        return $mime;
+      }
+    
+    }
+      
+    return false;
+  }
+
+  /**
+   * Returns mime type from the actual file using a detection library
+   * @access protected
+   * @return string or boolean
+   */
+  protected function autoDetectMIMETypeFromFile($filename)
+  {
+    $settings = sfConfig::get('app_sfImageTransformPlugin_mime_type','GD');    
+     
+    $support_libraries = array('fileinfo', 'mime_type');
+    
+    if(false === $settings['auto_detect'])
+    {
+      return false;
+    }
+    
+    if(in_array(strtolower($settings['library']), $support_libraries) && '' !== $filename)
+    {
+
+      if('fileinfo' === strtolower($settings["library"]))
+      {
+          
+        if(function_exists('finfo_file'))
+        {
+          $finfo = finfo_open(FILEINFO_MIME);
+          
+          return finfo_file($finfo, $filename);
+        }
+      }
+      
+      if('mime_type' === strtolower($settings["library"]))
+      {
+        // Supressing warning as PEAR is not strict compliant
+        @require_once 'MIME/Type.php';
+        if(method_exists('MIME_Type', 'autoDetect'))
+        {
+          return @MIME_Type::autoDetect($filename);
+        }
+      }
+    }
+
+    return false;
+   
+  }
+  
+  /**
+   * Returns a adapter class of the specified type
+   * @access protected
+   * @return string or boolean
+   */
   protected function createAdapter($name)
   {
   

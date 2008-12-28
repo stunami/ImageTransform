@@ -181,8 +181,13 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
   {
     if ('' !== $mime)
     {
-      $this->setMimeType($mime);
+      if(!$this->setMimeType($mime))
+      {
+        throw new sfImageTransformException(sprintf('Cannot convert as %s is an unsupported type' ,$mime));
+      }
     }
+
+    $this->setFilename($filename);
 
     return $this->__output(true, $filename);
   }
@@ -282,7 +287,6 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
     return false;
   }
   
-  
  /**
    * Returns image MIME type
    * @return boolean
@@ -301,6 +305,23 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
       return true;
     }
     
+    return false;
+  }
+
+  public function getMIMETypeFromFilename($filename)
+  {
+  
+    $path = pathinfo($filename);
+  
+    foreach($this->types as $type => $extensions)
+    {
+      if(in_array($path['extension'], $extensions))
+      {
+        return $type;
+      }
+      
+    }
+  
     return false;
   }
   
@@ -334,7 +355,6 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
         
     return $color;
   }
- 
   
  /**
    * Returns image in current format and optionally writes image to disk

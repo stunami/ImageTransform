@@ -156,7 +156,7 @@ class sfImageTransformImageMagickAdapter extends sfImageTransformAdapterAbstract
     {
       $this->setMimeType($mime);
     }
-    
+
     $this->getHolder()->setImageCompressionQuality($this->getQuality());
 
     return $this->getHolder()->writeImage($filename);
@@ -257,7 +257,7 @@ class sfImageTransformImageMagickAdapter extends sfImageTransformAdapterAbstract
     $this->mime_type = $mime;
     if ($this->hasHolder() && isset($this->types[$mime]))
     {
-        $this->getHolder()->setImageFormat($mime);
+        $this->getHolder()->setImageFormat($this->types[$mime][0]);
     }
   }
   
