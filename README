@@ -1,5 +1,5 @@
-sfImageTransformPlugin plugin
-=============================
+sfImageTransformPlugin
+======================
 
 The sfImageTransformPlugin allows the easily manipulation of images.  The plugin requires either either GD or ImageMagick graphics libraries to be installed on the server.
 
@@ -29,6 +29,8 @@ Clear the cache to enable the autoloading to find the new classes:
 Usage
 -----
 
+Note that if you enable MIME detection passing the type are required in the method calls.
+
 Example 1 Chaining
 
 The simplest way to use sfImageTransform is to use method chaining. In an action:
@@ -42,7 +44,6 @@ The simplest way to use sfImageTransform is to use method chaining. In an action
     $response->setContent($img->resize(1000,null)->overlay(sfImage('logo.png'))); 
 
     return sfView::NONE;
-
 
 Example 2 Standalone
 
@@ -66,13 +67,18 @@ app.yml
         default_adapter: GD # GD or ImageMagick
         default_image: { mime_type: image/png, filename: Untitled.png }
         font_dir: /usr/share/fonts/truetype/msttcorefonts
+        mime_type:
+          auto_detect: false
+          library: Fileinfo # Fileinfo (PECL), MIME_Type (PEAR)
         
 Writing your own transforms
 ---------------------------
 
 sfImageTransformPlugin is designed to be easily extended. To make a new transform you simple create a class that extends the abstract class (sfImageTransformAbstract) and implements the transform method.
 
-Transforms are written specifically for the image library you want to use. The naming convention for a transform is important. The class files should be named sfImage#transform name##image library#.class.php and class names should be sfImage#transform name##image library#
+Transforms are written specifically for the image library you want to use or generically if they don't use image library specific calls (see the thumbnail transform).
+
+The naming convention for a transform is important. For generic transforms the class should be named sfImage#transform name#Generic and for graphic library specific transforms, sfImage#transform name##image library#.class.php and class names should be sfImage#transform name##image library#
 
 Let's create a GD transform called "Example".
 
@@ -121,6 +127,10 @@ Outputting the image using an action
 Included tranforms
 -----------------
 
+Generic
+
+  * thumbnail
+
 GD
 
   * arc
@@ -136,7 +146,7 @@ GD
   * pixelBlur, pixelize
   * rectangle, resize, rotate
   * scale, scatter, selectiveBlur, sketchy, smooth
-  * text, transparency, thumbnail
+  * text, transparency
 
 
 ImageMagick
@@ -147,5 +157,40 @@ ImageMagick
   * prettyThumbnail
   * rectangle, resize, rotate
   * scale
-  * text, thumbnail, trim
+  * text, trim
   * opacity
+  
+
+MIME detection
+-----------------
+
+sfImageTransformPlugin currently supports two MIME type detection libraries, PECL's Fileinfo and PEAR's MIME_Type. These can be installed via PECL and PEAR respectively.
+
+To enable support in the plugin set auto_detect to true and library: Fileinfo # Fileinfo (PECL), MIME_Type (PEAR)
+
+app.yml
+
+...
+      sfImageTransformPlugin:
+...
+        mime_type:
+          auto_detect: true
+          library: Fileinfo # Fileinfo (PECL), MIME_Type (PEAR)
+          
+          
+With MIME detection enabled there is no need to specific the MIME types in the method calls.
+
+So with MIME detection enable and saving the jpg image to a gif
+    
+    $img = new sfImage('image1.jpg');
+
+    $response = $this->getResponse();
+
+    $response->setContentType($img->getMIMEType());    
+
+    $img->resize(150,null)->overlay(sfImage('logo.png')); 
+    
+    $img->saveAs('image1-with-logo.gif');
+
+    return sfView::NONE;
+
