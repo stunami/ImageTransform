@@ -248,8 +248,10 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
    */
   public function setHolder($resource)
   {
+
     if (is_resource($resource) && 'gd' === get_resource_type($resource))
     {
+
       $this->holder = $resource;
       return true;
     }
@@ -283,7 +285,7 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
     {
       return true; 
     }
-    
+
     return false;
   }
   
@@ -380,7 +382,7 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
    
     if (array_key_exists($mime,$this->creators))
     {  
-      
+
       switch ($mime)
       {
 
@@ -399,6 +401,7 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
           break;
 
         case 'image/gif':
+          
           if (!is_null($file))
           {
             $output = $this->creators[$mime]($this->holder,$file);
@@ -428,10 +431,62 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
     if('image/png' === $mime)
     {
 
-      return round($this->quality * (9/100));
+      return 9 - round($this->quality * (9/100));
     }
     
     return $this->quality;
+  }
+  
+  public function getTransparentFillImage($w, $h)
+  {
+
+    $resource = $this->getHolder();
+
+    $dest_resource = imagecreatetruecolor($w, $h);
+          
+    // Preserve alpha transparency
+    if (in_array($this->getMIMEType(), array('image/gif','image/png')))
+    {
+      $index = imagecolortransparent($resource);
+ 
+      // Handle transparency
+      if ($index >= 0) 
+      {
+ 
+        // Grab the current images transparent color
+        $index_color = imagecolorsforindex($resource, $index);
+ 
+        // Set the transparent color for the resized version of the image
+        $index = imagecolorallocate($dest_resource, $index_color['red'], $index_color['green'], $index_color['blue']);
+ 
+        // Fill the entire image with our transparent color
+        imagefill($dest_resource, 0, 0, $index);
+ 
+        // Set the filled background color to be transparent
+        imagecolortransparent($dest_resource, $index);
+  
+      } 
+      
+      // Always make a transparent background color for PNGs that don't have one allocated already
+      elseif ($this->getMIMEType() == 'image/png') 
+      {
+ 
+        // Disabled blending 
+        imagealphablending($dest_resource, false);
+ 
+        // Grab our alpha tranparency color
+        $color = imagecolorallocatealpha($dest_resource, 0, 0, 0, 127);
+ 
+        // Fill the entire image with our transparent color
+        imagefill($dest_resource, 0, 0, $color);
+ 
+        // Re-enable transparency blending
+        imagesavealpha($dest_resource, true);
+      }
+    }
+
+    return $dest_resource;
+  
   }
      
 }

@@ -36,7 +36,7 @@ class sfImageFlipGD extends sfImageTransformAbstract
     $x = imagesx($resource);
     $y = imagesy($resource);
 
-    $dest_resource = imagecreatetruecolor($x, $y);
+    $dest_resource = $image->getAdapter()->getTransparentFillImage($x, $y);       
     
     for ($h = 0; $h < $y; $h++)
     {

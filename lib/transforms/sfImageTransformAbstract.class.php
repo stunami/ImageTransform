@@ -32,9 +32,11 @@ abstract class sfImageTransformAbstract
   {
 
     // Check we have a valid image holder
-    if(false == $image->getAdapter()->hasHolder())
+    if(false === $image->getAdapter()->hasHolder())
     {
-      throw new sfImageTransformException(sprintf('Cannot perform transform: %s',get_class($this)));
+print    $image->getAdapter()->hasHolder();
+    print_r($image->getAdapter());exit;
+      throw new sfImageTransformException(sprintf('Cannot perform transform: %s invalid image resource',get_class($this)));
     }
     return $this->transform($image);
   }

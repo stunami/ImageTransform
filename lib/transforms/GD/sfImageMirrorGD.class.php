@@ -31,18 +31,15 @@ class sfImageMirrorGD extends sfImageTransformAbstract
   protected function transform(sfImage $image)
   {
 
-    // Check we have a valid image resource
-    if(false === $resource = $image->getAdapter()->getHolder())
-    {
-      throw new sfImageTransformException(sprintf('Cannot perform transform: %s',get_class($this)));
-    }
+    $resource = $image->getAdapter()->getHolder();
 
     $x = imagesx($resource);
     $y = imagesy($resource);
+    
 
     imagealphablending($resource,true);
     
-    $dest_resource = imagecreatetruecolor($x, $y);
+    $dest_resource = $image->getAdapter()->getTransparentFillImage($x, $y);
     imagealphablending($dest_resource,true); 
     for ($w = 0; $w < $x; $w++)
     {

@@ -117,7 +117,7 @@ class sfImageRotateGD extends sfImageTransformAbstract
     else
     {
 
-      throw new sfImageTransformException(sprintf('Cannot perform transform: %s. Your install of GD does not support imagerotate',get_class($this)));
+      //throw new sfImageTransformException(sprintf('Cannot perform transform: %s. Your install of GD does not support imagerotate',get_class($this)));
 
       // TODO: FIX ME!!
 
@@ -184,10 +184,7 @@ class sfImageRotateGD extends sfImageTransformAbstract
       $dsth = $maxy - $miny + 1;
     
       // Create our new image
-      $dstImg = imagecreatetruecolor($dstw, $dsth);
-           
-      imagecolortransparent($dstImg, $this->background);
-      imagefilledrectangle($dstImg, 0, 0, $dstw + 1, $dsth + 1, $this->background);
+      $dstImg = $image->getAdapter()->getTransparentFillImage();
      
       // Get the new origin
       $neworiginx = -$minx;

@@ -95,6 +95,8 @@ class sfImageResizeGD extends sfImageTransformAbstract
   protected function transform(sfImage $image)
   {
   
+
+  
     $resource = $image->getAdapter()->getHolder();
 
     $x = imagesx($resource);
@@ -107,28 +109,19 @@ class sfImageResizeGD extends sfImageTransformAbstract
     } 
     elseif(!is_integer($this->height) || $this->height < 1) 
     {
+
       $this->height = round(($y / $x) * $this->width);    
-    }
-    
-    $index = imagecolortransparent($resource);
-    
-    if($index > 0)
-    {
-    
+
     }
 
-    $dest_resource = imagecreatetruecolor($this->width, $this->height);
-    
-    // Preserve alpha transparency
-    imagealphablending($dest_resource, false);
-    $color = imagecolorallocatealpha($dest_resource, 0, 0, 0, 127);
-    imagefill($dest_resource, 0, 0, $color);
-    imagesavealpha($dest_resource, true);
-    
+    $dest_resource = $image->getAdapter()->getTransparentFillImage($this->width, $this->height);
+
+    // Finally do our resizing
     imagecopyresampled($dest_resource,$resource,0, 0, 0, 0, $this->width, $this->height,$x, $y);
     imagedestroy($resource);
-    
+
     $image->getAdapter()->setHolder($dest_resource);
+
     return $image;
 
   }
