@@ -106,10 +106,12 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
    */
   public function load($filename, $mime)
   {
+  
     if (array_key_exists($mime,$this->loaders))
     {
       $this->holder = $this->loaders[$mime]($filename);
       $this->mime_type = $mime;
+      $this->setFilename($filename);
       
       return true;
     } 

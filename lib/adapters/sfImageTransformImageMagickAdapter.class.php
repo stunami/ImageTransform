@@ -92,6 +92,7 @@ class sfImageTransformImageMagickAdapter extends sfImageTransformAdapterAbstract
     {
       $this->holder = new Imagick($filename);
       $this->mime_type = $mime;
+      $this->setFilename($filename);
       
       return true;
     } 
