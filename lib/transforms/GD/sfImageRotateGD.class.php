@@ -117,7 +117,7 @@ class sfImageRotateGD extends sfImageTransformAbstract
     else
     {
 
-      //throw new sfImageTransformException(sprintf('Cannot perform transform: %s. Your install of GD does not support imagerotate',get_class($this)));
+      throw new sfImageTransformException(sprintf('Cannot perform transform: %s. Your install of GD does not support imagerotate',get_class($this)));
 
       // TODO: FIX ME!!
 
@@ -184,7 +184,7 @@ class sfImageRotateGD extends sfImageTransformAbstract
       $dsth = $maxy - $miny + 1;
     
       // Create our new image
-      $dstImg = $image->getAdapter()->getTransparentFillImage();
+      $dstImg = $image->getAdapter()->getTransparentImage($dstw, $dsth);
      
       // Get the new origin
       $neworiginx = -$minx;
@@ -196,8 +196,10 @@ class sfImageRotateGD extends sfImageTransformAbstract
         list($x, $y, $color) = $data;
         list($newx, $newy) = $this->translateCoordinate($neworiginx, $neworiginy, $x, $y);
 
-        imagesetpixel($dstImg, $newx, $newy, $color);
+        imagesetpixel($dstImg, (int)$newx, (int)$newy, $color);
       }
+      
+      unset($resource);
       
       $image->getAdapter()->setHolder($dstImg);
       
@@ -207,13 +209,17 @@ class sfImageRotateGD extends sfImageTransformAbstract
 
   }
   
-  protected function translateCoordinate($originx, $originy, $x, $y, $toComp=true) {
-      if($toComp) {
-          $newx = $originx + $x;
-          $newy = $originy - $y;
-      } else {
-          $newx = $x - $originx;
-          $newy = $originy - $y;
+  protected function translateCoordinate($originx, $originy, $x, $y, $toComp=true)
+  {
+      if($toComp)
+      {
+        $newx = $originx + $x;
+        $newy = $originy - $y;
+      }
+      else 
+      {
+        $newx = $x - $originx;
+        $newy = $originy - $y;
       }
      
       return array($newx, $newy);

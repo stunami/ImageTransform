@@ -236,8 +236,7 @@ class sfImageOverlayGD extends sfImageTransformAbstract
     $canvas_w = $image->getWidth();
     $canvas_h = $image->getHeight();
     
-    $canvas_img = imagecreatetruecolor($canvas_w, $canvas_h);
-    imagealphablending($canvas_img, true);
+    $canvas_img = $image->getAdapter()->getTransparentImage($canvas_w, $canvas_h);
     imagecopy($canvas_img, $resource, 0,0,0,0, $canvas_w, $canvas_h);
     
     // Check we have a valid image resource

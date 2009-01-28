@@ -133,7 +133,7 @@ class sfImageCropGD extends sfImageTransformAbstract
 
     $resource = $image->getAdapter()->getHolder();
     
-    $dest_resource = imagecreatetruecolor($this->width, $this->height);
+    $dest_resource = $image->getAdapter()->getTransparentImage($this->width, $this->height);
 
     imagecopy($dest_resource, $resource, 0, 0, $this->left, $this->top, $this->width, $this->height);
     

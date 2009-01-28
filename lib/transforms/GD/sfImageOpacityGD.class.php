@@ -74,7 +74,8 @@ class sfImageOpacityGD extends sfImageTransformAbstract
    */
   protected function transform(sfImage $image)
   {
-    $new_img  = imagecreatetruecolor($image->getWidth(), $image->getHeight());
+    $new_img  = $image->getAdapter()->getTransparentImage($image->getWidth(), $image->getHeight());
+    
     imagealphablending($new_img, false);
     imagesavealpha($new_img, true);
     

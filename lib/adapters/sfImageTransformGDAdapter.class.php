@@ -312,6 +312,11 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
     return false;
   }
 
+ /**
+   * Returns image MIME type
+   * @return boolean
+   *
+   */
   public function getMIMETypeFromFilename($filename)
   {
   
@@ -439,20 +444,28 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
     return $this->quality;
   }
   
-  public function getTransparentFillImage($w, $h)
+ /**
+   * Helper method. Returns a transparent image resource of the same type as that of the current image
+   * @param integer
+   * @param integer
+   * @return resource
+   *
+   * @throws sfImageTransformException
+   */
+  public function getTransparentImage($w, $h)
   {
 
     $resource = $this->getHolder();
 
-    $dest_resource = imagecreatetruecolor($w, $h);
+    $dest_resource = imagecreatetruecolor((int)$w, (int)$h);
           
     // Preserve alpha transparency
-    if (in_array($this->getMIMEType(), array('image/gif','image/png')))
+    if(in_array($this->getMIMEType(), array('image/gif','image/png')))
     {
       $index = imagecolortransparent($resource);
  
       // Handle transparency
-      if ($index >= 0) 
+      if($index >= 0) 
       {
  
         // Grab the current images transparent color
@@ -470,7 +483,7 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
       } 
       
       // Always make a transparent background color for PNGs that don't have one allocated already
-      elseif ($this->getMIMEType() == 'image/png') 
+      elseif($this->getMIMEType() == 'image/png') 
       {
  
         // Disabled blending 

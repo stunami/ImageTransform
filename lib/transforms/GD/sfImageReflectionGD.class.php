@@ -115,7 +115,7 @@ class sfImageReflectionGD extends sfImageTransformAbstract
        
     $r_resource = $reflection->getAdapter()->getHolder();
         
-    $dest_resource = $reflection->getAdapter()->getTransparentFillImage($width, $height + $this->reflection_height);  
+    $dest_resource = $reflection->getAdapter()->getTransparentImage($width, $height + $this->reflection_height);  
     
     imagecopymerge($dest_resource, $resource, 0, 0, 0 ,0, $width, $height, 100);
     

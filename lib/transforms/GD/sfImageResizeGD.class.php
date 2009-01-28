@@ -114,7 +114,7 @@ class sfImageResizeGD extends sfImageTransformAbstract
 
     }
 
-    $dest_resource = $image->getAdapter()->getTransparentFillImage($this->width, $this->height);
+    $dest_resource = $image->getAdapter()->getTransparentImage($this->width, $this->height);
 
     // Finally do our resizing
     imagecopyresampled($dest_resource,$resource,0, 0, 0, 0, $this->width, $this->height,$x, $y);
