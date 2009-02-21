@@ -51,7 +51,7 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
   );
   
   /*
-   * List of GD functions use to create specific image types
+   * List of GD functions used to create specific image types
    * @var array
    */
   protected $creators = array(
@@ -125,7 +125,7 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
   /**
    * Loads an image from a string
    * @param string String image
-   * @return integer
+   * @return boolean
    */
   public function loadString($string)
   {
@@ -201,8 +201,8 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
    */    
   public function copy()
   {
-    $class = get_class($this);
-    $copyObj = new $class();
+   
+    $copyObj = clone $this;
     
     $copy = imagecreatetruecolor($this->getWidth(), $this->getHeight());
     imagecopy($copy, $this->getHolder(), 0, 0, 0, 0, $this->getWidth(), $this->getHeight());
@@ -445,10 +445,10 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
   }
   
  /**
-   * Helper method. Returns a transparent image resource of the same type as that of the current image
-   * @param integer
-   * @param integer
-   * @return resource
+   * Helper method. Returns a transparent image resource of the specified size
+   * @param integer width
+   * @param integer height
+   * @return resource image
    *
    * @throws sfImageTransformException
    */
