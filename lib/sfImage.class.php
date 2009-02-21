@@ -426,7 +426,7 @@ class sfImage
   {
     $settings = sfConfig::get('app_sfImageTransformPlugin_mime_type','GD');
 
-    $support_libraries = array('fileinfo', 'mime_type');
+    $support_libraries = array('fileinfo', 'mime_type', 'gd_mime_type');
 
     if (false === $settings['auto_detect'])
     {
@@ -435,6 +435,25 @@ class sfImage
 
     if (in_array(strtolower($settings['library']), $support_libraries) && '' !== $filename)
     {
+      if('gd_mime_type' === strtolower($settings['library']))
+      {
+        if (!extension_loaded('gd'))
+        {
+          throw new Exception ('GD not enabled. Cannot detect mime type using GD.');
+        }
+
+        $imgData = @GetImageSize($filename);
+
+        if (isset($imgData['mime']))
+        {
+          return $imgData['mime'];
+        }
+
+        else
+        {
+          return false;
+        }
+      }
 
       if ('fileinfo' === strtolower($settings["library"]))
       {

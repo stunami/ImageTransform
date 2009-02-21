@@ -6,4 +6,4 @@ all:
     font_dir: /usr/share/fonts/truetype/msttcorefonts
     mime_type:
       auto_detect: false
-      library: Fileinfo # Fileinfo (PECL), MIME_Type (PEAR)
+      library: Fileinfo # Fileinfo (PECL), MIME_Type (PEAR), gd_mime_type (GD)
