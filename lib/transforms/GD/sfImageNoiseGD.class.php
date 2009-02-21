@@ -21,10 +21,9 @@
  */
 class sfImageNoiseGD extends sfImageTransformAbstract
 {
-  
   /**
    * Noise density.
-  */  
+  */
   protected $density = 20;
 
   /**
@@ -45,11 +44,13 @@ class sfImageNoiseGD extends sfImageTransformAbstract
    */
   public function setDensity($density)
   {
-    if(is_integer($density))
+    if (is_numeric($density))
     {
       $this->density = (int)$density;
+
       return true;
     }
+
     return false;
   }
 
@@ -72,10 +73,10 @@ class sfImageNoiseGD extends sfImageTransformAbstract
   protected function transform(sfImage $image)
   {
     $resource = $image->getAdapter()->getHolder();
-    
+
     $resourcex = imagesx($resource);
     $resourcey = imagesy($resource);
-    
+
     for ($x = 0; $x < $resourcex; ++$x)
     {
       for ($y = 0; $y < $resourcey; ++$y)
@@ -89,47 +90,45 @@ class sfImageNoiseGD extends sfImageTransformAbstract
         $red += $modifier;
         $green += $modifier;
         $blue += $modifier;
-        
+
         // Max value is 255
         // Min value is 0
-        
-        if($red > 255)
+        if ($red > 255)
         {
           $red = 255;
         }
-        
-        if($green > 255)
+
+        if ($green > 255)
         {
           $green = 255;
         }
-        
-        if($blue > 255)
+
+        if ($blue > 255)
         {
           $blue = 255;
         }
-        
-        if($red < 0)
+
+        if ($red < 0)
         {
           $red = 0;
         }
-        
-        if($green < 0)
+
+        if ($green < 0)
         {
           $green = 0;
         }
-        
-        if($blue < 0)
+
+        if ($blue < 0)
         {
           $blue = 0;
         }
-        
+
         $newcol = imagecolorallocate ($resource, $red,$green,$blue);
         imagesetpixel ($resource, $x, $y, $newcol);
-        }
+
+      }
     }
 
     return $image;
-    
   }
-  
 }

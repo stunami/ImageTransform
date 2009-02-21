@@ -13,7 +13,7 @@
  *
  * Fills the set area with a color or tile image.
  *
- * 
+ *
  *
  * @package sfImageTransform
  * @author Stuart Lowes <stuart.lowes@gmail.com>
@@ -21,7 +21,6 @@
  */
 class sfImageFillGD extends sfImageTransformAbstract
 {
-
   /**
    * x-coordinate.
    * @var integer
@@ -36,7 +35,7 @@ class sfImageFillGD extends sfImageTransformAbstract
 
   /**
    * Fill.
-  */  
+  */
   protected $fill = null;
 
   /**
@@ -48,11 +47,9 @@ class sfImageFillGD extends sfImageTransformAbstract
    */
   public function __construct($x=0, $y=0, $fill='#000000')
   {
-
     $this->setX($x);
     $this->setY($y);
     $this->setFill($fill);
-    
   }
 
   /**
@@ -63,12 +60,13 @@ class sfImageFillGD extends sfImageTransformAbstract
    */
   public function setX($x)
   {
-    if(is_integer($x))
+    if (is_numeric($x))
     {
       $this->x = (int)$x;
+
       return true;
     }
-    
+
     return false;
   }
 
@@ -90,11 +88,13 @@ class sfImageFillGD extends sfImageTransformAbstract
    */
   public function setY($y)
   {
-    if(is_integer($y))
+    if (is_numeric($y))
     {
       $this->y = (int)$y;
+
       return true;
     }
+
     return false;
   }
 
@@ -116,11 +116,13 @@ class sfImageFillGD extends sfImageTransformAbstract
    */
   public function setFill($fill)
   {
-    if(preg_match('/#[\d\w]{6}/',$fill) || (is_object($fill) && class_name($fill) === 'sfImage')) 
+    if (preg_match('/#[\d\w]{6}/',$fill) || (is_object($fill) && class_name($fill) === 'sfImage'))
     {
       $this->fill = $fill;
+
       return true;
     }
+
     return false;
   }
 
@@ -143,19 +145,18 @@ class sfImageFillGD extends sfImageTransformAbstract
   protected function transform(sfImage $image)
   {
     $resource = $image->getAdapter()->getHolder();
-  
-    if(is_object($this->fill))
+
+    if (is_object($this->fill))
     {
       imagesettile($resource, $this->fill->getAdapter()->getHolder());
       imagefill($resource, $this->x, $this->y, IMG_COLOR_TILED);
     }
-    
+
     else
     {
-      imagefill($resource, $this->x, $this->y, $image->getAdapter()->getColorByHex($resource, $this->fill)); 
+      imagefill($resource, $this->x, $this->y, $image->getAdapter()->getColorByHex($resource, $this->fill));
     }
-    
+
     return $image;
   }
-  
 }

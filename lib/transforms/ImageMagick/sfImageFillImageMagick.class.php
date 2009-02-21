@@ -13,7 +13,7 @@
  *
  * Fills the set area with a color or tile image.
  *
- * 
+ *
  *
  * @package sfImageTransform
  * @author Stuart Lowes <robin@ngse.co.uk>
@@ -21,7 +21,6 @@
  */
 class sfImageFillImageMagick extends sfImageTransformAbstract
 {
-
   /**
    * x-coordinate.
    * @var integer
@@ -36,16 +35,16 @@ class sfImageFillImageMagick extends sfImageTransformAbstract
 
   /**
    * Fill.
-  */  
+  */
   protected $fill = null;
-  
+
   /**
    * Fuzz
    *
    * @var integer
    */
   protected $fuzz = 0;
-  
+
   /**
    * Border
    *
@@ -64,13 +63,11 @@ class sfImageFillImageMagick extends sfImageTransformAbstract
    */
   public function __construct($x=0, $y=0, $fill='#000000', $fuzz=0, $border=null)
   {
-
     $this->setX($x);
     $this->setY($y);
     $this->setFill($fill);
     $this->setFuzz($fuzz);
     $this->setBorder($border);
-    
   }
 
   /**
@@ -81,12 +78,13 @@ class sfImageFillImageMagick extends sfImageTransformAbstract
    */
   public function setX($x)
   {
-    if(is_integer($x))
+    if (is_numeric($x))
     {
       $this->x = (int)$x;
+
       return true;
     }
-    
+
     return false;
   }
 
@@ -108,11 +106,13 @@ class sfImageFillImageMagick extends sfImageTransformAbstract
    */
   public function setY($y)
   {
-    if(is_integer($y))
+    if (is_numeric($y))
     {
       $this->y = (int)$y;
+
       return true;
     }
+
     return false;
   }
 
@@ -134,14 +134,16 @@ class sfImageFillImageMagick extends sfImageTransformAbstract
    */
   public function setFuzz($fuzz)
   {
-    if(is_integer($fuzz))
+    if (is_numeric($fuzz))
     {
       $this->fuzz = (int)$fuzz;
+
       return true;
     }
+
     return false;
   }
-  
+
   /**
    * Gets the fuzz
    *
@@ -151,7 +153,7 @@ class sfImageFillImageMagick extends sfImageTransformAbstract
   {
     return $this->fuzz;
   }
-  
+
   /**
    * Sets the border colour.
    *
@@ -160,15 +162,16 @@ class sfImageFillImageMagick extends sfImageTransformAbstract
    */
   public function setBorder($border)
   {
-    if(preg_match('/#[\d\w]{6}/',$border))
+    if (preg_match('/#[\d\w]{6}/',$border))
     {
       $this->border = $border;
+
       return true;
     }
-    
+
     return false;
   }
-  
+
   /**
    * Gets the border colour.
    *
@@ -178,7 +181,7 @@ class sfImageFillImageMagick extends sfImageTransformAbstract
   {
     return $this->border;
   }
-  
+
   /**
    * Sets the fill
    *
@@ -187,11 +190,13 @@ class sfImageFillImageMagick extends sfImageTransformAbstract
    */
   public function setFill($fill)
   {
-    if(preg_match('/#[\d\w]{6}/',$fill)) 
+    if (preg_match('/#[\d\w]{6}/',$fill))
     {
       $this->fill = $fill;
+
       return true;
     }
+
     return false;
   }
 
@@ -214,16 +219,15 @@ class sfImageFillImageMagick extends sfImageTransformAbstract
   protected function transform(sfImage $image)
   {
     $resource = $image->getAdapter()->getHolder();
-      
+
     $fill = new ImagickPixel();
     $fill->setColor($this->fill);
-   
+
     $border = new ImagickPixel();
     $border->setColor($this->border);
 
     $resource->colorFloodfillImage($fill, $this->fuzz, $border, $this->x, $this->y);
-    
-    return $image;    
+
+    return $image;
   }
-  
 }

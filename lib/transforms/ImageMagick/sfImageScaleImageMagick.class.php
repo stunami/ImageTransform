@@ -21,12 +21,11 @@
  */
 class sfImageScaleImageMagick extends sfImageTransformAbstract
 {
-
   /**
    * The amount to scale the image by.
    *
    * @var float
-  */  
+  */
   protected $scale = 1;
 
   /**
@@ -36,24 +35,22 @@ class sfImageScaleImageMagick extends sfImageTransformAbstract
    */
   public function __construct($scale)
   {
-
-    $this->setScale($scale);  
-
-  }   
+    $this->setScale($scale);
+  }
 
   /**
    * Set the scale factor.
    *
    * @param float
-   */ 
+   */
   public function setScale($scale)
   {
-    if(is_numeric($scale))
+    if (is_numeric($scale))
     {
-      $this->scale = $scale;  
+      $this->scale = (float)$scale;
     }
   }
-  
+
   /**
    * Gets the scale factor.
    *
@@ -62,8 +59,8 @@ class sfImageScaleImageMagick extends sfImageTransformAbstract
   public function getScale()
   {
     return $this->scale;
-  }  
-  
+  }
+
   /**
    * Apply the transform to the sfImage object.
    *
@@ -72,15 +69,13 @@ class sfImageScaleImageMagick extends sfImageTransformAbstract
    */
   protected function transform(sfImage $image)
   {
-    
     $resource = $image->getAdapter()->getHolder();
 
     $x = $resource->getImageWidth();
-    $y = $resource->getImageHeight();    
+    $y = $resource->getImageHeight();
 
     $image->resize(round($x * $this->scale),round($y * $this->scale));
 
     return $image;
-    
   }
 }

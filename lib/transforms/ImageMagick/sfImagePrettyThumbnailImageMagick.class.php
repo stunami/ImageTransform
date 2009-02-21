@@ -21,26 +21,25 @@
  */
 class sfImagePrettyThumbnailImageMagick extends sfImageTransformAbstract
 {
-
   /**
    * The thumbnail width
    *
    * @var integer
-  */  
+  */
   protected $width = null;
 
   /**
    * The thumbnail height
    *
    * @var integer
-  */  
+  */
   protected $height = null;
 
   /**
    * The thumbnail corner radius
    *
    * @var integer
-  */  
+  */
   protected $radius = null;
 
   /**
@@ -52,22 +51,22 @@ class sfImagePrettyThumbnailImageMagick extends sfImageTransformAbstract
   {
     $this->setWidth($width);
     $this->setHeight($height);
-    $this->setRadius($radius);       
-  }   
+    $this->setRadius($radius);
+  }
 
   /**
    * Set the thumbnail's width.
    *
    * @param integer
-   */ 
+   */
   public function setWidth($width)
   {
-    if(is_numeric($width))
+    if (is_numeric($width))
     {
-      $this->width = $width;  
+      $this->width = (int)$width;
     }
   }
-  
+
   /**
    * Gets the thumbnail's width.
    *
@@ -76,21 +75,21 @@ class sfImagePrettyThumbnailImageMagick extends sfImageTransformAbstract
   public function getWidth()
   {
     return $this->width;
-  }  
-  
+  }
+
   /**
    * Set the thumbnail's height.
    *
    * @param integer
-   */ 
+   */
   public function setHeight($height)
   {
-    if(is_numeric($height))
+    if (is_numeric($height))
     {
-      $this->height = $height;  
+      $this->height = (int)$height;
     }
   }
-  
+
   /**
    * Gets the thumbnail's height.
    *
@@ -99,21 +98,21 @@ class sfImagePrettyThumbnailImageMagick extends sfImageTransformAbstract
   public function getHeight()
   {
     return $this->height;
-  }  
-  
+  }
+
   /**
    * Set the thumbnail's corner radius.
    *
    * @param integer
-   */ 
+   */
   public function setRadius($radius)
   {
-    if(is_numeric($radius))
+    if (is_numeric($radius))
     {
-      $this->radius = $radius;  
+      $this->radius = (int)$radius;
     }
   }
-  
+
   /**
    * Gets the thumbnail's radius.
    *
@@ -122,8 +121,8 @@ class sfImagePrettyThumbnailImageMagick extends sfImageTransformAbstract
   public function getRadius()
   {
     return $this->radius;
-  }  
-  
+  }
+
   /**
    * Apply the transform to the sfImage object.
    *
@@ -132,7 +131,7 @@ class sfImagePrettyThumbnailImageMagick extends sfImageTransformAbstract
    */
   protected function transform(sfImage $image)
   {
-    
+
     $resource = $image->getAdapter()->getHolder();
 
     $image->resize( $this->getWidth(), $this->getHeight() );
@@ -142,12 +141,12 @@ class sfImagePrettyThumbnailImageMagick extends sfImageTransformAbstract
     $shadow = $resource->clone();
 
     $shadow->setImageBackgroundColor( new ImagickPixel( 'black' ) );
-  
+
     $shadow->shadowImage( 80, 3, 5, 5 );
 
     $shadow->compositeImage( $resource, Imagick::COMPOSITE_OVER, 0, 0 );
 
     return $image;
-    
+
   }
 }

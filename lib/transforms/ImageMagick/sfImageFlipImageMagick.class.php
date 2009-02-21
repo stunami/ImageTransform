@@ -21,7 +21,6 @@
  */
 class sfImageFlipImageMagick extends sfImageTransformAbstract
 {
-
   /**
    * Apply the transform to the sfImage object.
    *
@@ -30,12 +29,10 @@ class sfImageFlipImageMagick extends sfImageTransformAbstract
    */
   protected function transform(sfImage $image)
   {
-
     $resource = $image->getAdapter()->getHolder();
 
     $resource->flipImage();
 
     return $image;
-
   }
 }

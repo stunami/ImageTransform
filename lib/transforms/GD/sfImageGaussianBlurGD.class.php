@@ -13,7 +13,7 @@
  *
  * Blurs the image using the Gaussian method.
  *
- * 
+ *
  *
  * @package sfImageTransform
  * @author Stuart Lowes <stuart.lowes@gmail.com>
@@ -21,7 +21,6 @@
  */
 class sfImageGaussianBlurGD extends sfImageTransformAdapter
 {
-
   /**
    * Apply the transform to the sfImage object.
    *
@@ -31,16 +30,17 @@ class sfImageGaussianBlurGD extends sfImageTransformAdapter
   protected function transform(sfImage $image)
   {
     $resource = $image->getAdapter()->getHolder();
-        
-    if(function_exists('imagefilter'))
+
+    if (function_exists('imagefilter'))
     {
       imagefilter($resource, IMG_FILTER_GAUSSIAN_BLUR);
-    } else {
+    }
+
+    else
+    {
       throw new sfImageTransformException(sprintf('Cannot perform transform, GD does not support imagefilter '));
     }
-    
+
     return $image;
-    
   }
-  
 }

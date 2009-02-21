@@ -21,11 +21,10 @@
  */
 class sfImageContrastGD extends sfImageTransformAbstract
 {
-  
   /**
    * Constract level to be applied.
-  */  
-  protected $contrast = 0;  
+  */
+  protected $contrast = 0;
 
   /**
    * Construct an sfImageContrast object.
@@ -34,7 +33,7 @@ class sfImageContrastGD extends sfImageTransformAbstract
    */
   public function __construct($contrast)
   {
-    $this->setContrast($contrast);    
+    $this->setContrast($contrast);
   }
 
   /**
@@ -45,11 +44,13 @@ class sfImageContrastGD extends sfImageTransformAbstract
    */
   public function setContrast($contrast)
   {
-    if(is_integer($contrast))
+    if (is_numeric($contrast))
     {
       $this->contrast = (int)$contrast;
+
       return true;
     }
+
     return false;
   }
 
@@ -73,16 +74,18 @@ class sfImageContrastGD extends sfImageTransformAbstract
   protected function transform(sfImage $image)
   {
     $resource = $image->getAdapter()->getHolder();
-        
-    if(function_exists('imagefilter'))
+
+    if (function_exists('imagefilter'))
     {
       imagefilter($resource, IMG_FILTER_CONTRAST, $this->contrast);
-    } else {
+    }
+
+    else
+    {
       throw new sfImageTransformException(sprintf('Cannot perform transform, GD does not support imagefilter '));
     }
-    
+
     return $image;
-    
   }
-  
+
 }

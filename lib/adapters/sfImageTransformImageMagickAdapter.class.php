@@ -20,7 +20,6 @@
  */
 class sfImageTransformImageMagickAdapter extends sfImageTransformAdapterAbstract
 {
-
   /**
    * The image resource.
    * @access protected
@@ -29,7 +28,7 @@ class sfImageTransformImageMagickAdapter extends sfImageTransformAdapterAbstract
    * @throws sfImageTransformException
   */
   protected $holder;
-  
+
   /*
    * Supported MIME types for the sfImageImageMagickAdapter
    * and their associated file extensions
@@ -37,10 +36,10 @@ class sfImageTransformImageMagickAdapter extends sfImageTransformAdapterAbstract
    */
   protected $types = array(
     'image/jpeg' => array('jpeg','jpg'),
-    'image/gif' => array('gif'),    
+    'image/gif' => array('gif'),
     'image/png' => array('png')
   );
-  
+
   public function __construct()
   {
     // Check that the GD extension is installed and configured
@@ -48,10 +47,10 @@ class sfImageTransformImageMagickAdapter extends sfImageTransformAdapterAbstract
     {
       throw new sfImageTransformException('The image processing library ImageMagick is not enabled. See PHP Manual for installation instructions.');
     }
-    
-    $this->setHolder(new Imagick());    
+
+    $this->setHolder(new Imagick());
   }
-  
+
   /**
    * Tidy up the object
   */
@@ -62,7 +61,7 @@ class sfImageTransformImageMagickAdapter extends sfImageTransformAdapterAbstract
       $this->getHolder()->destroy();
     }
   }
- 
+
   /**
    * Create a new empty (1 x 1 px) gd true colour image
    *
@@ -87,19 +86,18 @@ class sfImageTransformImageMagickAdapter extends sfImageTransformAdapterAbstract
    */
   public function load($filename, $mime)
   {
-
     if (preg_match('/image\/.+/',$mime))
     {
       $this->holder = new Imagick($filename);
       $this->mime_type = $mime;
       $this->setFilename($filename);
-      
+
       return true;
-    } 
+    }
 
     throw new sfImageTransformException(sprintf('Cannot load file %s as %s is an unsupported file type.', $filename, $mime));
   }
-  
+
   /**
    * Load and sets the resource from a string
    *
@@ -110,16 +108,15 @@ class sfImageTransformImageMagickAdapter extends sfImageTransformAdapterAbstract
    */
   public function loadString($string)
   {
-    
     $image = $this->getHolder()->readImageBlob($string);
-    
+
     if (is_object($image) && class_name($image) == 'Imagick')
     {
       $this->setHolder($image);
-      
+
       return true;
     }
-  
+
     throw new sfImageTransformException('Cannot load image string');
   }
 
@@ -131,7 +128,7 @@ class sfImageTransformImageMagickAdapter extends sfImageTransformAdapterAbstract
   public function __toString()
   {
     $this->getHolder()->setImageCompressionQuality($this->getQuality());
-    
+
     return (string)$this->getHolder();
   }
 
@@ -143,10 +140,10 @@ class sfImageTransformImageMagickAdapter extends sfImageTransformAdapterAbstract
   public function save()
   {
     $this->getHolder()->setImageCompressionQuality($this->getQuality());
-    
+
     return $this->getHolder()->writeImage($this->getFilename());
   }
-  
+
   /**
    * Save the image to the specified file
    *
@@ -169,16 +166,16 @@ class sfImageTransformImageMagickAdapter extends sfImageTransformAdapterAbstract
    * Returns a copy of the adapter object
    *
    * @return sfImage
-   */    
+   */
   public function copy()
   {
     $copyObj = clone $this;
-        
+
     $copyObj->setHolder($this->getHolder()->clone());
-    
+
     return $copyObj;
   }
-  
+
   /**
    * Gets the pixel width of the image
    *
@@ -190,10 +187,10 @@ class sfImageTransformImageMagickAdapter extends sfImageTransformAdapterAbstract
     {
       return $this->getHolder()->getImageWidth();
     }
-    
+
     return 0;
   }
-  
+
   /**
    * Gets the pixel height of the image
    *
@@ -205,10 +202,10 @@ class sfImageTransformImageMagickAdapter extends sfImageTransformAdapterAbstract
     {
       return $this->getHolder()->getImageHeight();
     }
-    
+
     return 0;
   }
-  
+
   /**
    * Sets the image resource holder
    * @param Imagick
@@ -222,10 +219,10 @@ class sfImageTransformImageMagickAdapter extends sfImageTransformAdapterAbstract
       $this->holder = $holder;
       return true;
     }
-    
+
     return false;
   }
-  
+
   /**
    * Returns the image resource
    * @return resource
@@ -233,15 +230,14 @@ class sfImageTransformImageMagickAdapter extends sfImageTransformAdapterAbstract
    */
   public function getHolder()
   {
-
     if ($this->hasHolder())
     {
       return $this->holder;
     }
-    
+
     return false;
   }
-  
+
   /**
    * Returns whether there is a valid GD image resource
    * @return boolean
@@ -249,15 +245,14 @@ class sfImageTransformImageMagickAdapter extends sfImageTransformAdapterAbstract
    */
   public function hasHolder()
   {
-
     if (is_object($this->holder) && 'Imagick' === get_class($this->holder))
     {
-      return true; 
+      return true;
     }
-    
+
     return false;
   }
-  
+
   /**
    * Returns the supported MIME types
    * @return array
@@ -273,20 +268,20 @@ class sfImageTransformImageMagickAdapter extends sfImageTransformAdapterAbstract
    * @return boolean
    *
    */
-  
+
   public function setMimeType($mime)
   {
     $this->mime_type = $mime;
     if ($this->hasHolder() && isset($this->types[$mime]))
     {
       $this->getHolder()->setImageFormat($this->types[$mime][0]);
-      
+
       return true;
     }
-    
+
     return false;
   }
- 
+
   /**
    * Returns the name of the adapter
    * @return string
@@ -296,7 +291,7 @@ class sfImageTransformImageMagickAdapter extends sfImageTransformAdapterAbstract
   {
     return 'ImageMagick';
   }
-  
+
   /**
    * Sets the image filename
    * @param integer Quality of the image
@@ -305,14 +300,13 @@ class sfImageTransformImageMagickAdapter extends sfImageTransformAdapterAbstract
    */
   public function setQuality($quality)
   {
-    if(parent::setQuality($quality))
+    if (parent::setQuality($quality))
     {
       $this->getHolder()->setImageCompressionQuality($quality);
-      
+
       return true;
     }
-    
+
     return false;
   }
-    
 }

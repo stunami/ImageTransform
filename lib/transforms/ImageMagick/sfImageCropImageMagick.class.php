@@ -21,7 +21,6 @@
  */
 class sfImageCropImageMagick extends sfImageTransformAbstract
 {
-
   /**
    * Left coordinate.
   */
@@ -52,8 +51,6 @@ class sfImageCropImageMagick extends sfImageTransformAbstract
    */
   public function __construct($left, $top, $width, $height)
   {
-
-    // Set the crop area
     $this->setLeft($left);
     $this->setTop($top);
     $this->setWidth($width);
@@ -68,11 +65,13 @@ class sfImageCropImageMagick extends sfImageTransformAbstract
    */
   public function setLeft($left)
   {
-    if(is_integer($left))
+    if (is_numeric($left))
     {
       $this->left = (int)$left;
+
       return true;
     }
+
     return false;
   }
 
@@ -83,11 +82,13 @@ class sfImageCropImageMagick extends sfImageTransformAbstract
    */
   public function setTop($top)
   {
-    if(is_integer($top))
+    if (is_numeric($top))
     {
       $this->top = (int)$top;
+
       return true;
     }
+
     return false;
   }
 
@@ -98,14 +99,16 @@ class sfImageCropImageMagick extends sfImageTransformAbstract
    */
   public function setWidth($width)
   {
-    if(is_integer($width))
+    if (is_numeric($width))
     {
       $this->width = (int)$width;
+
       return true;
     }
+
     return false;
   }
-  
+
   /**
    * set the height.
    *
@@ -113,13 +116,15 @@ class sfImageCropImageMagick extends sfImageTransformAbstract
    */
   public function setHeight($height)
   {
-    if(is_integer($height))
+    if (is_numeric($height))
     {
       $this->height = (int)$height;
+
       return true;
     }
+
     return false;
-  }       
+  }
 
   /**
    * Apply the transform to the sfImage object.
@@ -132,10 +137,9 @@ class sfImageCropImageMagick extends sfImageTransformAbstract
   {
 
     $resource = $image->getAdapter()->getHolder();
-    
+
     $resource->cropImage($this->left, $this->top, $this->width, $this->height);
 
     return $image;
-
   }
 }

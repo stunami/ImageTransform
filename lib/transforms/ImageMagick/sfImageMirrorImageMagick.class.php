@@ -21,7 +21,6 @@
  */
 class sfImageMirrorImageMagick extends sfImageTransformAbstract
 {
-
   /**
    * Apply the transform to the sfImage object.
    *
@@ -30,12 +29,11 @@ class sfImageMirrorImageMagick extends sfImageTransformAbstract
    */
   protected function transform(sfImage $image)
   {
-
     // Check we have a valid image resource
     $resource = $image->getAdapter()->getHolder();
 
     $resource->flopImage();
-    return $image;
 
+    return $image;
   }
 }

@@ -20,14 +20,13 @@
  */
 class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
 {
-
   /**
    * The image resource.
    * @access protected
    * @var resource
   */
   protected $holder;
-  
+
   /*
    * Supported MIME types for the sfImageGDAdapter
    * and their associated file extensions
@@ -35,7 +34,7 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
    */
   protected $types = array(
     'image/jpeg' => array('jpeg','jpg'),
-    'image/gif' => array('gif'),    
+    'image/gif' => array('gif'),
     'image/png' => array('png')
   );
 
@@ -49,7 +48,7 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
     'image/gif' => 'imagecreatefromgif',
     'image/png' => 'imagecreatefrompng'
   );
-  
+
   /*
    * List of GD functions used to create specific image types
    * @var array
@@ -60,7 +59,7 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
     'image/gif' => 'imagegif',
     'image/png' => 'imagepng'
   );
-  
+
   /**
    * Initialize the object. Check for GD extension. A exception is thrown if not installed
    *
@@ -74,7 +73,7 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
       throw new sfImageTransformException('The image processing library GD is not enabled. See PHP Manual for installation instructions.');
     }
   }
-  
+
   /**
    * Tidy up the image resources
    */
@@ -85,7 +84,7 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
       imagedestroy($this->getHolder());
     }
   }
- 
+
   /**
    * Create a new empty (1 x 1 px) gd true colour image
    * @param integer Width
@@ -106,22 +105,21 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
    */
   public function load($filename, $mime)
   {
-  
     if (array_key_exists($mime,$this->loaders))
     {
       $this->holder = $this->loaders[$mime]($filename);
       $this->mime_type = $mime;
       $this->setFilename($filename);
-      
+
       return true;
-    } 
-    
-    else 
+    }
+
+    else
     {
         throw new sfImageTransformException(sprintf('Cannot load file %s as %s is an unsupported file type.', $filename, $mime));
     }
   }
-  
+
   /**
    * Loads an image from a string
    * @param string String image
@@ -129,16 +127,15 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
    */
   public function loadString($string)
   {
-    
     $resource = imagecreatefromstring($string);
-    
+
     if (is_resource($resource) && 'gd' === get_resource_type($resource))
     {
       $this->setHolder($resource);
-      
+
       return true;
     }
-  
+
     return false;
   }
 
@@ -148,11 +145,11 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
    * @return string
    */
   public function __toString()
-  {    
+  {
     ob_start();
     $this->__output(false);
 
-    return ob_get_clean();    
+    return ob_get_clean();
   }
 
   /**
@@ -171,7 +168,7 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
     return $this->__output(true);
 
   }
-  
+
   /**
    * Save the image to disk
    *
@@ -183,7 +180,7 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
   {
     if ('' !== $mime)
     {
-      if(!$this->setMimeType($mime))
+      if (!$this->setMimeType($mime))
       {
         throw new sfImageTransformException(sprintf('Cannot convert as %s is an unsupported type' ,$mime));
       }
@@ -198,20 +195,19 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
    * Returns a copy of the adapter object
    *
    * @return sfImage
-   */    
+   */
   public function copy()
   {
-   
     $copyObj = clone $this;
-    
+
     $copy = imagecreatetruecolor($this->getWidth(), $this->getHeight());
     imagecopy($copy, $this->getHolder(), 0, 0, 0, 0, $this->getWidth(), $this->getHeight());
-    
+
     $copyObj->setHolder($copy);
-    
+
     return $copyObj;
   }
-  
+
   /**
    * Gets the pixel width of the image
    *
@@ -223,10 +219,10 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
     {
       return imagesx($this->getHolder());
     }
-    
+
     return 0;
   }
-  
+
   /**
    * Gets the pixel height of the image
    *
@@ -238,10 +234,10 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
     {
       return imagesy($this->getHolder());
     }
-    
+
     return 0;
   }
-  
+
   /**
    * Sets the image resource holder
    * @param resource
@@ -257,10 +253,10 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
       $this->holder = $resource;
       return true;
     }
-    
+
     return false;
   }
-  
+
   /**
    * Returns the image resource
    * @return resource
@@ -272,10 +268,10 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
     {
       return $this->holder;
     }
-    
+
     return false;
   }
-  
+
   /**
    * Returns whether there is a valid GD image resource
    * @return boolean
@@ -285,12 +281,12 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
   {
     if (is_resource($this->holder) && 'gd' === get_resource_type($this->holder))
     {
-      return true; 
+      return true;
     }
 
     return false;
   }
-  
+
  /**
    * Returns image MIME type
    * @return boolean
@@ -300,7 +296,7 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
   {
     return $this->mime_type;
   }
-  
+
   public function setMIMEType($mime)
   {
     if (array_key_exists($mime,$this->loaders))
@@ -308,7 +304,7 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
       $this->mime_type = $mime;
       return true;
     }
-    
+
     return false;
   }
 
@@ -319,21 +315,21 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
    */
   public function getMIMETypeFromFilename($filename)
   {
-  
+
     $path = pathinfo($filename);
-  
+
     foreach($this->types as $type => $extensions)
     {
-      if(in_array($path['extension'], $extensions))
+      if (in_array($path['extension'], $extensions))
       {
         return $type;
       }
-      
+
     }
-  
+
     return false;
   }
-  
+
  /**
    * Returns the name of the adapter
    * @return string
@@ -343,7 +339,7 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
   {
     return 'GD';
   }
-  
+
   /**
    * Returns the image color for a hex value (format #XXXXXX).
    *
@@ -354,17 +350,17 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
   public function getColorByHex($image, $color)
   {
 
-    if (preg_match('/#[\d\w]{6}/',$color)) 
+    if (preg_match('/#[\d\w]{6}/',$color))
     {
       $rgb = sscanf($color, '#%2x%2x%2x');
       $color = imagecolorallocate($image, $rgb[0], $rgb[1], $rgb[2]);
 
       return $color;
     }
-        
+
     return $color;
   }
-  
+
  /**
    * Returns image in current format and optionally writes image to disk
    * @return resource
@@ -374,7 +370,7 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
   protected function __output($to_file=false, $filename='')
   {
     $file = null;
-    
+
     // Are we saving to file, if so get the filename to save to
     if ($to_file)
     {
@@ -386,9 +382,9 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
     }
 
     $mime = $this->getMimeType();
-   
+
     if (array_key_exists($mime,$this->creators))
-    {  
+    {
 
       switch ($mime)
       {
@@ -398,7 +394,7 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
           if (is_null($this->quality))
           {
             $this->quality = 75;
-          }      
+          }
           $output = $this->creators[$mime]($this->holder,$file,$this->getImageSpecificQuality($this->quality, $mime));
           break;
 
@@ -408,12 +404,12 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
           break;
 
         case 'image/gif':
-          
+
           if (!is_null($file))
           {
             $output = $this->creators[$mime]($this->holder,$file);
-          } 
-          else 
+          }
+          else
           {
             $output = $this->creators[$mime]($this->holder);
           }
@@ -422,28 +418,28 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
         default:
           throw new sfImageTransformException(sprintf('Cannot convert as %s is an unsupported type' ,$mime));
       }
-    } 
-    else 
+    }
+    else
     {
       throw new sfImageTransformException(sprintf('Cannot convert as %s is an unsupported type' ,$mime));
     }
 
     return $output;
   }
-  
+
   protected function getImageSpecificQuality($quality, $mime)
   {
     // Range is from 0-100
-  
-    if('image/png' === $mime)
+
+    if ('image/png' === $mime)
     {
 
       return 9 - round($this->quality * (9/100));
     }
-    
+
     return $this->quality;
   }
-  
+
  /**
    * Helper method. Returns a transparent image resource of the specified size
    * @param integer width
@@ -458,50 +454,50 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
     $resource = $this->getHolder();
 
     $dest_resource = imagecreatetruecolor((int)$w, (int)$h);
-          
+
     // Preserve alpha transparency
-    if(in_array($this->getMIMEType(), array('image/gif','image/png')))
+    if (in_array($this->getMIMEType(), array('image/gif','image/png')))
     {
       $index = imagecolortransparent($resource);
- 
+
       // Handle transparency
-      if($index >= 0) 
+      if ($index >= 0)
       {
- 
+
         // Grab the current images transparent color
         $index_color = imagecolorsforindex($resource, $index);
- 
+
         // Set the transparent color for the resized version of the image
         $index = imagecolorallocate($dest_resource, $index_color['red'], $index_color['green'], $index_color['blue']);
- 
+
         // Fill the entire image with our transparent color
         imagefill($dest_resource, 0, 0, $index);
- 
+
         // Set the filled background color to be transparent
         imagecolortransparent($dest_resource, $index);
-  
-      } 
-      
+
+      }
+
       // Always make a transparent background color for PNGs that don't have one allocated already
-      elseif($this->getMIMEType() == 'image/png') 
+      elseif ($this->getMIMEType() == 'image/png')
       {
- 
-        // Disabled blending 
+
+        // Disabled blending
         imagealphablending($dest_resource, false);
- 
+
         // Grab our alpha tranparency color
         $color = imagecolorallocatealpha($dest_resource, 0, 0, 0, 127);
- 
+
         // Fill the entire image with our transparent color
         imagefill($dest_resource, 0, 0, $color);
- 
+
         // Re-enable transparency blending
         imagesavealpha($dest_resource, true);
       }
     }
 
     return $dest_resource;
-  
+
   }
-     
+
 }

@@ -21,7 +21,6 @@
  */
 class sfImageGreyscaleGD extends sfImageTransformAbstract
 {
-
   /**
    * Apply the transform to the sfImage object.
    *
@@ -31,19 +30,20 @@ class sfImageGreyscaleGD extends sfImageTransformAbstract
   protected function transform(sfImage $image)
   {
     $resource = $image->getAdapter()->getHolder();
-    
+
     $resourcex = imagesx($resource);
     $resourcey = imagesy($resource);
-    
-    if(function_exists('imagefilter'))
+
+    if (function_exists('imagefilter'))
     {
       imagefilter($resource, IMG_FILTER_GRAYSCALE);
-    } else {
+    }
+
+    else
+    {
       throw new sfImageTransformException(sprintf('Cannot perform transform, GD does not support imagefilter '));
     }
-    
+
     return $image;
-    
   }
-  
 }

@@ -21,7 +21,6 @@
  */
 class sfImageOverlayGD extends sfImageTransformAbstract
 {
-
   /**
    * The overlay sfImage.
   */
@@ -46,17 +45,20 @@ class sfImageOverlayGD extends sfImageTransformAbstract
    *
    * @param array mixed
    */
-  public function __construct(sfImage $overlay, $position=array(0,0)) {
-
+  public function __construct(sfImage $overlay, $position=array(0,0))
+  {
     $this->setOverlay($overlay);
     if (is_array($position) && count($position))
     {
+
       $this->setLeft($position[0]);
+
       if (isset($position[1]))
       {
         $this->setTop($position[1]);
       }
     }
+
     else
     {
       $this->setPosition($position);
@@ -71,7 +73,6 @@ class sfImageOverlayGD extends sfImageTransformAbstract
   function setOverlay(sfImage $overlay)
   {
     $this->overlay = $overlay;
-
   }
 
   /**
@@ -126,7 +127,7 @@ class sfImageOverlayGD extends sfImageTransformAbstract
 
   /**
    * set the named position
-   * 
+   *
    * @param string $position named position. Possible named positions:
    *                - middle - overlay in the middle
    *                - north  - overlay in the north side
@@ -137,46 +138,49 @@ class sfImageOverlayGD extends sfImageTransformAbstract
    *                - north east combination of north and east
    *                - south west combination of south and west
    *                - south east combination of south and east
-   * 
-   * @return void 
+   *
+   * @return void
    */
   public function setPosition($position)
   {
     $this->position = $position;
   }
-  
+
   /**
    * returns the position name
-   * 
+   *
    * @return string
    */
   public function getPosition()
   {
     return $this->position;
   }
-  
+
   /**
    * Computes the offset of the overlayed image and sets
    * the top and left coordinates based on the named position
-   * 
+   *
    * @param sfImage $image canvas image
-   * 
-   * @return void
+   *
+   * @return boolean
    */
   public function computeCoordinates(sfImage $image)
   {
     $position = $this->getPosition();
-    
-    if (is_null($position)) return;
-    
+
+    if (is_null($position))
+    {
+      return false;
+    }
+
     $resource   = $image->getAdapter()->getHolder();
     $resource_x = ImageSX($resource);
     $resource_y = ImageSY($resource);
-    
+
     $overlay    = $this->getOverlay()->getAdapter()->getHolder();
     $overlay_x  = ImageSX($overlay);
     $overlay_y  = ImageSY($overlay);
-    
+
     switch (strtolower($position))
     {
       case 'north':
@@ -211,12 +215,14 @@ class sfImageOverlayGD extends sfImageTransformAbstract
         $this->setLeft(0);
         $this->setTop($resource_y - $overlay_y);
         break;
-     
+
       default:
         $this->setLeft(round(($resource_x - $overlay_x)/2));
-        $this->setTop(round(($resource_y - $overlay_y)/2));  
+        $this->setTop(round(($resource_y - $overlay_y)/2));
         break;
     }
+
+    return true;
   }
 
   /**
@@ -229,18 +235,18 @@ class sfImageOverlayGD extends sfImageTransformAbstract
   {
     // compute the named coordinates
     $this->computeCoordinates($image);
-    
+
     $resource = $image->getAdapter()->getHolder();
 
     // create true color canvas image:
     $canvas_w = $image->getWidth();
     $canvas_h = $image->getHeight();
-    
+
     $canvas_img = $image->getAdapter()->getTransparentImage($canvas_w, $canvas_h);
     imagecopy($canvas_img, $resource, 0,0,0,0, $canvas_w, $canvas_h);
-    
+
     // Check we have a valid image resource
-    if(false === $this->overlay->getAdapter()->getHolder())
+    if (false === $this->overlay->getAdapter()->getHolder())
     {
       throw new sfImageTransformException(sprintf('Cannot perform transform: %s',get_class($this)));
     }
@@ -248,8 +254,7 @@ class sfImageOverlayGD extends sfImageTransformAbstract
     // create true color overlay image:
     $overlay_w   = $this->overlay->getWidth();
     $overlay_h   = $this->overlay->getHeight();
-    $overlay_img = $this->overlay->getAdapter()->getHolder(); 
-    
+    $overlay_img = $this->overlay->getAdapter()->getHolder();
 
     // copy and merge the overlay image and the canvas image:
     imagecopy($canvas_img, $overlay_img, $this->left,$this->top,0,0, $overlay_w, $overlay_h);
@@ -258,7 +263,7 @@ class sfImageOverlayGD extends sfImageTransformAbstract
     imagedestroy($resource);
 
     $image->getAdapter()->setHolder($canvas_img);
-    return $image;
 
+    return $image;
   }
 }

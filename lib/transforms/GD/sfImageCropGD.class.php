@@ -21,7 +21,6 @@
  */
 class sfImageCropGD extends sfImageTransformAbstract
 {
-
   /**
    * Left coordinate.
   */
@@ -52,13 +51,10 @@ class sfImageCropGD extends sfImageTransformAbstract
    */
   public function __construct($left, $top, $width, $height)
   {
-
-    // Set the crop area
     $this->setLeft($left);
     $this->setTop($top);
     $this->setWidth($width);
     $this->setHeight($height);
-
   }
 
   /**
@@ -68,11 +64,13 @@ class sfImageCropGD extends sfImageTransformAbstract
    */
   public function setLeft($left)
   {
-    if(is_integer($left))
+    if (is_numeric($left))
     {
       $this->left = (int)$left;
+
       return true;
     }
+
     return false;
   }
 
@@ -83,11 +81,13 @@ class sfImageCropGD extends sfImageTransformAbstract
    */
   public function setTop($top)
   {
-    if(is_integer($top))
+    if (is_numeric($top))
     {
       $this->top = (int)$top;
+
       return true;
     }
+
     return false;
   }
 
@@ -98,14 +98,16 @@ class sfImageCropGD extends sfImageTransformAbstract
    */
   public function setWidth($width)
   {
-    if(is_integer($width))
+    if (is_numeric($width))
     {
       $this->width = (int)$width;
+
       return true;
     }
+
     return false;
   }
-  
+
   /**
    * set the height.
    *
@@ -113,13 +115,15 @@ class sfImageCropGD extends sfImageTransformAbstract
    */
   public function setHeight($height)
   {
-    if(is_integer($height))
+    if (is_numeric($height))
     {
       $this->height = (int)$height;
+
       return true;
     }
+
     return false;
-  }       
+  }
 
   /**
    * Apply the transform to the sfImage object.
@@ -132,17 +136,16 @@ class sfImageCropGD extends sfImageTransformAbstract
   {
 
     $resource = $image->getAdapter()->getHolder();
-    
     $dest_resource = $image->getAdapter()->getTransparentImage($this->width, $this->height);
 
     imagecopy($dest_resource, $resource, 0, 0, $this->left, $this->top, $this->width, $this->height);
-    
+
     // Tidy up
     imagedestroy($resource);
-    
+
     // Replace old image with flipped version
     $image->getAdapter()->setHolder($dest_resource);
-    return $image;
 
+    return $image;
   }
 }

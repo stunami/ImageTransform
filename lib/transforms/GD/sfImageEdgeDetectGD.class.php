@@ -13,7 +13,7 @@
  *
  * Uses edge detection to highlight the edges in the GD image.
  *
- * 
+ *
  *
  * @package sfImageTransform
  * @author Stuart Lowes <stuart.lowes@gmail.com>
@@ -21,7 +21,6 @@
  */
 class sfImageEdgeDetectGD extends sfImageTransformAbstract
 {
-
   /**
    * Apply the transform to the sfImage object.
    *
@@ -31,16 +30,16 @@ class sfImageEdgeDetectGD extends sfImageTransformAbstract
   protected function transform(sfImage $image)
   {
     $resource = $image->getAdapter()->getHolder();
-        
-    if(function_exists('imagefilter'))
+
+    if (function_exists('imagefilter'))
     {
       imagefilter($resource, IMG_FILTER_EDGEDETECT);
-    } else {
+    }
+    else
+    {
       throw new sfImageTransformException(sprintf('Cannot perform transform, GD does not support imagefilter '));
     }
-    
+
     return $image;
-    
   }
-  
 }

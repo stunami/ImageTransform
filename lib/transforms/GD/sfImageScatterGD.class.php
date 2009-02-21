@@ -21,10 +21,9 @@
  */
 class sfImageScatterGD extends sfImageTransformAbstract
 {
-  
   /**
    * Scatter factor.
-  */  
+  */
   protected $scatter_factor = 4;
 
   /**
@@ -34,16 +33,14 @@ class sfImageScatterGD extends sfImageTransformAbstract
    */
   public function __construct($scatter=4)
   {
-
     $this->setScatterFactor($scatter);
-
   }
 
   /**
    * Set the scatter factor.
    *
    * @param integer
-   */ 
+   */
   public function setScatterFactor($width)
   {
     $this->width = (int)$width;
@@ -57,7 +54,7 @@ class sfImageScatterGD extends sfImageTransformAbstract
   public function getScatterFactor()
   {
     return $this->width;
-  } 
+  }
 
   /**
    * Apply the transform to the sfImage object.
@@ -68,38 +65,38 @@ class sfImageScatterGD extends sfImageTransformAbstract
   protected function transform(sfImage $image)
   {
     $resource = $image->getAdapter()->getHolder();
-    
+
     $resourcex = imagesx($resource);
     $resourcey = imagesy($resource);
-    
+
     for ($x = 0; $x < $resourcex; ++$x)
     {
       for ($y = 0; $y < $resourcey; ++$y)
       {
         $distx = rand(-$this->scatter_factor, $this->scatter_factor);
         $disty = rand(-$this->scatter_factor, $this->scatter_factor);
-        
+
         // keep inside the image boundaries
-        if($x + $distx >= $resourcex) 
+        if($x + $distx >= $resourcex)
         {
           continue;
         }
-        
+
         if($x + $distx < 0)
         {
           continue;
         }
-        
+
         if($y + $disty >= $resourcey)
         {
           continue;
         }
-        
+
         if($y + $disty < 0)
         {
           continue;
         }
-        
+
         $oldcol = imagecolorat($resource, $x, $y);
         $newcol = imagecolorat($resource, $x + $distx, $y + $disty);
         imagesetpixel($resource, $x, $y, $newcol);
@@ -108,7 +105,5 @@ class sfImageScatterGD extends sfImageTransformAbstract
     }
 
     return $image;
-    
   }
-  
 }

@@ -21,8 +21,8 @@
  * <?php
  * $img = new sfImage('image1.jpg', 'image/png', 'GD');
  * $response = $this->getResponse();
- * $response->setContentType($img->getMIMEType());    
- * $response->setContent($img->resize(1000,null)->overlay(sfImage('logo.png','',''))); 
+ * $response->setContentType($img->getMIMEType());
+ * $response->setContent($img->resize(1000,null)->overlay(sfImage('logo.png','','')));
  * ?>
  * </code>
  *
@@ -41,14 +41,13 @@
  */
 class sfImage
 {
-
   /**
    * The adapter class.
    * @access protected
    * @var object
   */
   protected $adapter;
-  
+
   /*
    * MIME type map and their associated file extension(s)
    * @var array
@@ -57,10 +56,10 @@ class sfImage
     'image/gif' => array('gif'),
     'image/jpeg' => array('jpg', 'jpeg'),
     'image/png' => array('png'),
-    'image/svg' => array('svg'),    
+    'image/svg' => array('svg'),
     'image/tiff' => array('tiff')
   );
-  
+
   /**
    * Construct an sfImage object.
    * @access public
@@ -71,9 +70,9 @@ class sfImage
   public function __construct($filename='', $mime='', $adapter='')
   {
     $this->setAdapter($this->createAdapter($adapter));
-    
+
     // Set the Image source if passed
-    if($filename !== '')
+    if ($filename !== '')
     {
       $this->load($filename, $mime);
     }
@@ -85,7 +84,7 @@ class sfImage
     }
 
   }
-  
+
   /**
    * Gets the image library adapter object
    * @access public
@@ -95,7 +94,7 @@ class sfImage
   {
     return $this->adapter;
   }
-  
+
   /**
    * Sets the adapter to be used, i.e. GD or ImageMagick
    *
@@ -104,16 +103,17 @@ class sfImage
    */
   public function setAdapter($adapter)
   {
-    
-    if(is_object($adapter))
+
+    if (is_object($adapter))
     {
       $this->adapter = $adapter;
+
       return true;
     }
-    
+
     return false;
   }
-  
+
   /**
    * Creates a blank image
    *
@@ -126,9 +126,9 @@ class sfImage
   public function create($x=1, $y=1)
   {
     $this->getAdapter()->create($x, $y);
-    
+
     $default = sfConfig::get('app_sfImageTransformPlugin_default_image',array('filename' => 'Untitled.png', 'mime_type' => 'image/png'));
-    
+
     $this->getAdapter()->setFilename($default['filename']);
   }
 
@@ -142,27 +142,27 @@ class sfImage
    * @param string MIME type of image
    *
    * return boolean
-   */  
+   */
   public function load($filename, $mime='')
   {
-    if(file_exists($filename))
+    if (file_exists($filename))
     {
-    	
-      if('' == $mime)
+
+      if ('' == $mime)
       {
         $mime = $this->autoDetectMIMETypeFromFile($filename);
       }
-      
-      if('' == $mime)
+
+      if ('' == $mime)
       {
         throw new sfImageTransformException(sprintf('You must either specify the MIME type for file %s or enable mime detection',$filename));
       }
 
       $this->getAdapter()->load($filename,$mime);
-      return true;        
 
+      return true;
     }
-    
+
     throw new sfImageTransformException(sprintf('Unable to load %s. File does not exist or is unreadable',$filename));
   }
 
@@ -173,12 +173,12 @@ class sfImage
    *
    * @access public
    * @param string Image string
-   */ 
+   */
   public function loadString($string)
   {
     $this->getAdapter()->loadString($string);
   }
-  
+
   /**
    * Saves the image to disk
    *
@@ -186,7 +186,7 @@ class sfImage
    *
    * @access public
    * @param string
-   */ 
+   */
   public function save()
   {
     return $this->getAdapter()->save();
@@ -200,26 +200,26 @@ class sfImage
    * @access public
    * @param string Filename
    * @param string MIME type
-   */   
+   */
   public function saveAs($filename, $mime='')
   {
-    if('' === $mime)
+    if ('' === $mime)
     {
       $mime = $this->autoDetectMIMETypeFromFilename($filename);
     }
-        
-    if(!$mime)
+
+    if (!$mime)
     {
       throw new sfImageTransformException(sprintf('Unsupported file %s',$filename));
     }
-    
+
     $copy = $this->copy();
-    
+
     $copy->getAdapter()->saveAs($filename, $mime);
-    
+
     return $copy;
   }
-  
+
   /**
    * Copies the image object and returns it
    *
@@ -227,7 +227,7 @@ class sfImage
    *
    * @access public
    * @return object
-   */   
+   */
   public function copy()
   {
     $copy = clone $this;
@@ -235,7 +235,7 @@ class sfImage
 
     return $copy;
   }
-  
+
   /**
    * Magic method. Converts the image to a string
    *
@@ -243,12 +243,12 @@ class sfImage
    *
    * @access public
    * @return string
-   */   
+   */
   public function __toString()
   {
     return $this->toString();
   }
-  
+
   /**
    * Converts the image to a string
    *
@@ -256,7 +256,7 @@ class sfImage
    *
    * @access public
    * @return string
-   */   
+   */
   public function toString()
   {
     return (string)$this->getAdapter();
@@ -275,17 +275,17 @@ class sfImage
     $class_adapter = 'sfImage'.ucfirst($name) . $this->getAdapter()->getAdapterName();
 
     $class = null;
-    
+
     // Make sure a transform class exists, either generic or adapter specific, otherwise throw an exception
-    
+
     // Defaults to adapter transform
-    if(class_exists($class_adapter,true))
+    if (class_exists($class_adapter,true))
     {
       $class = $class_adapter;
     }
-    
+
     // No adapter specific transform so look for a generic transform
-    elseif(class_exists($class_generic,true))
+    elseif (class_exists($class_generic,true))
     {
       $class = $class_generic;
     }
@@ -295,18 +295,18 @@ class sfImage
     {
         throw new sfImageTransformException(sprintf('Unsupported transform %s. Cannot find %s adapter or generic transform class',$name, $this->getAdapter()->getAdapterName()));
     }
-  
+
     $reflectionObj = new ReflectionClass($class);
-    if(is_array($arguments) && count($arguments) > 0)
+    if (is_array($arguments) && count($arguments) > 0)
     {
-      $transform = $reflectionObj->newInstanceArgs($arguments); 
-    } 
-    
+      $transform = $reflectionObj->newInstanceArgs($arguments);
+    }
+
     else
     {
       $transform = $reflectionObj->newInstance();
     }
-    
+
     $transform->execute($this);
 
     // Tidy up
@@ -335,7 +335,7 @@ class sfImage
   {
     return $this->getAdapter()->getFilename();
   }
-  
+
   /**
    * Returns the image pixel width
    * @return integer
@@ -345,7 +345,7 @@ class sfImage
   {
     return $this->getAdapter()->getWidth();
   }
-  
+
   /**
    * Returns the image height
    * @return integer
@@ -355,47 +355,47 @@ class sfImage
   {
     return $this->getAdapter()->getHeight();
   }
-   
+
   /**
    * Sets the MIME type
    * @param string
    *
-   */  
+   */
   public function setMIMEType($mime)
   {
     $this->getAdapter()->setMIMEType($mime);
   }
-   
+
   /**
    * Returns the MIME type
    * @return string
    *
-   */  
+   */
   public function getMIMEType()
   {
     return $this->getAdapter()->getMIMEType();
   }
-  
+
   /**
    * Sets the image quality
    * @param integer Valid range is from 0 (worst) to 100 (best)
    *
-   */  
+   */
   public function setQuality($quality)
   {
     $this->getAdapter()->setQuality($quality);
   }
-   
+
   /**
    * Returns the image quality
    * @return string
    *
-   */  
+   */
   public function getQuality()
   {
     return $this->getAdapter()->getQuality();
   }
-  
+
   /**
    * Returns mime type from the specified file type. Returns false for unsupported types
    * @access protected
@@ -404,16 +404,16 @@ class sfImage
   protected function autoDetectMIMETypeFromFilename($filename)
   {
     $pathinfo = pathinfo($filename);
-    
+
     foreach($this->types as $mime => $extension)
     {
-      if(in_array($pathinfo['extension'],$extension))
+      if (in_array($pathinfo['extension'],$extension))
       {
         return $mime;
       }
-    
+
     }
-      
+
     return false;
   }
 
@@ -424,34 +424,34 @@ class sfImage
    */
   protected function autoDetectMIMETypeFromFile($filename)
   {
-    $settings = sfConfig::get('app_sfImageTransformPlugin_mime_type','GD');    
-     
+    $settings = sfConfig::get('app_sfImageTransformPlugin_mime_type','GD');
+
     $support_libraries = array('fileinfo', 'mime_type');
-    
-    if(false === $settings['auto_detect'])
+
+    if (false === $settings['auto_detect'])
     {
       return false;
     }
-    
-    if(in_array(strtolower($settings['library']), $support_libraries) && '' !== $filename)
+
+    if (in_array(strtolower($settings['library']), $support_libraries) && '' !== $filename)
     {
 
-      if('fileinfo' === strtolower($settings["library"]))
+      if ('fileinfo' === strtolower($settings["library"]))
       {
-          
+
         if(function_exists('finfo_file'))
         {
           $finfo = finfo_open(FILEINFO_MIME);
-          
+
           return finfo_file($finfo, $filename);
         }
       }
-      
-      if('mime_type' === strtolower($settings["library"]))
+
+      if ('mime_type' === strtolower($settings["library"]))
       {
         // Supressing warning as PEAR is not strict compliant
         @require_once 'MIME/Type.php';
-        if(method_exists('MIME_Type', 'autoDetect'))
+        if (method_exists('MIME_Type', 'autoDetect'))
         {
           return @MIME_Type::autoDetect($filename);
         }
@@ -459,9 +459,8 @@ class sfImage
     }
 
     return false;
-   
   }
-  
+
   /**
    * Returns a adapter class of the specified type
    * @access protected
@@ -469,27 +468,25 @@ class sfImage
    */
   protected function createAdapter($name)
   {
-  
-    // No adapter set so use default 
-    if($name == '')
+    // No adapter set so use default
+    if ($name == '')
     {
-      $name = sfConfig::get('app_sfImageTransformPlugin_default_adapter','GD');    
+      $name = sfConfig::get('app_sfImageTransformPlugin_default_adapter','GD');
     }
-        
+
     $adapter_class = 'sfImageTransform' . $name . 'Adapter';
 
-    if(class_exists($adapter_class))
+    if (class_exists($adapter_class))
     {
       $adapter = new $adapter_class;
-    } 
-    
-    // Cannot find the adapter class so throw an exception
-    else 
-    {
-        throw new sfImageTransformException(sprintf('Unsupported adapter: %s',$adapter_class));
     }
-    
+
+    // Cannot find the adapter class so throw an exception
+    else
+    {
+      throw new sfImageTransformException(sprintf('Unsupported adapter: %s',$adapter_class));
+    }
+
     return $adapter;
-  
   }
 }

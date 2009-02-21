@@ -21,45 +21,44 @@
  */
 class sfImageTextGD extends sfImageTransformAbstract
 {
-
   /**
    * Font face.
-  */  
+  */
   protected $font = 'Arial';
-  
+
   /**
    * Font size.
-  */    
+  */
   protected $size = 10;
-  
+
   /**
    * Text.
-  */    
+  */
   protected $text = '';
-  
+
   /**
    * Angel of the text.
-  */    
+  */
   protected $angle = 0;
-  
+
   /**
    * X coordinate.
-  */    
+  */
   protected $x = 0;
-  
+
   /**
    * Y coordinate.
-  */    
+  */
   protected $y = 0;
-  
+
   /**
    * Font Color.
-  */    
+  */
   protected $color = '#000000';
-  
+
   /**
    * Path to font.
-  */    
+  */
   protected $font_dir = '';
 
   /**
@@ -67,11 +66,9 @@ class sfImageTextGD extends sfImageTransformAbstract
    *
    * @param array integer
    */
-  public function __construct($text, $x=0, $y=0, $size=10, $font='Arial', $color='#000000', $angle=0) {
-
+  public function __construct($text, $x=0, $y=0, $size=10, $font='Arial', $color='#000000', $angle=0)
+  {
     $this->font_dir = sfConfig::get('app_sfImageTransformPlugin_font_dir','/usr/share/fonts/truetype/msttcorefonts');
-
-    //
     $this->setText($text);
     $this->setX($x);
     $this->setY($y);
@@ -99,7 +96,7 @@ class sfImageTextGD extends sfImageTransformAbstract
   public function getText()
   {
     return $this->text;
-  } 
+  }
 
   /**
    * Sets X coordinate.
@@ -119,8 +116,8 @@ class sfImageTextGD extends sfImageTransformAbstract
   public function getX()
   {
     return $this->x;
-  } 
-  
+  }
+
   /**
    * Sets Y coordinate.
    *
@@ -139,8 +136,8 @@ class sfImageTextGD extends sfImageTransformAbstract
   public function getY()
   {
     return $this->y;
-  }   
-  
+  }
+
   /**
    * Sets text size.
    *
@@ -159,7 +156,7 @@ class sfImageTextGD extends sfImageTransformAbstract
   public function getSize()
   {
     return $this->size;
-  } 
+  }
 
   /**
    * Sets text font.
@@ -179,7 +176,7 @@ class sfImageTextGD extends sfImageTransformAbstract
   public function getFont()
   {
     return $this->font;
-  } 
+  }
 
   /**
    * Sets text color.
@@ -199,8 +196,8 @@ class sfImageTextGD extends sfImageTransformAbstract
   public function getColor()
   {
     return $this->color;
-  } 
-  
+  }
+
   /**
    * Sets text angle.
    *
@@ -219,7 +216,7 @@ class sfImageTextGD extends sfImageTransformAbstract
   public function getAngle()
   {
     return $this->angle;
-  } 
+  }
 
   /**
    * Apply the transform to the sfImage object.
@@ -230,8 +227,6 @@ class sfImageTextGD extends sfImageTransformAbstract
    */
   protected function transform(sfImage $image)
   {
-
-    //
     $resource = $image->getAdapter()->getHolder();
 
     $this->font = $this->font_dir . DIRECTORY_SEPARATOR . $this->font . '.ttf';
@@ -240,14 +235,13 @@ class sfImageTextGD extends sfImageTransformAbstract
 
     $textwidth = abs($box[4] - $box[0]) - 4;
     $textheight = abs($box[5] - $box[1]) - 4;
-        
+
     $rgb = sscanf($this->color, '#%2x%2x%2x');
-    
+
     $color = imagecolorallocate($resource, $rgb[0], $rgb[1], $rgb[2]);
-    
+
     imagettftext($resource, $this->size, $this->angle, $this->x, $this->y + $textheight, $color, $this->font, $this->text);
 
     return $image;
-
   }
 }

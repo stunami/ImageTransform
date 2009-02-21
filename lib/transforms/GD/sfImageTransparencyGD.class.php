@@ -21,7 +21,6 @@
  */
 class sfImageTransparencyGD extends sfImageTransformAbstract
 {
-
   /**
    * The transparent color defined in hex.
   */
@@ -34,9 +33,7 @@ class sfImageTransparencyGD extends sfImageTransformAbstract
    */
   public function __construct($color)
   {
-
     $this->setColor($color);
-
   }
 
   /**
@@ -57,7 +54,7 @@ class sfImageTransparencyGD extends sfImageTransformAbstract
   public function getColor()
   {
     return $this->color;
-  } 
+  }
 
   /**
    * Apply the transform to the sfImage object.
@@ -67,18 +64,16 @@ class sfImageTransparencyGD extends sfImageTransformAbstract
    */
   protected function transform(sfImage $image)
   {
-
-   $resource = $image->getAdapter()->getHolder();
+    $resource = $image->getAdapter()->getHolder();
 
     // Set the defined color as transparent
-    if($this->color !== '')
+    if ($this->color !== '')
     {
-
       $color = $image->getAdapter()->getColorByHex($resource, $this->color);
     }
 
     // Or default to the color at the top left
-    else 
+    else
     {
       $color = imagecolorat($resource, 0, 0);
     }
@@ -86,6 +81,5 @@ class sfImageTransparencyGD extends sfImageTransformAbstract
     imagecolortransparent($resource,$color);
 
     return $image;
-
   }
 }

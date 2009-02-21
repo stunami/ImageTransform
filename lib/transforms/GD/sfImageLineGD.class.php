@@ -13,7 +13,7 @@
  *
  * Draws a line on a GD.
  *
- * 
+ *
  *
  * @package sfImageTransform
  * @author Stuart Lowes <stuart.lowes@gmail.com>
@@ -21,42 +21,35 @@
  */
 class sfImageLineGD extends sfImageTransformAbstract
 {
-
   /**
    * Start X coordinate.
   */
   protected $x1 = 0;
-
 
   /**
    * Start Y coordinate.
   */
   protected $y1 = 0;
 
-
   /**
    * Finish X coordinate.
   */
   protected $x2 = 0;
-
 
   /**
    * Finish Y coordinate
   */
   protected $y2 = 0;
 
-
   /**
    * Line thickness.
   */
   protected $thickness = 1;
 
-
   /**
    * Hex color.
   */
   protected $color = '#000000';
-
 
   /**
    * The number of pixels used for the blur.
@@ -70,7 +63,6 @@ class sfImageLineGD extends sfImageTransformAbstract
    */
   public function __construct($x1, $y1, $x2, $y2, $thickness=1, $color='#000000', $style=null)
   {
-
     $this->setStartX($x1);
     $this->setStartY($y1);
     $this->setEndX($x2);
@@ -78,7 +70,6 @@ class sfImageLineGD extends sfImageTransformAbstract
     $this->setThickness($thickness);
     $this->setColor($color);
     $this->setStyle($style);
-
   }
 
   /**
@@ -89,12 +80,13 @@ class sfImageLineGD extends sfImageTransformAbstract
    */
   public function setStartX($x)
   {
-    if(is_integer($x))
+    if (is_numeric($x))
     {
       $this->x1 = (int)$x;
+
       return true;
     }
-    
+
     return false;
   }
 
@@ -116,11 +108,13 @@ class sfImageLineGD extends sfImageTransformAbstract
    */
   public function setStartY($y)
   {
-    if(is_integer($y))
+    if (is_numeric($y))
     {
       $this->y1 = (int)$y;
+
       return true;
     }
+
     return false;
   }
 
@@ -142,12 +136,13 @@ class sfImageLineGD extends sfImageTransformAbstract
    */
   public function setEndX($x)
   {
-    if(is_integer($x))
+    if (is_numeric($x))
     {
       $this->x2 = (int)$x;
+
       return true;
     }
-    
+
     return false;
   }
 
@@ -169,11 +164,13 @@ class sfImageLineGD extends sfImageTransformAbstract
    */
   public function setEndY($y)
   {
-    if(is_integer($y))
+    if (is_numeric($y))
     {
       $this->y2 = (int)$y;
+
       return true;
     }
+
     return false;
   }
 
@@ -186,7 +183,7 @@ class sfImageLineGD extends sfImageTransformAbstract
   {
     return $this->y2;
   }
-  
+
   /**
    * Sets the thickness
    *
@@ -195,11 +192,13 @@ class sfImageLineGD extends sfImageTransformAbstract
    */
   public function setThickness($thickness)
   {
-    if(is_integer($thickness))
+    if (is_numeric($thickness))
     {
       $this->thickness = (int)$thickness;
+
       return true;
     }
+
     return false;
   }
 
@@ -211,7 +210,7 @@ class sfImageLineGD extends sfImageTransformAbstract
   public function getThickness()
   {
     return $this->thickness;
-  }      
+  }
 
   /**
    * Sets the color
@@ -221,11 +220,13 @@ class sfImageLineGD extends sfImageTransformAbstract
    */
   public function setColor($color)
   {
-    if(preg_match('/#[\d\w]{6}/',$color)) 
+    if (preg_match('/#[\d\w]{6}/',$color))
     {
       $this->color = $color;
+
       return true;
     }
+
     return false;
   }
 
@@ -247,11 +248,13 @@ class sfImageLineGD extends sfImageTransformAbstract
    */
   public function setStyle($style)
   {
-    if(is_integer($style = $style))
+    if (is_numeric($style = $style))
     {
       $this->style = $style;
+
       return true;
     }
+
     return false;
   }
 
@@ -274,19 +277,24 @@ class sfImageLineGD extends sfImageTransformAbstract
   protected function transform(sfImage $image)
   {
     $resource = $image->getAdapter()->getHolder();
-    
-    if(!is_null($this->style))
+
+    if (!is_null($this->style))
     {
       imagesetstyle($this->style);
     }
-    
-    if($this->thickness === 1)
+
+    if ($this->thickness === 1)
     {
       imageline($resource, $this->x1, $this->y1, $this->x2, $this->y2, $image->getAdapter()->getColorByHex($resource, $this->color));
-    } elseif($this->x1 === $this->x2 || $this->y1 === $this->y2)
+    }
+
+    else if ($this->x1 === $this->x2 || $this->y1 === $this->y2)
     {
       imagefilledrectangle($resource, round(min($this->x1, $this->x2) - $this->thickness), round(min($this->y1, $this->y2) - $this->thickness), round(max($this->x1, $this->x2) + $this->thickness), round(max($this->y1, $this->y2) + $this->thickness), $image->getAdapter()->getColorByHex($resource, $this->color));
-    } else {
+    }
+
+    else
+    {
       $k = ($this->y2 - $this->y1) / ($this->x2 - $this->x1);
       $a = $this->thickness / sqrt(1 + pow($k, 2));
       $points = array(
@@ -295,14 +303,12 @@ class sfImageLineGD extends sfImageTransformAbstract
         round($this->x2 + (1+$k)*$a), round($this->y2 - (1-$k)*$a),
         round($this->x2 + (1-$k)*$a), round($this->y2 + (1+$k)*$a),
       );
-      
+
       $color = $image->getAdapter()->getColorByHex($resource, $this->color);
       imagefilledpolygon($resource, $points, 4, $color);
       imagepolygon($resource, $points, 4, $color);
     }
 
     return $image;
-
   }
-
 }

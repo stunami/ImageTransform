@@ -21,13 +21,11 @@
  */
 class sfImageEllipseGD extends sfImageTransformAbstract
 {
-
   /**
    * X-coordinate of the center.
    * @var integer
   */
   protected $x = 0;
-
 
   /**
    * Y-coordinate of the center.
@@ -35,13 +33,11 @@ class sfImageEllipseGD extends sfImageTransformAbstract
   */
   protected $y = 0;
 
-
   /**
    * The Ellipse width
    * @var integer
   */
   protected $width = 0;
-
 
   /**
    * The Ellipse height
@@ -54,22 +50,21 @@ class sfImageEllipseGD extends sfImageTransformAbstract
    * @var integer
   */
   protected $thickness = 1;
-  
+
   /**
    * Line color.
   */
-  protected $color = 90;  
+  protected $color = 90;
 
   /**
    * Fill.
   */
-  protected $fill = null;  
+  protected $fill = null;
 
   /**
    * Line style.
   */
   protected $style = null;
-
 
   /**
    * Construct an sfImageBlur object.
@@ -85,7 +80,6 @@ class sfImageEllipseGD extends sfImageTransformAbstract
    */
   public function __construct($x, $y, $width, $height, $thickness=1, $color='#000000', $fill=null, $style=null)
   {
-
     $this->setX($x);
     $this->setY($y);
     $this->setWidth($width);
@@ -94,7 +88,6 @@ class sfImageEllipseGD extends sfImageTransformAbstract
     $this->setColor($color);
     $this->setFill($fill);
     $this->setStyle($style);
-
   }
 
   /**
@@ -105,12 +98,13 @@ class sfImageEllipseGD extends sfImageTransformAbstract
    */
   public function setX($x)
   {
-    if(is_integer($x))
+    if (is_numeric($x))
     {
       $this->x = (int)$x;
+
       return true;
     }
-    
+
     return false;
   }
 
@@ -132,11 +126,13 @@ class sfImageEllipseGD extends sfImageTransformAbstract
    */
   public function setY($y)
   {
-    if(is_integer($y))
+    if (is_numeric($y))
     {
       $this->y = (int)$y;
+
       return true;
     }
+
     return false;
   }
 
@@ -149,7 +145,7 @@ class sfImageEllipseGD extends sfImageTransformAbstract
   {
     return $this->y;
   }
-  
+
   /**
    * Sets the width
    *
@@ -158,11 +154,13 @@ class sfImageEllipseGD extends sfImageTransformAbstract
    */
   public function setWidth($width)
   {
-    if(is_integer($width))
+    if (is_numeric($width))
     {
       $this->width = (int)$width;
+
       return true;
     }
+
     return false;
   }
 
@@ -175,7 +173,7 @@ class sfImageEllipseGD extends sfImageTransformAbstract
   {
     return $this->width;
   }
-  
+
   /**
    * Sets the height
    *
@@ -184,11 +182,13 @@ class sfImageEllipseGD extends sfImageTransformAbstract
    */
   public function setHeight($height)
   {
-    if(is_integer($height))
+    if (is_numeric($height))
     {
       $this->height = (int)$height;
+
       return true;
     }
+
     return false;
   }
 
@@ -201,7 +201,7 @@ class sfImageEllipseGD extends sfImageTransformAbstract
   {
     return $this->height;
   }
-  
+
   /**
    * Sets the thickness
    *
@@ -210,11 +210,13 @@ class sfImageEllipseGD extends sfImageTransformAbstract
    */
   public function setThickness($thickness)
   {
-    if(is_integer($thickness))
+    if (is_numeric($thickness))
     {
       $this->thickness = (int)$thickness;
+
       return true;
     }
+
     return false;
   }
 
@@ -226,7 +228,7 @@ class sfImageEllipseGD extends sfImageTransformAbstract
   public function getThickness()
   {
     return $this->thickness;
-  }        
+  }
 
   /**
    * Sets the color
@@ -236,11 +238,13 @@ class sfImageEllipseGD extends sfImageTransformAbstract
    */
   public function setColor($color)
   {
-    if(preg_match('/#[\d\w]{6}/',$color)) 
+    if (preg_match('/#[\d\w]{6}/',$color))
     {
       $this->color = $color;
+
       return true;
     }
+
     return false;
   }
 
@@ -262,11 +266,13 @@ class sfImageEllipseGD extends sfImageTransformAbstract
    */
   public function setFill($fill)
   {
-    if(preg_match('/#[\d\w]{6}/',$fill) || (is_object($fill) && class_name($fill) === 'sfImage')) 
+    if (preg_match('/#[\d\w]{6}/',$fill) || (is_object($fill) && class_name($fill) === 'sfImage'))
     {
       $this->fill = $fill;
+
       return true;
     }
+
     return false;
   }
 
@@ -288,11 +294,13 @@ class sfImageEllipseGD extends sfImageTransformAbstract
    */
   public function setStyle($style)
   {
-    if(is_integer($style))
+    if (is_numeric($style))
     {
       $this->style = (int)$style;
+
       return true;
     }
+
     return false;
   }
 
@@ -315,34 +323,33 @@ class sfImageEllipseGD extends sfImageTransformAbstract
   protected function transform(sfImage $image)
   {
     $resource = $image->getAdapter()->getHolder();
-        
     imagesetthickness($resource, $this->thickness);
 
-    if(!is_null($this->fill))
+    if (!is_null($this->fill))
     {
-      if(!is_object($this->fill))
+      if (!is_object($this->fill))
       {
         imagefilledellipse($resource, $this->x, $this->y, $this->width, $this->height, $image->getAdapter()->getColorByHex($resource, $this->fill));
       }
-      
-      if(is_object($this->fill))
+
+      if (is_object($this->fill))
       {
         imagefilledellipse($resource, $this->x, $this->y, $this->width, $this->height, $image->getAdapter()->getColorByHex($resource, $this->color));
-        $image->fill($this->x, $this->y, $this->fill); 
+        $image->fill($this->x, $this->y, $this->fill);
       }
 
-      if($this->color !== "" && $this->fill !== $this->color)
+      if ($this->color !== "" && $this->fill !== $this->color)
       {
-        imageellipse($resource, $this->x, $this->y, $this->width, $this->height, $image->getAdapter()->getColorByHex($resource, $this->color)); 
-      }       
-      
-    } else {
-    
-      imageellipse($resource, $this->x, $this->y, $this->width, $this->height, $image->getAdapter()->getColorByHex($resource, $this->color)); 
+        imageellipse($resource, $this->x, $this->y, $this->width, $this->height, $image->getAdapter()->getColorByHex($resource, $this->color));
+      }
+
     }
-    
+
+    else
+    {
+      imageellipse($resource, $this->x, $this->y, $this->width, $this->height, $image->getAdapter()->getColorByHex($resource, $this->color));
+    }
+
     return $image;
-
   }
-
 }

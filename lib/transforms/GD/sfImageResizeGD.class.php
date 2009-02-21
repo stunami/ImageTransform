@@ -21,17 +21,16 @@
  */
 class sfImageResizeGD extends sfImageTransformAbstract
 {
-
   /**
    * Image width.
    * var integer width of the image is to be reized to
-  */  
+  */
   protected $width = 0;
-  
+
   /**
    * Image height.
    * var integer height of the image is to be reized to
-  */  
+  */
   protected $height = 0;
 
   /**
@@ -50,7 +49,7 @@ class sfImageResizeGD extends sfImageTransformAbstract
    * Set the images new width.
    *
    * @param integer
-   */ 
+   */
   public function setWidth($width)
   {
     $this->width = (int)$width;
@@ -70,11 +69,11 @@ class sfImageResizeGD extends sfImageTransformAbstract
    * Set the images new height.
    *
    * @param integer
-   */ 
+   */
   public function setHeight($height)
   {
     $this->height = (int)$height;
-  }   
+  }
 
   /**
    * Gets the images new height
@@ -94,24 +93,20 @@ class sfImageResizeGD extends sfImageTransformAbstract
    */
   protected function transform(sfImage $image)
   {
-  
-
-  
     $resource = $image->getAdapter()->getHolder();
 
     $x = imagesx($resource);
     $y = imagesy($resource);
 
     // If the width or height is not valid then enforce the aspect ratio
-    if(!is_integer($this->width) || $this->width < 1)
+    if (!is_numeric($this->width) || $this->width < 1)
     {
-      $this->width = round(($x / $y) * $this->height);       
-    } 
-    elseif(!is_integer($this->height) || $this->height < 1) 
+      $this->width = round(($x / $y) * $this->height);
+    }
+
+    else if (!is_numeric($this->height) || $this->height < 1)
     {
-
-      $this->height = round(($y / $x) * $this->width);    
-
+      $this->height = round(($y / $x) * $this->width);
     }
 
     $dest_resource = $image->getAdapter()->getTransparentImage($this->width, $this->height);
@@ -123,6 +118,5 @@ class sfImageResizeGD extends sfImageTransformAbstract
     $image->getAdapter()->setHolder($dest_resource);
 
     return $image;
-
   }
 }

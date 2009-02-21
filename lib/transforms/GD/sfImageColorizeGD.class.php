@@ -13,7 +13,7 @@
  *
  * Colorizes a GD image.
  *
- * 
+ *
  *
  * @package sfImageTransform
  * @author Stuart Lowes <stuart.lowes@gmail.com>
@@ -21,26 +21,25 @@
  */
 class sfImageColorizeGD  extends sfImageTransformAbstract
 {
-  
   /**
    * Red Tint.
-  */  
+  */
   protected $red_tint = 0;
 
   /**
    * Green Tint.
-  */  
+  */
   protected $green_tint = 0;
-  
+
   /**
    * Blue Tint.
-  */  
+  */
   protected $blue_tint = 0;
-  
+
   /**
    * Alpha.
-  */  
-  protected $alpha = 0; 
+  */
+  protected $alpha = 0;
 
   /**
    * Construct an sfImageColorize object.
@@ -52,12 +51,10 @@ class sfImageColorizeGD  extends sfImageTransformAbstract
    */
   public function __construct($red, $green, $blue, $alpha=0)
   {
-
     $this->setRed($red);
     $this->setGreen($green);
     $this->setBlue($blue);
     $this->setAlpha($alpha);
-        
   }
 
   /**
@@ -68,11 +65,13 @@ class sfImageColorizeGD  extends sfImageTransformAbstract
    */
   public function setRed($red)
   {
-    if(is_integer($red))
+    if (is_numeric($red))
     {
       $this->red_tint = (int)$red;
+
       return true;
     }
+
     return false;
   }
 
@@ -85,7 +84,7 @@ class sfImageColorizeGD  extends sfImageTransformAbstract
   {
     return $this->red_tint;
   }
-  
+
   /**
    * Sets the green
    *
@@ -94,11 +93,13 @@ class sfImageColorizeGD  extends sfImageTransformAbstract
    */
   public function setGreen($green)
   {
-    if(is_integer($green))
+    if (is_numeric($green))
     {
       $this->green_tint = (int)$green;
+
       return true;
     }
+
     return false;
   }
 
@@ -111,7 +112,7 @@ class sfImageColorizeGD  extends sfImageTransformAbstract
   {
     return $this->green_tint;
   }
-  
+
   /**
    * Sets the blue
    *
@@ -120,11 +121,13 @@ class sfImageColorizeGD  extends sfImageTransformAbstract
    */
   public function setBlue($blue)
   {
-    if(is_integer($blue))
+    if (is_numeric($blue))
     {
       $this->blue_tint = (int)$blue;
+
       return true;
     }
+
     return false;
   }
 
@@ -137,7 +140,7 @@ class sfImageColorizeGD  extends sfImageTransformAbstract
   {
     return $this->blue_tint;
   }
-  
+
   /**
    * Sets the alpha
    *
@@ -146,11 +149,13 @@ class sfImageColorizeGD  extends sfImageTransformAbstract
    */
   public function setAlpha($alpha)
   {
-    if(is_integer($alpha))
+    if (is_numeric($alpha))
     {
       $this->alpha = (int)$alpha;
+
       return true;
     }
+
     return false;
   }
 
@@ -162,7 +167,7 @@ class sfImageColorizeGD  extends sfImageTransformAbstract
   public function getAlpha()
   {
     return $this->alpha;
-  }      
+  }
 
   /**
    * Apply the transform to the sfImage object.
@@ -174,20 +179,22 @@ class sfImageColorizeGD  extends sfImageTransformAbstract
   protected function transform(sfImage $image)
   {
     $resource = $image->getAdapter()->getHolder();
-    
-    
+
+
     // Use GD's built in filter
-    if(function_exists('imagefilter'))
+    if (function_exists('imagefilter'))
     {
       imagefilter($resource,IMG_FILTER_COLORIZE, $this->red_tint, $this->green_tint, $this->blue_tint, $this->alpha);
-      
+
+    }
+
     // Else do filter in code
     // Alpha not supported
-    } else {
-      
+    else
+    {
       $resourcex = imagesx($resource);
       $resourcey = imagesy($resource);
-      
+
       for ($x = 0; $x < $resourcex; ++$x)
       {
         for ($y = 0; $y < $resourcey; ++$y)
@@ -200,40 +207,40 @@ class sfImageColorizeGD  extends sfImageTransformAbstract
           $green = $red + $this->green_tint;
           $blue = $red + $this->blue_tint;
           $red += $this->red_tint;
-          
+
           // Max value is 255
           // Min value is 0
-          
-          if($red > 255)
+
+          if ($red > 255)
           {
             $red = 255;
           }
-          
-          if($green > 255)
+
+          if ($green > 255)
           {
             $green = 255;
           }
-          
-          if($blue > 255)
+
+          if ($blue > 255)
           {
             $blue = 255;
           }
-          
-          if($red < 0)
+
+          if ($red < 0)
           {
             $red = 0;
           }
-          
-          if($green < 0)
+
+          if ($green < 0)
           {
             $green = 0;
           }
-          
-          if($blue < 0)
+
+          if ($blue < 0)
           {
             $blue = 0;
           }
-          
+
           $newcol = imagecolorallocate ($resource, $red,$green,$blue);
           imagesetpixel ($resource, $x, $y, $newcol);
         }
@@ -241,6 +248,5 @@ class sfImageColorizeGD  extends sfImageTransformAbstract
     }
 
     return $image;
-    
   }
 }

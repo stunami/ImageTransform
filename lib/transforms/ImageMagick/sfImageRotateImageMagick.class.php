@@ -21,8 +21,18 @@
  */
 class sfImageRotateImageMagick extends sfImageTransformAbstract
 {
-
+  /**
+   * Angle to rotate
+   *
+   * @param integer
+   */
   protected $angle;
+
+  /**
+   * Background color.
+   *
+   * @param integer
+   */
   protected $background = '';
 
   /**
@@ -33,12 +43,10 @@ class sfImageRotateImageMagick extends sfImageTransformAbstract
    */
   public function __construct($angle, $background='')
   {
-
     $this->setAngle($angle);
     $this->setBackgroundColor($background);
-
   }
-  
+
   /**
    * set the angle to rotate the image by.
    *
@@ -57,7 +65,7 @@ class sfImageRotateImageMagick extends sfImageTransformAbstract
   public function getAngle()
   {
     return $this->angle;
-  }  
+  }
 
   /**
    * set the background color for the image.
@@ -70,14 +78,14 @@ class sfImageRotateImageMagick extends sfImageTransformAbstract
   }
 
   /**
-   * Gets the angle to rotate the image by.
+   * Gets the background color
    *
    * @return integer
    */
   public function getBackgroundColor()
   {
     return $this->background;
-  }  
+  }
 
   /**
    * Apply the transform to the sfImage object.
@@ -85,24 +93,24 @@ class sfImageRotateImageMagick extends sfImageTransformAbstract
    * @param sfImage
    * @return sfImage
    */
-  protected function transform(sfImage $image) 
+  protected function transform(sfImage $image)
   {
-
     // No need to do anything
-    if($this->angle == 0) 
+    if ($this->angle == 0)
     {
       return $image;
     }
-    
+
     $resource = $image->getAdapter()->getHolder();
-       
+
     // By default use the background of the top left corner
-    if($this->background === '') {
+    if ($this->background === '')
+    {
       $this->background = $resource->getImagePixelColor(0, 0);
     }
-    
+
     $resource->rotateImage($this->background, $this->angle);
-    
+
     return $image;
   }
 }

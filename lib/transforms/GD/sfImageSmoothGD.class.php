@@ -21,11 +21,10 @@
  */
 class sfImageSmoothGD extends sfImageTransformAbstract
 {
-  
   /**
    * Smoothness level to be applied.
-  */  
-  protected $smoothness = 0;  
+  */
+  protected $smoothness = 0;
 
   /**
    * Construct an sfImageSmooth object.
@@ -34,9 +33,7 @@ class sfImageSmoothGD extends sfImageTransformAbstract
    */
   public function __construct($smoothness=0)
   {
-
     $this->setSmoothness($smoothness);
-
   }
 
   /**
@@ -47,12 +44,13 @@ class sfImageSmoothGD extends sfImageTransformAbstract
    */
   public function setSmoothness($smoothness)
   {
-    if(is_numeric($smoothness))
+    if (is_numeric($smoothness))
     {
       $this->smoothness = (int)$smoothness;
+
       return true;
     }
-    
+
     return false;
   }
 
@@ -75,18 +73,17 @@ class sfImageSmoothGD extends sfImageTransformAbstract
   protected function transform(sfImage $image)
   {
     $resource = $image->getAdapter()->getHolder();
-        
-    if(function_exists('imagefilter'))
+
+    if (function_exists('imagefilter'))
     {
       imagefilter($resource, IMG_FILTER_SMOOTH, $this->smoothness);
     }
+
     else
     {
       throw new sfImageTransformException(sprintf('Cannot perform transform, GD does not support imagefilter '));
     }
-    
+
     return $image;
-    
   }
-  
 }

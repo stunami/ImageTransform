@@ -21,12 +21,11 @@
  */
 class sfImagePixelizeGD extends sfImageTransformAbstract
 {
-  
   /**
    * The size of the pixelization.
-  */  
-  protected $block_size = 10; 
-  
+  */
+  protected $block_size = 10;
+
   /**
    * Construct an sfImagePixelize object.
    *
@@ -36,20 +35,22 @@ class sfImagePixelizeGD extends sfImageTransformAbstract
   {
     $this->setSize($size);
   }
-  
+
   /**
    * Set the pixelize blocksize.
    *
    * @param integer
    * @return boolean
-   */ 
+   */
   public function setSize($pixels)
   {
-    if(is_integer($pixels) && $pixels > 0)
+    if (is_numeric($pixels) && $pixels > 0)
     {
-      $this->block_size = $pixels;
+      $this->block_size = (int)$pixels;
+
       return true;
     }
+
     return false;
   }
 
@@ -57,12 +58,12 @@ class sfImagePixelizeGD extends sfImageTransformAbstract
    * Returns the pixelize blocksize.
    *
    * @return integer
-   */   
+   */
   public function getSize()
   {
     return $this->block_size;
   }
-  
+
   /**
    * Apply the transform to the sfImage object.
    *
@@ -72,19 +73,19 @@ class sfImagePixelizeGD extends sfImageTransformAbstract
   protected function transform(sfImage $image)
   {
     $resource = $image->getAdapter()->getHolder();
-    
+
     $resourcex = imagesx($resource);
     $resourcey = imagesy($resource);
-    
-    for ($x = 0; $x < $resourcex; $x += $this->block_size) {
-      for ($y = 0; $y < $resourcey; $y += $this->block_size) {
-          $rgb = imagecolorat($resource, $x, $y);
-          imagefilledrectangle($resource, $x, $y, $x + $this->block_size - 1, $y + $this->block_size - 1, $rgb);
+
+    for ($x = 0; $x < $resourcex; $x += $this->block_size)
+    {
+      for ($y = 0; $y < $resourcey; $y += $this->block_size)
+      {
+        $rgb = imagecolorat($resource, $x, $y);
+        imagefilledrectangle($resource, $x, $y, $x + $this->block_size - 1, $y + $this->block_size - 1, $rgb);
       }
     }
-    
+
     return $image;
-    
   }
-  
 }

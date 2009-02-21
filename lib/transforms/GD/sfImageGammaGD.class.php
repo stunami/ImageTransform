@@ -13,7 +13,7 @@
  *
  * Apply a gamma correction to a GD image.
  *
- * 
+ *
  *
  * @package sfImageTransform
  * @author Stuart Lowes <stuart.lowes@gmail.com>
@@ -21,13 +21,11 @@
  */
 class sfImageGammaGD extends sfImageTransformAbstract
 {
-
   /**
    * The input gamma.
    * @var float
   */
   protected $input_gamma = 1.0;
-
 
   /**
    * The number of pixels used for the blur.
@@ -43,12 +41,10 @@ class sfImageGammaGD extends sfImageTransformAbstract
    */
   public function __construct($input_gamma=1.0, $output_gamma=1.6)
   {
-
     $this->setInputGamma($input_gamma);
     $this->setOutputGamma($output_gamma);
-    
   }
-  
+
   /**
    * Sets the input gamma
    *
@@ -57,14 +53,16 @@ class sfImageGammaGD extends sfImageTransformAbstract
    */
   public function setInputGamma($gamma)
   {
-    if(is_float($gamma))
+    if (is_float($gamma))
     {
       $this->input_gamma = (float)$gamma;
+
       return true;
     }
+
     return false;
   }
-  
+
   /**
    * Gets the input gamma
    *
@@ -73,8 +71,8 @@ class sfImageGammaGD extends sfImageTransformAbstract
   public function getInputGamma()
   {
     return $this->input_gamma;
-  }        
-  
+  }
+
   /**
    * Sets the ouput gamma
    *
@@ -82,13 +80,14 @@ class sfImageGammaGD extends sfImageTransformAbstract
    */
   public function setOutputGamma($gamma)
   {
-    if(is_float($gamma))
+    if (is_numeric($gamma))
     {
       $this->ouput_gamma = (float)$gamma;
+
       return true;
     }
-  }  
-  
+  }
+
   /**
    * Gets the ouput gamma
    *
@@ -97,7 +96,7 @@ class sfImageGammaGD extends sfImageTransformAbstract
   public function getOuputGamma()
   {
     return $this->ouput_gamma;
-  }        
+  }
 
   /**
    * Apply the transform to the sfImage object.
@@ -108,11 +107,8 @@ class sfImageGammaGD extends sfImageTransformAbstract
   protected function transform(sfImage $image)
   {
     $resource = $image->getAdapter()->getHolder();
-
     imagegammacorrect ($resource, $this->input_gamma, $this->output_gamma);
-   
+
     return $image;
-    
   }
-  
 }

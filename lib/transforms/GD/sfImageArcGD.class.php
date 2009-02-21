@@ -21,13 +21,11 @@
  */
 class sfImageArcGD extends sfImageTransformAbstract
 {
-
   /**
    * X-coordinate of the center.
    * @var integer
   */
   protected $x = 0;
-
 
   /**
    * Y-coordinate of the center.
@@ -35,13 +33,11 @@ class sfImageArcGD extends sfImageTransformAbstract
   */
   protected $y = 0;
 
-
   /**
    * The arc width
    * @var integer
   */
   protected $width = 0;
-
 
   /**
    * The arc height
@@ -61,31 +57,29 @@ class sfImageArcGD extends sfImageTransformAbstract
   */
   protected $start_angle = 0;
 
-
   /**
    * The arc end angle, in degrees.
    * @var integer
   */
   protected $end_angle = 90;
-  
+
   /**
    * Line color.
    * @var string hex
   */
-  protected $color = '#000000';  
+  protected $color = '#000000';
 
   /**
    * Fill.
    * @var string/sfImage hex color or sfImage
   */
-  protected $fill = null;  
+  protected $fill = null;
 
   /**
    * Line style.
    * @var integer
   */
   protected $style = null;
-
 
   /**
    * Construct an sfImageArc object.
@@ -103,7 +97,6 @@ class sfImageArcGD extends sfImageTransformAbstract
    */
   public function __construct($x, $y, $width, $height, $start_angle, $end_angle, $thickness=1, $color='#000000', $fill=null,$style=null )
   {
-
     $this->setX($x);
     $this->setY($y);
     $this->setWidth($width);
@@ -114,7 +107,6 @@ class sfImageArcGD extends sfImageTransformAbstract
     $this->setColor($color);
     $this->setFill($fill);
     $this->setStyle($style);
-    
   }
 
   /**
@@ -125,12 +117,13 @@ class sfImageArcGD extends sfImageTransformAbstract
    */
   public function setX($x)
   {
-    if(is_integer($x))
+    if (is_numeric($x))
     {
       $this->x = (int)$x;
+
       return true;
     }
-    
+
     return false;
   }
 
@@ -152,11 +145,13 @@ class sfImageArcGD extends sfImageTransformAbstract
    */
   public function setY($y)
   {
-    if(is_integer($y))
+    if (is_numeric($y))
     {
       $this->y = (int)$y;
+
       return true;
     }
+
     return false;
   }
 
@@ -178,11 +173,13 @@ class sfImageArcGD extends sfImageTransformAbstract
    */
   public function setWidth($width)
   {
-    if(is_integer($width))
+    if (is_numeric($width))
     {
       $this->width = (int)$width;
+
       return true;
     }
+
     return false;
   }
 
@@ -195,7 +192,7 @@ class sfImageArcGD extends sfImageTransformAbstract
   {
     return $this->width;
   }
-  
+
   /**
    * Sets the height
    *
@@ -204,11 +201,13 @@ class sfImageArcGD extends sfImageTransformAbstract
    */
   public function setHeight($height)
   {
-    if(is_integer($height))
+    if (is_numeric($height))
     {
       $this->height = (int)$height;
+
       return true;
     }
+
     return false;
   }
 
@@ -221,7 +220,7 @@ class sfImageArcGD extends sfImageTransformAbstract
   {
     return $this->height;
   }
-  
+
   /**
    * Sets the start angel
    *
@@ -230,11 +229,13 @@ class sfImageArcGD extends sfImageTransformAbstract
    */
   public function setStartAngle($start_angle)
   {
-    if(is_integer($start_angle))
+    if (is_numeric($start_angle))
     {
       $this->start_angle = (int)$start_angle;
+
       return true;
     }
+
     return false;
   }
 
@@ -247,7 +248,7 @@ class sfImageArcGD extends sfImageTransformAbstract
   {
     return $this->start_angle;
   }
-  
+
   /**
    * Sets the end angel
    *
@@ -256,11 +257,13 @@ class sfImageArcGD extends sfImageTransformAbstract
    */
   public function setEndAngle($end_angle)
   {
-    if(is_integer($end_angle))
+    if (is_numeric($end_angle))
     {
       $this->end_angle = (int)$end_angle;
+
       return true;
     }
+
     return false;
   }
 
@@ -273,7 +276,7 @@ class sfImageArcGD extends sfImageTransformAbstract
   {
     return $this->end_angle;
   }
-  
+
   /**
    * Sets the thickness
    *
@@ -282,11 +285,12 @@ class sfImageArcGD extends sfImageTransformAbstract
    */
   public function setThickness($thickness)
   {
-    if(is_integer($thickness))
+    if (is_numeric($thickness))
     {
       $this->thickness = (int)$thickness;
       return true;
     }
+
     return false;
   }
 
@@ -298,7 +302,7 @@ class sfImageArcGD extends sfImageTransformAbstract
   public function getThickness()
   {
     return $this->thickness;
-  }        
+  }
 
   /**
    * Sets the color
@@ -308,7 +312,7 @@ class sfImageArcGD extends sfImageTransformAbstract
    */
   public function setColor($color)
   {
-    if(preg_match('/#[\d\w]{6}/',$color)) 
+    if (preg_match('/#[\d\w]{6}/',$color))
     {
       $this->color = $color;
       return true;
@@ -334,11 +338,13 @@ class sfImageArcGD extends sfImageTransformAbstract
    */
   public function setFill($fill)
   {
-    if(preg_match('/#[\d\w]{6}/',$fill) || (is_object($fill) && class_name($fill) === 'sfImage')) 
+    if (preg_match('/#[\d\w]{6}/',$fill) || (is_object($fill) && class_name($fill) === 'sfImage'))
     {
       $this->fill = $fill;
+
       return true;
     }
+
     return false;
   }
 
@@ -360,11 +366,13 @@ class sfImageArcGD extends sfImageTransformAbstract
    */
   public function setStyle($style)
   {
-    if(is_integer($style))
+    if (is_numeric($style))
     {
       $this->style = (int)$style;
+
       return true;
     }
+
     return false;
   }
 
@@ -387,28 +395,29 @@ class sfImageArcGD extends sfImageTransformAbstract
   protected function transform(sfImage $image)
   {
     $resource = $image->getAdapter()->getHolder();
-        
+
     imagesetthickness($resource, $this->thickness);
 
-    if(!is_null($this->fill))
+    if (!is_null($this->fill))
     {
-      if(!is_object($this->fill))
+      if (!is_object($this->fill))
       {
         imagefilledarc($resource, $this->x, $this->y, $this->width, $this->height, $this->start_angle, $this->end_angle, $image->getAdapter()->getColorByHex($resource, $this->fill), $this->style);
       }
-            
-      if($this->color !== "" && $this->fill !== $this->color)
+
+      if ($this->color !== "" && $this->fill !== $this->color)
       {
-        imagearc($resource, $this->x, $this->y, $this->width, $this->height, $this->start_angle, $this->end_angle, $image->getAdapter()->getColorByHex($resource, $this->color)); 
-      }      
-      
-    } else {
-    
-      imagearc($resource, $this->x, $this->y, $this->width, $this->height, $this->start_angle, $this->end_angle, $image->getAdapter()->getColorByHex($resource, $this->color)); 
+        imagearc($resource, $this->x, $this->y, $this->width, $this->height, $this->start_angle, $this->end_angle, $image->getAdapter()->getColorByHex($resource, $this->color));
+      }
+
     }
-    
+
+    else
+    {
+
+      imagearc($resource, $this->x, $this->y, $this->width, $this->height, $this->start_angle, $this->end_angle, $image->getAdapter()->getColorByHex($resource, $this->color));
+    }
+
     return $image;
-
   }
-
 }

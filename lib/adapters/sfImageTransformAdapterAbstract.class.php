@@ -20,7 +20,6 @@
  */
 abstract class  sfImageTransformAdapterAbstract
 {
-
  /**
    * Image filename.
    * @access protected
@@ -43,35 +42,35 @@ abstract class  sfImageTransformAdapterAbstract
   protected $quality = null;
 
   abstract public function create($x=1, $y=1);
-  
+
   abstract public function load($filename, $mime);
-  
+
   abstract public function loadString($string);
-    
+
   abstract public function save();
-  
+
   abstract public function saveAs($filename, $mime='');
-  
+
   abstract public function copy();
-  
+
   abstract public function getWidth();
-  
+
   abstract public function getHeight();
 
   abstract public function hasHolder();
 
   abstract public function getHolder();
-  
+
   abstract public function setHolder($holder);
-  
+
   abstract public function getMIMEType();
-  
+
   abstract public function setMIMEType($mime);
 
   abstract public function __toString();
-  
+
   abstract public function getAdapterName();
-   
+
   /**
    * Sets the image filename
    * @param string
@@ -80,26 +79,27 @@ abstract class  sfImageTransformAdapterAbstract
    */
   public function setFilename($filename)
   {
-    if('' !== $filename)
+    if ('' !== $filename)
     {
       $this->filename = $filename;
+
       return true;
     }
-    
+
     return false;
 
   }
 
   /**
    * Returns the image full filename
-   * 
+   *
    * @return string
    */
   public function getFilename()
   {
     return $this->filename;
   }
-  
+
   /**
    * Sets the image filename
    * @param integer Quality of the image
@@ -108,24 +108,23 @@ abstract class  sfImageTransformAdapterAbstract
    */
   public function setQuality($quality)
   {
-    if(is_numeric($quality) && $quality >= 0 && $quality <= 100)
+    if (is_numeric($quality) && $quality >= 0 && $quality <= 100)
     {
       $this->quality = $quality;
+
       return true;
     }
+
     return false;
   }
- 
+
   /**
    * Returns the current setting for the image quality
-   * 
+   *
    * @return integer
    */
   public function getQuality()
   {
     return $this->quality;
   }
-
- 
- 
 }
