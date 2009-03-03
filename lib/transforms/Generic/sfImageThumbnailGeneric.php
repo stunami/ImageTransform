@@ -28,20 +28,26 @@ class sfImageThumbnailGeneric extends sfImageTransformAbstract
   protected $height;
 
   /**
-   * method for thumbnail creation
+   * method to be used for thumbnail creation. default is scale.
    */
-  protected $method;
+  protected $method = 'scale';
+  
+  /**
+   * available methods for thumbnail creation
+   */
+  protected $methods = array('scale', 'inflate','deflate', 'left' ,'right', 'top', 'bottom', 'center');
 
   /**
    * constructor
    *
    * @param integer $width of the thumbnail
    * @param integer $height of the thumbnail
+   * @param string type of thumbnail method to be created
    *
    * @return void
    */
   public function __construct($width, $height, $method='scale')
-  {
+  {   
     $this->setWidth($width);
     $this->setHeight($height);
     $this->setMethod($method);
@@ -55,7 +61,14 @@ class sfImageThumbnailGeneric extends sfImageTransformAbstract
    */
   public function setHeight($height)
   {
-    $this->height = $height;
+    if(is_numeric($height) && $height > 0)
+    {
+      $this->height = (int)$height;
+      
+      return true;
+    }
+    
+    return false;
   }
 
   /**
@@ -76,7 +89,12 @@ class sfImageThumbnailGeneric extends sfImageTransformAbstract
    */
   public function setWidth($width)
   {
-    $this->width = $width;
+    if(is_numeric($width) && $width > 0)
+    {
+      $this->width = (int)$width;
+      
+      return false;
+    }
   }
 
   /**
@@ -91,7 +109,22 @@ class sfImageThumbnailGeneric extends sfImageTransformAbstract
 
   public function setMethod($method)
   {
-    $this->method = strtolower($method);
+    // Backwards compatibility
+    $map = array('left' => 'west', 'right' => 'east', 'top' => 'north', 'bottom' => 'south');
+    if($key = array_search($method, $map))
+    {
+      $message = sprintf('sfImageTransformPlugin thumbnail method \'%s\' is depreciated use \'%s\'', $method, $key);
+      sfContext::getInstance()->getEventDispatcher()->notify(new sfEvent($this, 'application.log', array($message, 'priority' => sfLogger::ERR)));
+    }
+  
+    if(in_array($method, $this->methods))
+    {
+      $this->method = strtolower($method);
+      
+      return true;
+    }
+    
+    return false;
   }
 
   /**
@@ -103,6 +136,7 @@ class sfImageThumbnailGeneric extends sfImageTransformAbstract
   {
     return $this->method;
   }
+  
   /**
    * Apply the transformation to the image and returns the image thumbnail
    */
@@ -114,8 +148,12 @@ class sfImageThumbnailGeneric extends sfImageTransformAbstract
     $scale_w    = $this->getWidth()/$resource_w;
     $scale_h    = $this->getHeight()/$resource_h;
 
+    $scale_w    = $this->getWidth()/$resource_w;
+    $scale_h    = $this->getHeight()/$resource_h;
+
     $ratio_w    = $resource_w/$this->getWidth();
     $ratio_h    = $resource_w/$this->getHeight();
+    
 
     switch ($this->getMethod())
     {
@@ -124,37 +162,37 @@ class sfImageThumbnailGeneric extends sfImageTransformAbstract
 
         return $image->resize($this->getWidth(), $this->getHeight());
 
-      case 'west':
+      case 'left':
         $image->scale(max($scale_w, $scale_h));
 
-        return $image->crop($this->getWidth(), $this->getHeight(), 0, 0);
+        return $image->crop(0, (int)round(($image->getHeight() - $this->getHeight()) / 2), $this->getWidth(), $this->getHeight());
 
-      case 'east':
+      case 'right':
         $image->scale(max($scale_w, $scale_h));
 
-        return $image->crop($this->getWidth(), $this->getHeight(), (int)($image->getWidth()-$this->getWidth()), 0);
+        return $image->crop(($image->getWidth() - $this->getWidth()), (int)round(($image->getHeight() - $this->getHeight()) / 2),$this->getWidth(), $this->getHeight());
 
-      case 'north':
+      case 'top':
         $image->scale(max($scale_w, $scale_h));
 
-        return $image->crop($this->getWidth(), $this->getHeight(), 0, 0);
+        return $image->crop((int)round(($image->getWidth() - $this->getWidth()) / 2), 0, $this->getWidth(), $this->getHeight());
 
-      case 'south':
+      case 'bottom':
         $image->scale(max($scale_w, $scale_h));
 
-        return $image->crop($this->getWidth(), $this->getHeight(), 0, $image->getHeight()-$this->getHeight());
-
+        return $image->crop((int)round(($image->getWidth() - $this->getWidth()) / 2), ($image->getHeight() - $this->getHeight()), $this->getWidth(), $this->getHeight());
+        
       case 'center':
         $image->scale(max($scale_w, $scale_h));
-        $left = (int)round(($image->getWidth() - $this->getWidth())/2);
-        $top  = (int)round(($image->getHeight() - $this->getHeight())/2);
+        
+        $left = (int)round(($image->getWidth() - $this->getWidth()) / 2);
+        $top  = (int)round(($image->getHeight() - $this->getHeight()) / 2);
 
-        return $image->crop($this->getWidth(), $this->getHeight(), $left, $top);
+        return $image->crop($left, $top, $this->getWidth(), $this->getHeight());
 
       case 'scale':
       default:
-
-    return $image->scale(min($scale_w, $scale_h));
+        return $image->scale(min($scale_w, $scale_h));
     }
   }
 }
