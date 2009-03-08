@@ -40,14 +40,27 @@ class sfImageOverlayGD extends sfImageTransformAbstract
    * The named position for the overlay
    */
   protected $position = null;
+  
+  /**
+   * available labels for overlay positions 
+   */
+  protected $labels = array(
+                            'top', 'bottom','left' ,'right', 'middle', 'center',
+                            'top-left', 'top-right', 'top-center',
+                            'middle-left', 'middle-right', 'middle-center',
+                            'bottom-left', 'bottom-right', 'bottom-center',
+                           );
+  
+  
   /**
    * Construct an sfImageOverlay object.
    *
    * @param array mixed
    */
-  public function __construct(sfImage $overlay, $position=array(0,0))
+  public function __construct(sfImage $overlay, $position='top-left')
   {
     $this->setOverlay($overlay);
+    
     if (is_array($position) && count($position))
     {
 
@@ -92,7 +105,14 @@ class sfImageOverlayGD extends sfImageTransformAbstract
    */
   public function setLeft($left)
   {
-    $this->left = $left;
+    if(is_numeric($left))
+    {
+      $this->left = $left;
+      
+      return true;
+    }
+    
+    return false;
   }
 
   /**
@@ -112,7 +132,14 @@ class sfImageOverlayGD extends sfImageTransformAbstract
    */
   public function setTop($top)
   {
-    $this->top = $top;
+    if(is_numeric($top))
+    {
+      $this->top = $top;
+      
+      return true;
+    }
+    
+    return false;
   }
 
   /**
@@ -129,21 +156,40 @@ class sfImageOverlayGD extends sfImageTransformAbstract
    * set the named position
    *
    * @param string $position named position. Possible named positions:
-   *                - middle - overlay in the middle
-   *                - north  - overlay in the north side
-   *                - south  - overlay in the south side
-   *                - west   - overlay in the west side
-   *                - east   - overlay in the east side
-   *                - north west combination of north and west
-   *                - north east combination of north and east
-   *                - south west combination of south and west
-   *                - south east combination of south and east
+   *                - top (alias of top-center), 
+   *                - bottom (alias of botom-center), 
+   *                - left ( alias of top-left), 
+   *                - right (alias of top-right), 
+   *                - center (alias of middle-center1), 
+   *                - top-left, top-right, top-center, 
+   *                - middle-left, middle-right, middle-center,
+   *                - bottom-left, bottom-right, bottom-center
    *
-   * @return void
+   * @return boolean
    */
   public function setPosition($position)
   {
-    $this->position = $position;
+  
+    // Backwards compatibility
+    $map = array(
+                  'left' => 'west', 'right' => 'east', 'top' => 'north', 'bottom' => 'south', 
+                  'top west' => 'top-left', 'top east' => 'top-left', 'south west' => 'bottom-left', 'south east' => 'bottom-left'
+                );
+                
+    if($key = array_search($position, $map))
+    {
+      $message = sprintf('sfImageTransformPlugin overlay position \'%s\' is depreciated use \'%s\'', $position, $key);
+      sfContext::getInstance()->getEventDispatcher()->notify(new sfEvent($this, 'application.log', array($message, 'priority' => sfLogger::ERR)));
+    }
+  
+    if(in_array($position, $this->labels))
+    {
+      $this->position = strtolower($position);
+      
+      return true;
+    }
+    
+    return false;
   }
 
   /**
@@ -152,7 +198,7 @@ class sfImageOverlayGD extends sfImageTransformAbstract
    * @return string
    */
   public function getPosition()
-  {
+  { 
     return $this->position;
   }
 
@@ -183,42 +229,53 @@ class sfImageOverlayGD extends sfImageTransformAbstract
 
     switch (strtolower($position))
     {
-      case 'north':
-        $this->setLeft(round(($resource_x - $overlay_x)/2));
+      case 'top':
+      case 'top-left':
+        $this->setLeft(0);
         $this->setTop(0);
         break;
-      case 'south':
-        $this->setLeft(round(($resource_x - $overlay_x)/2));
+      case 'bottom':
+      case 'bottom-left':
+        $this->setLeft(0);
         $this->setTop($resource_y-$overlay_y);
         break;
-      case 'east':
+      case 'left':
+        $this->setLeft(0);
+        $this->setTop(round(($resource_y - $overlay_y)/2));
+        break;
+      case 'right':
         $this->setLeft(round($resource_x - $overlay_x));
         $this->setTop(round(($resource_y - $overlay_y)/2));
         break;
-      case 'west':
-        $this->setLeft(0);
-        $this->setTop(round(($resource_y - $overlay_y)/2));
-        break;
-      case 'north east':
+      case 'top-right':
         $this->setLeft($resource_x - $overlay_x);
         $this->setTop(0);
         break;
-      case 'north west':
-        $this->setLeft(0);
-        $this->setTop(0);
-        break;
-      case 'south east':
+      case 'bottom-right':
         $this->setLeft($resource_x - $overlay_x);
         $this->setTop($resource_y - $overlay_y);
         break;
-      case 'south west':
-        $this->setLeft(0);
-        $this->setTop($resource_y - $overlay_y);
+      case 'bottom-center':
+        $this->setLeft(round(($resource_x - $overlay_x) / 2));
+        $this->setTop(round($resource_y - $overlay_y));
         break;
-
+      case 'middle':
+      case 'middle-center':
+        $this->setLeft(round(($resource_x - $overlay_x) / 2));
+        $this->setTop(round(($resource_y - $overlay_y) / 2));
+        break;
+      case 'middle-left':
+        $this->setLeft(0);
+        $this->setTop(round(($resource_y - $overlay_y) / 2));
+        break;
+      case 'middle-right':
+        $this->setLeft(round($resource_x - $overlay_x));
+        $this->setTop(round(($resource_y - $overlay_y) / 2));
+        break;
+      case 'bottom-left':
       default:
-        $this->setLeft(round(($resource_x - $overlay_x)/2));
-        $this->setTop(round(($resource_y - $overlay_y)/2));
+        $this->setLeft(0);
+        $this->setTop($resource_y - $overlay_y);
         break;
     }
 
