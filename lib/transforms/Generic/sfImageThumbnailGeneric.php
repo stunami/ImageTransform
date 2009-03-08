@@ -107,6 +107,12 @@ class sfImageThumbnailGeneric extends sfImageTransformAbstract
     return $this->width;
   }
 
+  /**
+   * returns the width of the thumbnail
+   * @param string thumbnail method. Options are scale (default), deflate (or inflate), right, left, top, bottom, scale
+   *
+   * @return integer
+   */
   public function setMethod($method)
   {
     // Backwards compatibility
@@ -192,6 +198,7 @@ class sfImageThumbnailGeneric extends sfImageTransformAbstract
 
       case 'scale':
       default:
+      
         return $image->scale(min($scale_w, $scale_h));
     }
   }
