@@ -84,18 +84,18 @@ class sfImageArcGD extends sfImageTransformAbstract
   /**
    * Construct an sfImageArc object.
    *
-   * @param integer
-   * @param integer
-   * @param integer
-   * @param integer
-   * @param integer
-   * @param integer
-   * @param integer
-   * @param string
-   * @param string/object
-   * @param integer
+   * @param integer $x x coordinate
+   * @param integer $y y coordinate
+   * @param integer $width width of arc
+   * @param integer $height height of arc
+   * @param integer $start_angle angle in degrees
+   * @param integer $end_angle angle in degrees
+   * @param integer $thickness line thickness
+   * @param string  $color hex color of line
+   * @param string/object $fill string color or fill object
+   * @param integer $style fill style, only applicable if using a fill object
    */
-  public function __construct($x, $y, $width, $height, $start_angle, $end_angle, $thickness=1, $color='#000000', $fill=null,$style=null )
+  public function __construct($x, $y, $width, $height, $start_angle, $end_angle, $thickness = 1, $color = '#000000', $fill=null,$style = null )
   {
     $this->setX($x);
     $this->setY($y);
