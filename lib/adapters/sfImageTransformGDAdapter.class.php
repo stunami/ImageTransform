@@ -434,10 +434,10 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
     if ('image/png' === $mime)
     {
 
-      return 9 - round($this->quality * (9/100));
+      return 9 - round($quality * (9/100));
     }
 
-    return $this->quality;
+    return $quality;
   }
 
  /**
