@@ -75,6 +75,16 @@ class sfImageCropGD extends sfImageTransformAbstract
   }
 
   /**
+   * returns the left coordinate
+   *
+   * @return integer
+   */
+  public function getLeft()
+  {
+    return $this->left;
+  }
+
+  /**
    * set the top coordinate.
    *
    * @param integer
@@ -89,6 +99,16 @@ class sfImageCropGD extends sfImageTransformAbstract
     }
 
     return false;
+  }
+
+  /**
+   * returns the top coordinate
+   *
+   * @return integer
+   */
+  public function getTop()
+  {
+    return $this->top;
   }
 
   /**
@@ -109,6 +129,16 @@ class sfImageCropGD extends sfImageTransformAbstract
   }
 
   /**
+   * returns the width of the thumbnail
+   *
+   * @return integer
+   */
+  public function getWidth()
+  {
+    return $this->width;
+  }
+
+  /**
    * set the height.
    *
    * @param integer
@@ -123,6 +153,16 @@ class sfImageCropGD extends sfImageTransformAbstract
     }
 
     return false;
+  }
+
+  /**
+   * returns the height of the thumbnail
+   *
+   * @return integer
+   */
+  public function getHeight()
+  {
+    return $this->height;
   }
 
   /**
