@@ -55,7 +55,6 @@ class sfImageCropImageMagick extends sfImageTransformAbstract
     $this->setTop($top);
     $this->setWidth($width);
     $this->setHeight($height);
-
   }
 
   /**
@@ -76,6 +75,16 @@ class sfImageCropImageMagick extends sfImageTransformAbstract
   }
 
   /**
+   * returns the left coordinate
+   *
+   * @return integer
+   */
+  public function getLeft()
+  {
+    return $this->left;
+  }
+
+  /**
    * set the top coordinate.
    *
    * @param integer
@@ -90,6 +99,16 @@ class sfImageCropImageMagick extends sfImageTransformAbstract
     }
 
     return false;
+  }
+
+  /**
+   * returns the top coordinate
+   *
+   * @return integer
+   */
+  public function getTop()
+  {
+    return $this->top;
   }
 
   /**
@@ -110,6 +129,16 @@ class sfImageCropImageMagick extends sfImageTransformAbstract
   }
 
   /**
+   * returns the width of the thumbnail
+   *
+   * @return integer
+   */
+  public function getWidth()
+  {
+    return $this->width;
+  }
+
+  /**
    * set the height.
    *
    * @param integer
@@ -127,6 +156,16 @@ class sfImageCropImageMagick extends sfImageTransformAbstract
   }
 
   /**
+   * returns the height of the thumbnail
+   *
+   * @return integer
+   */
+  public function getHeight()
+  {
+    return $this->height;
+  }
+
+  /**
    * Apply the transform to the sfImage object.
    *
    * @access protected
@@ -135,10 +174,8 @@ class sfImageCropImageMagick extends sfImageTransformAbstract
    */
   protected function transform(sfImage $image)
   {
-
     $resource = $image->getAdapter()->getHolder();
-
-    $resource->cropImage($this->left, $this->top, $this->width, $this->height);
+    $resource->cropImage($this->getWidth(), $this->getHeight(), $this->getLeft(), $this->getTop());
 
     return $image;
   }
