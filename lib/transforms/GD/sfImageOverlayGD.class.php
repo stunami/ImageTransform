@@ -259,7 +259,7 @@ class sfImageOverlayGD extends sfImageTransformAbstract
         $this->setLeft(round(($resource_x - $overlay_x) / 2));
         $this->setTop(round($resource_y - $overlay_y));
         break;
-      case 'middle':
+      case 'center':
       case 'middle-center':
         $this->setLeft(round(($resource_x - $overlay_x) / 2));
         $this->setTop(round(($resource_y - $overlay_y) / 2));

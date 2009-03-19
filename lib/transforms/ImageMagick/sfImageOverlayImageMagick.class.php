@@ -52,6 +52,16 @@ class sfImageOverlayImageMagick extends sfImageTransformAbstract
   protected $position = null;
 
   /**
+   * available labels for overlay positions 
+   */
+  protected $labels = array(
+                            'top', 'bottom','left' ,'right', 'middle', 'center',
+                            'top-left', 'top-right', 'top-center',
+                            'middle-left', 'middle-right', 'middle-center',
+                            'bottom-left', 'bottom-right', 'bottom-center',
+                           );
+                           
+  /**
    * Construct an sfImageOverlay object.
    *
    * @param sfImage $overlay  - the image for the overlay
@@ -61,7 +71,7 @@ class sfImageOverlayImageMagick extends sfImageTransformAbstract
    *
    * @return void
    */
-  public function __construct(sfImage $overlay, $position=array(0, 0), $opacity=null, $compose=IMagick::COMPOSITE_DEFAULT)
+  public function __construct(sfImage $overlay,  $position='top-left', $opacity=null, $compose=IMagick::COMPOSITE_DEFAULT)
   {
     $this->setOverlay($overlay);
     $this->setOpacity($opacity);
@@ -143,21 +153,40 @@ class sfImageOverlayImageMagick extends sfImageTransformAbstract
    * Set named position
    *
    * @param string $position named position. Possible named positions:
-   *                - middle - overlay in the middle
-   *                - north  - overlay in the north side
-   *                - south  - overlay in the south side
-   *                - west   - overlay in the west side
-   *                - east   - overlay in the east side
-   *                - north west combination of north and west
-   *                - north east combination of north and east
-   *                - south west combination of south and west
-   *                - south east combination of south and east
+   *                - top (alias of top-center), 
+   *                - bottom (alias of botom-center), 
+   *                - left ( alias of top-left), 
+   *                - right (alias of top-right), 
+   *                - center (alias of middle-center1), 
+   *                - top-left, top-right, top-center, 
+   *                - middle-left, middle-right, middle-center,
+   *                - bottom-left, bottom-right, bottom-center
    *
    * @return void
    */
   public function setPosition($position)
   {
-    $this->position = $position;
+  
+    // Backwards compatibility
+    $map = array(
+                  'left' => 'west', 'right' => 'east', 'top' => 'north', 'bottom' => 'south', 
+                  'top west' => 'top-left', 'top east' => 'top-left', 'south west' => 'bottom-left', 'south east' => 'bottom-left'
+                );
+                
+    if($key = array_search($position, $map))
+    {
+      $message = sprintf('sfImageTransformPlugin overlay position \'%s\' is depreciated use \'%s\'', $position, $key);
+      sfContext::getInstance()->getEventDispatcher()->notify(new sfEvent($this, 'application.log', array($message, 'priority' => sfLogger::ERR)));
+    }
+  
+    if(in_array($position, $this->labels))
+    {
+      $this->position = strtolower($position);
+      
+      return true;
+    }
+    
+    return false;
   }
 
   /**
@@ -198,42 +227,53 @@ class sfImageOverlayImageMagick extends sfImageTransformAbstract
 
     switch ($position)
     {
-      case 'north':
-        $this->setLeft(round(($resource_x - $overlay_x)/2));
+      case 'top':
+      case 'top-left':
+        $this->setLeft(0);
         $this->setTop(0);
         break;
-      case 'south':
-        $this->setLeft(round(($resource_x - $overlay_x)/2));
+      case 'bottom':
+      case 'bottom-left':
+        $this->setLeft(0);
         $this->setTop($resource_y-$overlay_y);
         break;
-      case 'east':
+      case 'left':
+        $this->setLeft(0);
+        $this->setTop(round(($resource_y - $overlay_y)/2));
+        break;
+      case 'right':
         $this->setLeft(round($resource_x - $overlay_x));
         $this->setTop(round(($resource_y - $overlay_y)/2));
         break;
-      case 'west':
-        $this->setLeft(0);
-        $this->setTop(round(($resource_y - $overlay_y)/2));
-        break;
-      case 'north east':
+      case 'top-right':
         $this->setLeft($resource_x - $overlay_x);
         $this->setTop(0);
         break;
-      case 'north west':
-        $this->setLeft(0);
-        $this->setTop(0);
-        break;
-      case 'south east':
+      case 'bottom-right':
         $this->setLeft($resource_x - $overlay_x);
         $this->setTop($resource_y - $overlay_y);
         break;
-      case 'south west':
-        $this->setLeft(0);
-        $this->setTop($resource_y - $overlay_y);
+      case 'bottom-center':
+        $this->setLeft(round(($resource_x - $overlay_x) / 2));
+        $this->setTop(round($resource_y - $overlay_y));
         break;
       case 'center':
+      case 'middle-center':
+        $this->setLeft(round(($resource_x - $overlay_x) / 2));
+        $this->setTop(round(($resource_y - $overlay_y) / 2));
+        break;
+      case 'middle-left':
+        $this->setLeft(0);
+        $this->setTop(round(($resource_y - $overlay_y) / 2));
+        break;
+      case 'middle-right':
+        $this->setLeft(round($resource_x - $overlay_x));
+        $this->setTop(round(($resource_y - $overlay_y) / 2));
+        break;
+      case 'bottom-left':
       default:
-        $this->setLeft(round(($resource_x - $overlay_x)/2));
-        $this->setTop(round(($resource_y - $overlay_y)/2));
+        $this->setLeft(0);
+        $this->setTop($resource_y - $overlay_y);
         break;
     }
   }
@@ -247,7 +287,7 @@ class sfImageOverlayImageMagick extends sfImageTransformAbstract
   {
     if(is_numeric($opacity) && $opacity > 1)
     {
-      $this->opacity = $opacity/100;
+      $this->opacity = $opacity / 100;
     }
 
     else if (is_float($opacity))
@@ -285,7 +325,7 @@ class sfImageOverlayImageMagick extends sfImageTransformAbstract
   }
 
   /**
-   * return the composite opeator
+   * return the composite operator
    *
    * @return integer composite operator
    */
