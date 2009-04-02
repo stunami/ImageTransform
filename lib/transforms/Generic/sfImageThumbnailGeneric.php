@@ -158,7 +158,7 @@ class sfImageThumbnailGeneric extends sfImageTransformAbstract
     $scale_h    = $this->getHeight()/$resource_h;
 
     $ratio_w    = $resource_w/$this->getWidth();
-    $ratio_h    = $resource_w/$this->getHeight();
+    $ratio_h    = $resource_h/$this->getHeight();
     
 
     switch ($this->getMethod())
