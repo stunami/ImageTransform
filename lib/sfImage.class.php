@@ -508,4 +508,9 @@ class sfImage
 
     return $adapter;
   }
+  
+  public function __clone()
+  {
+  	$this->adapter = $this->adapter->copy();
+  }
 }
