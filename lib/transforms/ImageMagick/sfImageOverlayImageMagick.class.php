@@ -170,13 +170,14 @@ class sfImageOverlayImageMagick extends sfImageTransformAbstract
     // Backwards compatibility
     $map = array(
                   'left' => 'west', 'right' => 'east', 'top' => 'north', 'bottom' => 'south', 
-                  'top west' => 'top-left', 'top east' => 'top-left', 'south west' => 'bottom-left', 'south east' => 'bottom-left'
+                  'top west' => 'top-left', 'top east' => 'top-right', 'south west' => 'bottom-left', 'south east' => 'bottom-right'
                 );
                 
     if($key = array_search($position, $map))
     {
-      $message = sprintf('sfImageTransformPlugin overlay position \'%s\' is depreciated use \'%s\'', $position, $key);
+      $message = sprintf('sfImageTransformPlugin overlay position \'%s\' is deprecated use \'%s\' instead', $position, $key);
       sfContext::getInstance()->getEventDispatcher()->notify(new sfEvent($this, 'application.log', array($message, 'priority' => sfLogger::ERR)));
+      $this->position = $map[$key];
     }
   
     if(in_array($position, $this->labels))

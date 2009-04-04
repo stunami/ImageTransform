@@ -173,13 +173,21 @@ class sfImageOverlayGD extends sfImageTransformAbstract
     // Backwards compatibility
     $map = array(
                   'left' => 'west', 'right' => 'east', 'top' => 'north', 'bottom' => 'south', 
-                  'top west' => 'top-left', 'top east' => 'top-left', 'south west' => 'bottom-left', 'south east' => 'bottom-left'
+                  'top west' => 'top-left', 'top east' => 'top-right', 'south west' => 'bottom-left', 'south east' => 'bottom-left'
                 );
                 
     if($key = array_search($position, $map))
     {
-      $message = sprintf('sfImageTransformPlugin overlay position \'%s\' is depreciated use \'%s\'', $position, $key);
-      sfContext::getInstance()->getEventDispatcher()->notify(new sfEvent($this, 'application.log', array($message, 'priority' => sfLogger::ERR)));
+      // We're showing a log message for 1.1/1.2
+      try
+      {
+        $message = sprintf('sfImageTransformPlugin overlay position \'%s\' is deprecated use \'%s\' instead', $position, $key);
+        sfContext::getInstance()->getEventDispatcher()->notify(new sfEvent($this, 'application.log', array($message, 'priority' => sfLogger::ERR)));
+      }
+      catch(Exception $e)
+      {
+        // 1.0
+      }
     }
   
     if(in_array($position, $this->labels))
