@@ -200,7 +200,7 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
   {
     $copyObj = clone $this;
 
-    $copy = imagecreatetruecolor($this->getWidth(), $this->getHeight());
+    $copy = $this->getTransparentImage($this->getWidth(), $this->getHeight());
     imagecopy($copy, $this->getHolder(), 0, 0, 0, 0, $this->getWidth(), $this->getHeight());
 
     $copyObj->setHolder($copy);
