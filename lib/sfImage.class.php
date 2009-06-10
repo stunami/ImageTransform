@@ -140,8 +140,7 @@ class sfImage
    * @access public
    * @param string Name of image file
    * @param string MIME type of image
-   *
-   * return boolean
+   * @return boolean
    */
   public function load($filename, $mime='')
   {
@@ -186,6 +185,7 @@ class sfImage
    *
    * @access public
    * @param string
+   * @return boolean
    */
   public function save()
   {
@@ -200,6 +200,7 @@ class sfImage
    * @access public
    * @param string Filename
    * @param string MIME type
+   * @return sfImage
    */
   public function saveAs($filename, $mime='')
   {
@@ -226,7 +227,7 @@ class sfImage
    * Returns a copy of the sfImage object
    *
    * @access public
-   * @return object
+   * @return sfImage
    */
   public function copy()
   {
@@ -265,6 +266,7 @@ class sfImage
   /**
    * Magic method. This allows the calling of execute tranform methods on sfImageTranform objects.
    *
+   * @method 
    * @param string $name the name of the transform, sfImage<NAME>
    * @param array Arguments for the transform class execute method
    * @return sfImage
@@ -442,7 +444,7 @@ class sfImage
           throw new Exception ('GD not enabled. Cannot detect mime type using GD.');
         }
 
-        $imgData = @GetImageSize($filename);
+        $imgData = GetImageSize($filename);
 
         if (isset($imgData['mime']))
         {
@@ -508,7 +510,14 @@ class sfImage
 
     return $adapter;
   }
-  
+ 
+  /**
+   * Copies the image object and returns it
+   *
+   * Returns a copy of the sfImage object
+   *
+   * @return sfImage
+   */ 
   public function __clone()
   {
   	$this->adapter = $this->adapter->copy();

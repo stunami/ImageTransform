@@ -16,6 +16,7 @@
  * Rotates image by a set angle.
  *
  * @package sfImageTransform
+ * @subpackage transforms
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @version SVN: $Id$
  */

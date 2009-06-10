@@ -13,9 +13,8 @@
  *
  * Fills the set area with a color or tile image.
  *
- *
- *
  * @package sfImageTransform
+ * @subpackage transforms
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @version SVN: $Id$
  */

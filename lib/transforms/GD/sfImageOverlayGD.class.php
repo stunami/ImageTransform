@@ -16,6 +16,7 @@
  * Overlays an image at a set point on the image.
  *
  * @package sfImageTransform
+ * @subpackage transforms
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @version SVN: $Id$
  */

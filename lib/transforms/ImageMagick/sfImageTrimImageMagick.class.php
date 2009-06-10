@@ -16,6 +16,7 @@
  * Trims an image using a specific colour or the colour of the top left of the image.
  *
  * @package sfImageTransform
+ * @subpackage transforms
  * @author Robin Corps <robin@ngse.co.uk>
  * @version SVN: $Id$
  */

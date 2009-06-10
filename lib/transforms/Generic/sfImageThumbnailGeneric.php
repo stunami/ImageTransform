@@ -11,9 +11,21 @@
  *
  * generic thumbnail transform
  *
+ * Create a thumbnail 100 x 100
+ * <code>
+ * <?php
+ * $img = new sfImage('image1.jpg');
+ * $img->thumbnail(100, 100);
+ * $img->setQuality(50);
+ * $img->saveAs('thumbnail.png');
+ * ?>
+ * </code>
+ *
+ * @package sfImageTransform
+ * @subpackage transforms
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @author Miloslav Kmet <miloslav.kmet@gmail.com>
- *
+ * @version SVN: $Id$
  */
 class sfImageThumbnailGeneric extends sfImageTransformAbstract
 {
@@ -30,12 +42,17 @@ class sfImageThumbnailGeneric extends sfImageTransformAbstract
   /**
    * method to be used for thumbnail creation. default is scale.
    */
-  protected $method = 'scale';
+  protected $method = 'fit';
   
   /**
    * available methods for thumbnail creation
    */
-  protected $methods = array('scale', 'inflate','deflate', 'left' ,'right', 'top', 'bottom', 'center');
+  protected $methods = array('fit', 'scale', 'inflate','deflate', 'left' ,'right', 'top', 'bottom', 'center');
+  
+  /*
+   * background color in hex or null for transparent
+   */
+  protected $background = null;
 
   /**
    * constructor
@@ -46,11 +63,12 @@ class sfImageThumbnailGeneric extends sfImageTransformAbstract
    *
    * @return void
    */
-  public function __construct($width, $height, $method='scale')
+  public function __construct($width, $height, $method='fit', $background=null)
   {   
     $this->setWidth($width);
     $this->setHeight($height);
     $this->setMethod($method);
+    $this->setBackground($background);    
   }
 
   /**
@@ -144,6 +162,26 @@ class sfImageThumbnailGeneric extends sfImageTransformAbstract
   }
   
   /**
+   * Sets background color.
+   *
+   * @param string
+   */
+  public function setBackground($color)
+  {
+    $this->background = $color;
+  }
+
+  /**
+   * Gets background color.
+   *
+   * @return string
+   */
+  public function getBackground()
+  {
+    return $this->background;
+  }
+  
+  /**
    * Apply the transformation to the image and returns the image thumbnail
    */
   protected function transform(sfImage $image)
@@ -153,14 +191,6 @@ class sfImageThumbnailGeneric extends sfImageTransformAbstract
 
     $scale_w    = $this->getWidth()/$resource_w;
     $scale_h    = $this->getHeight()/$resource_h;
-
-    $scale_w    = $this->getWidth()/$resource_w;
-    $scale_h    = $this->getHeight()/$resource_h;
-
-    $ratio_w    = $resource_w/$this->getWidth();
-    $ratio_h    = $resource_h/$this->getHeight();
-    
-
     switch ($this->getMethod())
     {
       case 'deflate':
@@ -195,11 +225,27 @@ class sfImageThumbnailGeneric extends sfImageTransformAbstract
         $top  = (int)round(($image->getHeight() - $this->getHeight()) / 2);
 
         return $image->crop($left, $top, $this->getWidth(), $this->getHeight());
-
       case 'scale':
-      default:
-      
         return $image->scale(min($scale_w, $scale_h));
+
+      case 'fit':           
+      default:
+        $img = clone $image;
+
+        $image->create($this->getWidth(), $this->getHeight());
+        
+        // Set a background color if specified
+        if(!is_null($this->getBackground()) && $this->getBackground() != '')
+        {
+          $image->fill(0,0, $this->getBackground());
+        }
+
+        $img->scale(min($this->getWidth() / $img->getWidth(), $this->getHeight() / $img->getHeight()));
+        
+        $image->overlay($img, 'center');
+
+        return $image;
+        
     }
   }
 }

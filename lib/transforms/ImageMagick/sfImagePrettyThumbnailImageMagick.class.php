@@ -16,6 +16,7 @@
  * Scales, adds drop shadow and rounded corners
  *
  * @package sfImageTransform
+ * @subpackage transforms
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @version SVN: $Id$
  */

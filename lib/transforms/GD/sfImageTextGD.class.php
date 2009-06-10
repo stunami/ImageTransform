@@ -13,9 +13,15 @@
  *
  * Adds text to the image.
  *
- * Text.
+ * <code>
+ * <?php
+ * $img = new sfImage('image1.jpg', 'image/png', 'GD');
+ * $img->text('a symfony plugin', 20, 20, 10, 'Verdana', '#FF0000', 'left');
+ * ?>
+ * </code>
  *
  * @package sfImageTransform
+ * @subpackage transforms
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @version SVN: $Id$
  */
@@ -62,30 +68,72 @@ class sfImageTextGD extends sfImageTransformAbstract
   protected $font_dir = '';
 
   /**
-   * Construct an sfImageText object.
+   * Allowed alignments.
+   * 
+   * options are:
+   *  top
+   *  bottom
+   *  left
+   *  right
+   *  middle
+   *  center
+   *  top-left
+   *  top-right
+   *  top-center
+   *  middle-left
+   *  middle-right
+   *  middle-center
+   *  bottom-left
+   *  bottom-right
+   *  bottom-center
    *
-   * @param array integer
+  */
+  protected $alignments = array(
+                               'top', 'bottom','left' ,'right', 'middle', 'center',
+                               'top-left', 'top-right', 'top-center',
+                               'middle-left', 'middle-right', 'middle-center',
+                               'bottom-left', 'bottom-right', 'bottom-center',
+                                );
+  
+  /**
+   * Text alignment.
+  */
+  protected $alignment = 'left';
+
+  /**
+   * Construct an sfImageTextGD object.
+   *
+   * @param string text to be added to image
+   * @param integer x-coordinate
+   * @param integer y-coordinate
+   * @param integer font size
+   * @param string font face
+   * @param string font color
+   * @param string text alignment
+   * @param integer text angle  
    */
-  public function __construct($text, $x=0, $y=0, $size=10, $font='Arial', $color='#000000', $angle=0)
+  public function __construct($text, $x=0, $y=0, $size=10, $font='Arial', $color='#000000', $align='left', $angle=0)
   {
-    $this->font_dir = sfConfig::get('app_sfImageTransformPlugin_font_dir','/usr/share/fonts/truetype/msttcorefonts');
+    $this->setFontDirectory(sfConfig::get('app_sfImageTransformPlugin_font_dir','/usr/share/fonts/truetype/msttcorefonts'));
+    
     $this->setText($text);
     $this->setX($x);
     $this->setY($y);
     $this->setSize($size);
     $this->setFont($font);
     $this->setColor($color);
+    $this->setAlignment($align);
     $this->setAngle($angle);
   }
 
   /**
    * Sets the text.
    *
-   * @param string
+   * @param string text to be displayed
    */
   public function setText($text)
   {
-    $this->text = $text;
+    $this->text = html_entity_decode($text, ENT_COMPAT, 'UTF-8');
   }
 
   /**
@@ -157,7 +205,35 @@ class sfImageTextGD extends sfImageTransformAbstract
   {
     return $this->size;
   }
+  
+  /**
+   * Sets text alignment.
+   *
+   * @param string
+   * @return boolean
+   */
+  public function setAlignment($alignment)
+  {
+    if (in_array($alignment, $this->alignments))
+    {
+      $this->alignment = $alignment;
+      
+      return true;
+    }
+    
+    return false;
+  }
 
+  /**
+   * Gets text alignment.
+   *
+   * @return string
+   */
+  public function getAlignment()
+  {
+    return $this->alignment;
+  }
+  
   /**
    * Sets text font.
    *
@@ -176,6 +252,35 @@ class sfImageTextGD extends sfImageTransformAbstract
   public function getFont()
   {
     return $this->font;
+  }
+  
+  /**
+   * Sets font directory.
+   *
+   * @param string
+   * @return boolean
+   */
+  public function setFontDirectory($dir)
+  {
+  
+    if (file_exists($dir) && is_dir($dir))
+    {
+      $this->font_dir = $dir;
+      
+      return true;
+    }
+    
+    return false;
+  }
+
+  /**
+   * Gets font file.
+   *
+   * @return string
+   */
+  public function getFontFile()
+  {
+    return $this->font_dir . DIRECTORY_SEPARATOR . $this->font . '.ttf';
   }
 
   /**
@@ -228,20 +333,72 @@ class sfImageTextGD extends sfImageTransformAbstract
   protected function transform(sfImage $image)
   {
     $resource = $image->getAdapter()->getHolder();
-
-    $this->font = $this->font_dir . DIRECTORY_SEPARATOR . $this->font . '.ttf';
-
-    $box = imageTTFBbox($this->size,$this->angle,$this->font,$this->text);
-
-    $textwidth = abs($box[4] - $box[0]) - 4;
-    $textheight = abs($box[5] - $box[1]) - 4;
+    
+    $x = $this->getX();
+    $y = $this->getY();
+    
+    list($x, $y, $width, $height) = $this->calculateBoxData($this->getText() ,$this->getFontFile(), $this->getSize(), $this->getAlignment(), $this->getX(), $this->getY(), $this->getAngle());
+    
+    // For now only horizontal text alignment is supported
+    if($this->getAngle() == 0)
+    {
+      
+    }
 
     $rgb = sscanf($this->color, '#%2x%2x%2x');
 
     $color = imagecolorallocate($resource, $rgb[0], $rgb[1], $rgb[2]);
 
-    imagettftext($resource, $this->size, $this->angle, $this->x, $this->y + $textheight, $color, $this->font, $this->text);
+    $lines = explode('\n', $this->getText());
+    
+    foreach($lines as $line)
+    {
+      imagettftext($resource, $this->getSize(), $this->getAngle(), $x, $y, $color, $this->getFontFile(), $line);
+      $y += $height;
+    }
 
     return $image;
+  }
+  
+  protected function calculateBoxData($text, $font, $size, $alignment, $x, $y, $angle)
+  {
+      
+    $box = imageTTFBbox($size,$angle,$font,$text);
+    
+    $width = abs($box[0] - $box[2]);
+    $height = abs($box[7] - $box[1]);
+
+    switch($alignment)
+    {
+      case 'top':
+      case 'top-left':
+        $x = $x;
+        $y = $y + $height;
+        break;
+      case 'right':
+      case 'bottom-right':
+        $x = $x - $width;
+        break;
+      case 'top-right':
+        $x = $x - $width;
+        $y = $y + $height;
+        break;
+      case 'center':
+      case 'bottom-center':
+        $x = (int)($x - $width / 2);
+        break;
+      case 'middle-left':
+        $y = (int)($y + $height / 2);
+        break;
+      case 'middle-right':
+        $x = $x - $width;
+        $y = (int)($y + $height / 2);
+        break;
+      case 'middle-center':
+        $x = (int)($x - $width / 2);
+        $y = (int)($y + $height / 2);
+    }
+    
+    return array($x, $y, $width, $height);
   }
 }

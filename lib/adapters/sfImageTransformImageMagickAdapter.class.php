@@ -40,6 +40,11 @@ class sfImageTransformImageMagickAdapter extends sfImageTransformAdapterAbstract
     'image/png' => array('png')
   );
 
+  /**
+   * Initialize the object. Check for imagick extension. An exception is thrown if not installed
+   *
+   * @throws sfImageTransformException
+   */
   public function __construct()
   {
     // Check that the GD extension is installed and configured
@@ -71,7 +76,7 @@ class sfImageTransformImageMagickAdapter extends sfImageTransformAdapterAbstract
   public function create($x=1, $y=1)
   {
     $image = new Imagick();
-    $image->newImage($x, $y, new ImagickPixel('black'));
+    $image->newImage($x, $y, new ImagickPixel('white'));
     $image->setImageFormat('png');
     $this->setHolder($image);
   }
@@ -147,7 +152,8 @@ class sfImageTransformImageMagickAdapter extends sfImageTransformAdapterAbstract
   /**
    * Save the image to the specified file
    *
-   * @param string $filename
+   * @param string Filename
+   * @param string MIME type
    * @return boolean
    */
   public function saveAs($filename, $mime='')
@@ -208,7 +214,7 @@ class sfImageTransformImageMagickAdapter extends sfImageTransformAdapterAbstract
 
   /**
    * Sets the image resource holder
-   * @param Imagick
+   * @param Imagick resource object
    * @return boolean
    *
    */
@@ -263,12 +269,12 @@ class sfImageTransformImageMagickAdapter extends sfImageTransformAdapterAbstract
     return $this->mime_type;
   }
 
-  /**
-   * Sets the MIME type for the image
+ /**
+   * Returns image MIME type
+   * @param string valid MIME Type
    * @return boolean
    *
    */
-
   public function setMimeType($mime)
   {
     $this->mime_type = $mime;

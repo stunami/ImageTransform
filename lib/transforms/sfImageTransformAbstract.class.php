@@ -15,7 +15,10 @@
  *
  * Abstract class all sfImageTranform transform classes are extended from.
  *
+ * @abstract
  * @package sfImageTransform
+ * @subpackage transforms
+ * @author Miloslav Kmet <miloslav.kmet@gmail.com>
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @version SVN: $Id$
  */

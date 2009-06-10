@@ -13,8 +13,8 @@
  *
  * Adapter abstract class.
  *
- *
  * @package sfImageTransform
+ * @subpackage adapters
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @version SVN: $Id$
  */

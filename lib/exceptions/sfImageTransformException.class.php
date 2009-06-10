@@ -12,7 +12,8 @@
  * sfImageTransformException is thrown when an fatal error occurs while manipulating a image.
  *
  * @package   sfImageTransform
-  * @author   Stuart Lowes <stuart.lowes@gmail.com>
+ * @subpackage exceptions
+ * @author   Stuart Lowes <stuart.lowes@gmail.com>
  * @version   SVN: $Id$
  */
 class sfImageTransformException extends sfException
@@ -20,8 +21,8 @@ class sfImageTransformException extends sfException
   /**
    * Class constructor.
    *
-   * @param string  the error message
-   * @param int   the error code
+   * @param string error message
+   * @param int error code
    */
   public function __construct($message = null, $code = 0)
   {

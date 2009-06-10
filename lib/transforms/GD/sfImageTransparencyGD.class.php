@@ -16,6 +16,7 @@
  * Defines and sets the transparent color for the image.
  *
  * @package sfImageTransform
+ * @subpackage transforms
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @version SVN: $Id$
  */

@@ -12,6 +12,7 @@
  * adds a mirrored reflection effect to an image
  *
  * @package sfImageTransform
+ * @subpackage transforms
  * @author Stuard Lowes <stuart.lowes@gmail.com>
  * @author Colin MacDonald <colin@oneweb.co.uk>
  *

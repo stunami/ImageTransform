@@ -13,8 +13,8 @@
  *
  * GD support for sfImageTransform.
  *
- *
  * @package sfImageTransform
+ * @subpackage adapters
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @version SVN: $Id$
  */
@@ -61,7 +61,7 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
   );
 
   /**
-   * Initialize the object. Check for GD extension. A exception is thrown if not installed
+   * Initialize the object. Check for GD extension. An exception is thrown if not installed
    *
    * @throws sfImageTransformException
    */
@@ -155,25 +155,20 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
   /**
    * Save the image to disk
    *
-   * @param string $mime
    * @return boolean
    */
-  public function save($mime='')
+  public function save()
   {
-    if ('' !== $mime)
-    {
-      $this->setMimeType($mime);
-    }
-
-    return $this->__output(true);
-
+    $this->__output(true);
+    
+    return true; 
   }
 
   /**
    * Save the image to disk
    *
-   * @param string $filename
-   * @param string $mime
+   * @param string Filename
+   * @param string MIME type
    * @return boolean
    */
   public function saveAs($filename, $mime='')
@@ -240,7 +235,7 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
 
   /**
    * Sets the image resource holder
-   * @param resource
+   * @param GD resource object
    * @return boolean
    *
    */
@@ -297,6 +292,12 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
     return $this->mime_type;
   }
 
+ /**
+   * Returns image MIME type
+   * @param string valid MIME Type
+   * @return boolean
+   *
+   */
   public function setMIMEType($mime)
   {
     if (array_key_exists($mime,$this->loaders))

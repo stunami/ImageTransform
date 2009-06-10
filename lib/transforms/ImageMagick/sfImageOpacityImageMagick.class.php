@@ -12,6 +12,7 @@
  * Changes the opacity of an image
  *
  * @package sfImageTransform
+ * @subpackage transforms
  * @author Stuard Lowes <stuart.lowes@gmail.com>
  * @author Miloslav Kmet <miloslav.kmet@gmail.com>
  *

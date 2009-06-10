@@ -16,6 +16,7 @@
  * Gives the image a disintegrated look
  *
  * @package sfImageTransform
+ * @subpackage transforms
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @version SVN: $Id$
  */

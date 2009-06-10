@@ -13,13 +13,12 @@
  *
  * Blurs the image using the Gaussian method.
  *
- *
- *
  * @package sfImageTransform
+ * @subpackage transforms
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @version SVN: $Id$
  */
-class sfImageGaussianBlurGD extends sfImageTransformAdapter
+class sfImageGaussianBlurGD extends sfImageTransformAbstract
 {
   /**
    * Apply the transform to the sfImage object.

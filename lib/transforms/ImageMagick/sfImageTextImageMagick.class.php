@@ -1,3 +1,4 @@
+
 <?php
 /*
  * This file is part of the sfImageTransform package.
@@ -13,9 +14,8 @@
  *
  * Adds text to the image.
  *
- * Text.
- *
  * @package sfImageTransform
+ * @subpackage transforms
  * @author Robin Corps <robin@ngse.co.uk>
  * @version SVN: $Id$
  */
@@ -62,11 +62,52 @@ class sfImageTextImageMagick extends sfImageTransformAbstract
   protected $font_dir = '';
 
   /**
-   * Construct an sfImageText object.
+   * Allowed alignments.
+   * 
+   * options are:
+   *  top
+   *  bottom
+   *  left
+   *  right
+   *  middle
+   *  center
+   *  top-left
+   *  top-right
+   *  top-center
+   *  middle-left
+   *  middle-right
+   *  middle-center
+   *  bottom-left
+   *  bottom-right
+   *  bottom-center
    *
-   * @param array integer
+  */
+  protected $alignments = array(
+                               'top', 'bottom','left' ,'right', 'middle', 'center',
+                               'top-left', 'top-right', 'top-center',
+                               'middle-left', 'middle-right', 'middle-center',
+                               'bottom-left', 'bottom-right', 'bottom-center',
+                                );
+  
+  /**
+   * Text alignment.
+  */
+  protected $alignment = 'left';
+  
+  /**
+   * Construct an sfImageTextImageMagick object.
+   *
+   * @param string text to be added to image
+   * @param integer x-coordinate
+   * @param integer y-coordinate
+   * @param integer font size
+   * @param string font face
+   * @param string font color
+   * @param string text alignment
+   * @param integer text angle
+   *
    */
-  public function __construct($text, $x=0, $y=0, $size=10, $font='Arial', $color='#000000', $angle=0)
+  public function __construct($text, $x=0, $y=0, $size=10, $font='Arial', $color='#000000', $align="left", $angle=0)
   {
     $this->font_dir = sfConfig::get('app_sfImageTransformPlugin_font_dir','/usr/share/fonts/truetype/msttcorefonts');
     $this->setText($text);
@@ -75,6 +116,7 @@ class sfImageTextImageMagick extends sfImageTransformAbstract
     $this->setSize($size);
     $this->setFont($font);
     $this->setColor($color);
+    $this->setAlignment($align);
     $this->setAngle($angle);
   }
 
@@ -159,6 +201,34 @@ class sfImageTextImageMagick extends sfImageTransformAbstract
   }
 
   /**
+   * Sets text alignment.
+   *
+   * @param string
+   * @return boolean
+   */
+  public function setAlignment($alignment)
+  {
+    if (in_array($alignment, $this->alignments))
+    {
+      $this->alignment = $alignment;
+      
+      return true;
+    }
+    
+    return false;
+  }
+
+  /**
+   * Gets text alignment.
+   *
+   * @return string
+   */
+  public function getAlignment()
+  {
+    return $this->alignment;
+  }
+
+  /**
    * Sets text font.
    *
    * @param string
@@ -232,9 +302,80 @@ class sfImageTextImageMagick extends sfImageTransformAbstract
     $draw = new ImagickDraw();
     $draw->setFont($this->font_dir . '/' . $this->font . '.ttf');
     $draw->setFontSize($this->size);
+    $draw->setFillColor( new ImagickPixel( $this->getColor() ) );
 
-    $resource->annotateImage($draw, $this->x, $this->y, $this->angle, $this->text);
+    $x = $this->getX();
+    $y = $this->getY();
+    
+    // For now only horizontal text alignment is supported
+    if($this->getAngle() == 0)
+    {   
+      list($x, $y) = $this->calculateBoxData($this->getText(), $resource, $draw, $this->getAlignment(), $this->getX(), $this->getY(), $this->getAngle());      
+    }
+    $lines = explode('\n', $this->getText());
+    
+    foreach($lines as $line)
+    {
+      $resource->annotateImage($draw, $x, $y, $this->getAngle(), $line);
+      $y += $this->getSize();
+    }
 
     return $image;
+  }
+  
+  protected function calculateBoxData($text, $image, $draw, $alignment, $x, $y, $angle)
+  {
+  
+    $align = imagick::ALIGN_LEFT;
+
+    if (strstr($alignment, 'center') !== false)
+    {
+      $align = imagick::ALIGN_CENTER;
+    }
+
+    elseif (strstr($alignment, 'right') !== false)
+    {
+      $align = imagick::ALIGN_RIGHT;
+    }
+
+    $draw->setTextAlignment($align);
+
+    list($width, $height) = $this->getTextDimensions($image, $draw, $text);
+
+    switch ($alignment)
+    {
+      case 'top':
+      case 'top-left':
+        $y = $y + $height;
+        break;
+        
+      case 'top-right':
+        $y = $y + $height;
+        break;
+        
+      case 'middle-left':
+        $y = (int)($y + $height / 2);
+        break;
+        
+      case 'middle-right':
+        $y = (int)($y + $height / 2);
+        break;
+        
+      case 'middle-center':
+        $y = (int)($y + $height / 2);
+    }
+    
+    return array($x, $y, $width, $height);
+    
+  }
+  
+  protected function getTextDimensions($image, $draw, $text)
+  {
+    $metrix = $image->queryFontMetrics($draw, $text);
+
+    $width = $metrix["boundingBox"]['x2'] - $metrix["boundingBox"]['x1'];
+    $height = $metrix["boundingBox"]['y2'] - $metrix["boundingBox"]['y1'];
+    
+    return array($width, $height);
   }
 }

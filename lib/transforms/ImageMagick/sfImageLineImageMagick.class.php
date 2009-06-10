@@ -9,96 +9,65 @@
 
 /**
  *
- * sfImageRectangleImageMagick class.
+ * sfImageLineImageMagick class.
  *
- * Draws a rectangle.
- *
- * Draws a rectangle on a ImageMagick image.
+ * Draws a line on a ImageMagick image.
  *
  * @package sfImageTransform
  * @subpackage transforms
- * @author Robin Corps <robin@ngse.co.uk>
+ * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @version SVN: $Id$
  */
-class sfImageRectangleImageMagick extends sfImageTransformAbstract
+class sfImageLineImageMagick extends sfImageTransformAbstract
 {
   /**
    * Start X coordinate.
-   *
-   * @var integer
   */
   protected $x1 = 0;
 
   /**
    * Start Y coordinate.
-   *
-   * @var integer
   */
   protected $y1 = 0;
 
   /**
    * Finish X coordinate.
-   *
-   * @var integer
   */
   protected $x2 = 0;
 
   /**
    * Finish Y coordinate
-   *
-   * @var integer
   */
   protected $y2 = 0;
 
   /**
-   * Rectangle thickness.
-   *
-   * @var integer
+   * Line thickness.
   */
   protected $thickness = 1;
 
   /**
    * Hex color.
-   *
-   * @var string
   */
-  protected $color = '';
+  protected $color = '#000000';
 
   /**
-   * Fill.
-   *
-   * @var string/object hex or sfImage object
-  */
-  protected $fill = null;
-
-  /**
-   * Line style.
-   *
-   * @var integer
+   * The number of pixels used for the blur.
   */
   protected $style = null;
 
   /**
    * Construct an sfImageBlur object.
    *
-   * @param integer
-   * @param integer
-   * @param integer
-   * @param integer
-   * @param integer
-   * @param integer
-   * @param string/object hex or sfImage object
-   * @param integer
+   * @param array integer
    */
-  public function __construct($x1, $y1, $x2, $y2, $thickness=1, $color=null, $fill=null, $style=null)
+  public function __construct($x1, $y1, $x2, $y2, $thickness=1, $color='#000000', $style=null)
   {
     $this->setStartX($x1);
     $this->setStartY($y1);
     $this->setEndX($x2);
-    $this->setEndY($x2);
+    $this->setEndY($y2);
     $this->setThickness($thickness);
     $this->setColor($color);
-    $this->setFill($fill);
     $this->setStyle($style);
   }
 
@@ -256,6 +225,7 @@ class sfImageRectangleImageMagick extends sfImageTransformAbstract
 
       return true;
     }
+
     return false;
   }
 
@@ -270,34 +240,6 @@ class sfImageRectangleImageMagick extends sfImageTransformAbstract
   }
 
   /**
-   * Sets the fill
-   *
-   * @param mixed
-   * @return boolean
-   */
-  public function setFill($fill)
-  {
-    if (preg_match('/#[\d\w]{6}/',$fill) || (is_object($fill) && class_name($fill) === 'sfImage'))
-    {
-      $this->fill = $fill;
-
-      return true;
-    }
-
-    return false;
-  }
-
-  /**
-   * Gets the fill
-   *
-   * @return mixed
-   */
-  public function getFill()
-  {
-    return $this->fill;
-  }
-
-  /**
    * Sets the style
    *
    * @param integer
@@ -305,10 +247,9 @@ class sfImageRectangleImageMagick extends sfImageTransformAbstract
    */
   public function setStyle($style)
   {
-    if (is_numeric($style))
+    if (is_numeric($style = $style))
     {
-      $this->style = (int)$style;
-      $this->color = IMG_COLOR_STYLED;
+      $this->style = $style;
 
       return true;
     }
@@ -337,25 +278,10 @@ class sfImageRectangleImageMagick extends sfImageTransformAbstract
     $resource = $image->getAdapter()->getHolder();
 
     $draw = new ImagickDraw();
-
-    $draw->setStrokeWidth($this->thickness);
-
-    if (!is_null($this->color))
-    {
-      $stroke = new ImagickPixel();
-      $stroke->setColor($this->color);
-      $draw->setStrokeColor($stroke);
-    }
-
-    if (!is_null($this->fill))
-    {
-      $fill = new ImagickPixel();
-      $fill->setColor($this->fill);
-      $draw->setFillColor($fill);
-    }
-
-    $draw->rectangle($this->x1, $this->y1, $this->x2, $this->y2);
-
+    $draw->setFillColor($this->getColor());
+    
+    $draw->line($this->getStartX(), $this->getStartY(), $this->getEndX(), $this->getEndY());
+    
     $resource->drawImage($draw);
 
     return $image;

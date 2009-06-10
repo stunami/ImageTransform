@@ -13,7 +13,11 @@
  *
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @author Miloslav Kmet <miloslav.kmet@gmail.com>
- *
+ * 
+ * @package sfImageTransform
+ * @subpackage transforms
+ * @author Stuart Lowes <stuart.lowes@gmail.com>
+ * @version SVN: $Id$
  */
 class sfImageBorderGeneric extends sfImageTransformAbstract
 {

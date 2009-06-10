@@ -13,9 +13,8 @@
  *
  * Uses edge detection to highlight the edges in the GD image.
  *
- *
- *
  * @package sfImageTransform
+ * @subpackage transforms
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @version SVN: $Id$
  */

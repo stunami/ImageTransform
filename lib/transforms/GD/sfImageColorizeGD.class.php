@@ -13,9 +13,8 @@
  *
  * Colorizes a GD image.
  *
- *
- *
  * @package sfImageTransform
+ * @subpackage transforms
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @version SVN: $Id$
  */

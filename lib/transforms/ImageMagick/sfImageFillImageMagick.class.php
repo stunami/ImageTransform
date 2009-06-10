@@ -13,9 +13,8 @@
  *
  * Fills the set area with a color or tile image.
  *
- *
- *
  * @package sfImageTransform
+ * @subpackage transforms
  * @author Stuart Lowes <robin@ngse.co.uk>
  * @version SVN: $Id$
  */
@@ -222,6 +221,7 @@ class sfImageFillImageMagick extends sfImageTransformAbstract
 
     $fill = new ImagickPixel();
     $fill->setColor($this->fill);
+    echo 
 
     $border = new ImagickPixel();
     $border->setColor($this->border);
