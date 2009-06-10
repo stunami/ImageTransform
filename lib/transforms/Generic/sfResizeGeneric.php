@@ -67,8 +67,10 @@ class sfImageResizeGeneric extends sfImageTransformAbstract
     if(is_numeric($height) && $height > 0)
     {
       $this->height = (int)$height;
+      
       return true;
     }
+    
     return false;
   }
 
@@ -93,6 +95,7 @@ class sfImageResizeGeneric extends sfImageTransformAbstract
     if(is_numeric($width) && $width > 0)
     {
       $this->width = (int)$width;
+      
       return false;
     }
   }
@@ -118,8 +121,10 @@ class sfImageResizeGeneric extends sfImageTransformAbstract
     if($inflate === true || $inflate === false)
     {
       $this->inflate = $inflate;
+      
       return true;
     }
+    
     return false;
   }
 
@@ -144,8 +149,10 @@ class sfImageResizeGeneric extends sfImageTransformAbstract
     if($proportional === true || $proportional === false)
     {
       $this->proportional = $proportional;
+      
       return true;
     }
+    
     return false;
   }
 
@@ -169,18 +176,19 @@ class sfImageResizeGeneric extends sfImageTransformAbstract
     $target_w = $this->width;
     $target_h = $this->height;
 
-
     if (is_numeric($this->width) && $this->width > 0 && $source_w > 0)
     {
       if (!$this->inflate && $target_w > $source_w)
       {
         $target_w = $source_w;
       }
+      
       if ($this->proportional)
       {
         // Compute the new height in order to keep the aspect ratio
         // and clamp it to the maximum height
         $target_h = round(($source_h / $source_w) * $target_w);
+        
         if (is_numeric($this->height) && $this->height < $target_h && $source_h > 0)
         {
           $target_h = $this->height;
@@ -195,11 +203,13 @@ class sfImageResizeGeneric extends sfImageTransformAbstract
       {
         $target_h = $source_h;
       }
+      
       if ($this->proportional)
       {
         // Compute the new width in order to keep the aspect ratio
         // and clamp it to the maximum width
         $target_w = round(($source_w / $source_h) * $target_h);
+        
         if (is_numeric($this->width) && $this->width < $target_w && $source_w > 0)
         {
           $target_w = $this->width;
@@ -207,6 +217,7 @@ class sfImageResizeGeneric extends sfImageTransformAbstract
         }
       }
     }
+    
     return $image->resizeSimple($target_w, $target_h);
   }
 }
