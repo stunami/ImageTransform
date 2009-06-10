@@ -9,7 +9,7 @@
 
 /**
  *
- * sfImageResize class.
+ * sfImageResizeSimpleImageMagick class.
  *
  * Resizes image.
  *
@@ -20,7 +20,7 @@
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @version SVN: $Id$
  */
-class sfImageResizeGD extends sfImageTransformAbstract
+class sfImageResizeSimpleImageMagick extends sfImageTransformAbstract
 {
   /**
    * Image width.
@@ -96,8 +96,8 @@ class sfImageResizeGD extends sfImageTransformAbstract
   {
     $resource = $image->getAdapter()->getHolder();
 
-    $x = imagesx($resource);
-    $y = imagesy($resource);
+    $x = $resource->getImageWidth();
+    $y = $resource->getImageHeight();
 
     // If the width or height is not valid then enforce the aspect ratio
     if (!is_numeric($this->width) || $this->width < 1)
@@ -110,13 +110,7 @@ class sfImageResizeGD extends sfImageTransformAbstract
       $this->height = round(($y / $x) * $this->width);
     }
 
-    $dest_resource = $image->getAdapter()->getTransparentImage($this->width, $this->height);
-
-    // Finally do our resizing
-    imagecopyresampled($dest_resource,$resource,0, 0, 0, 0, $this->width, $this->height,$x, $y);
-    imagedestroy($resource);
-
-    $image->getAdapter()->setHolder($dest_resource);
+    $resource->resizeImage($this->width, $this->height, Imagick::FILTER_LANCZOS, 1);
 
     return $image;
   }
