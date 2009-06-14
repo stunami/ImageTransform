@@ -11,7 +11,7 @@
  *
  * generic thumbnail transform
  *
- * Create a thumbnail 100 x 100
+ * Create a thumbnail 100 x 100, with the image resized to fit
  * <code>
  * <?php
  * $img = new sfImage('image1.jpg');
