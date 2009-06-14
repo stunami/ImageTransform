@@ -464,36 +464,37 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
       // Handle transparency
       if ($index >= 0)
       {
+        // Always make a transparent background color for PNGs that don't have one allocated already
+        if ($this->getMIMEType() == 'image/png')
+        {
 
-        // Grab the current images transparent color
-        $index_color = imagecolorsforindex($resource, $index);
+          // Disabled blending
+          imagealphablending($dest_resource, false);
 
-        // Set the transparent color for the resized version of the image
-        $index = imagecolorallocate($dest_resource, $index_color['red'], $index_color['green'], $index_color['blue']);
+          // Grab our alpha tranparency color
+          $color = imagecolorallocatealpha($dest_resource, 0, 0, 0, 127);
 
-        // Fill the entire image with our transparent color
-        imagefill($dest_resource, 0, 0, $index);
+          // Fill the entire image with our transparent color
+          imagefill($dest_resource, 0, 0, $color);
 
-        // Set the filled background color to be transparent
-        imagecolortransparent($dest_resource, $index);
+          // Re-enable transparency blending
+          imagesavealpha($dest_resource, true);
+        }
+        else
+        {
 
-      }
+          // Grab the current images transparent color
+          $index_color = imagecolorsforindex($resource, $index);
 
-      // Always make a transparent background color for PNGs that don't have one allocated already
-      elseif ($this->getMIMEType() == 'image/png')
-      {
+          // Set the transparent color for the resized version of the image
+          $index = imagecolorallocate($dest_resource, $index_color['red'], $index_color['green'], $index_color['blue']);
 
-        // Disabled blending
-        imagealphablending($dest_resource, false);
+          // Fill the entire image with our transparent color
+          imagefill($dest_resource, 0, 0, $index);
 
-        // Grab our alpha tranparency color
-        $color = imagecolorallocatealpha($dest_resource, 0, 0, 0, 127);
-
-        // Fill the entire image with our transparent color
-        imagefill($dest_resource, 0, 0, $color);
-
-        // Re-enable transparency blending
-        imagesavealpha($dest_resource, true);
+          // Set the filled background color to be transparent
+          imagecolortransparent($dest_resource, $index);      
+        }
       }
     }
 
