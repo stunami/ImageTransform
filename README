@@ -11,11 +11,11 @@ Multiple tranforms can be easily applied by chaining the transform calls as seen
 
 *Example 1. Simple chaining of transforms*
 
-Load an image, resize it to 100 pixels wide (preserving the aspect ratio) and rotate it by 90 degrees
+Load an image, resize it to 100 pixels wide (preserving the aspect ratio) and add some text
 
     $img = new sfImage('image1.jpg', 'image/jpg');
 
-    $img->resize(100,null)->->text('sfImageTransform', 10, 10, 20,'Arial', '#FF0000');
+    $img->resize(100,null)->text('sfImageTransform', 10, 10, 20,'Arial', '#FF0000');
     
     $img->save();
 
