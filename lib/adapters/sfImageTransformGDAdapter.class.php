@@ -246,6 +246,7 @@ class sfImageTransformGDAdapter extends sfImageTransformAdapterAbstract
     {
 
       $this->holder = $resource;
+      
       return true;
     }
 
