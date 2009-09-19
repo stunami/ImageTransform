@@ -5,7 +5,7 @@
 
 The aim of sfImageTransformPlugin is take the pain out of image manipulating in PHP/symfony. sfImageTransformPlugin is great for but not limited to common tasks like creating thumbnails, adding text to dynamic images or watermarking.
 
-sfImageTransformPlugin works by applying one or more "transforms" to the image.  A transform maybe a simple action like resize or thumnnail, mirror or more complex, like overlay (watermarks) and pixelize.
+sfImageTransformPlugin works by applying one or more "transform" to the image.  A transform maybe a simple action like resize or thumnnail, mirror or more complex like an overlay (watermarks) and pixelize.
 
 Multiple tranforms can be easily applied by chaining the transform calls as seen below. It is also very easy to extend and create your own transforms, see "Writing your own transforms" for an example. 
 
@@ -15,7 +15,7 @@ Load an image, resize it to 100 pixels wide (preserving the aspect ratio) and ad
 
     $img = new sfImage('image1.jpg', 'image/jpg');
 
-    $img->resize(100,null)->text('sfImageTransform', 10, 10, 20,'Arial', '#FF0000');
+    $img->resize(100,null)->text('Writing text on an image is easy!!', 10, 10, 20,'Arial', '#FF0000');
     
     $img->save();
 
@@ -77,10 +77,10 @@ Create a 150x150 pixel thumbnail
     $img->thumbnail(150,150);
     $img->setQuality(50);
     $img->saveAs('image1_150x150.gif');
-    
-Overlaying another image such as a logo or watermark is easy.
-    
+        
 *Example 4. Watermarking*
+
+Overlaying another image such as a logo or watermark is easy.
 
 Create a 150x150 pixel thumbnail
 
@@ -225,10 +225,7 @@ sfImageTransformPlugin currently supports three MIME type detection methods, GD'
 To enable support in the plugin set auto_detect to true and select the library you have installed.
 
 app.yml
-
-...
       sfImageTransformPlugin:
-...
         mime_type:
           auto_detect: true
           library: gd_mime_type # Fileinfo (PECL), MIME_Type (PEAR), gd_mime_type (GD)
