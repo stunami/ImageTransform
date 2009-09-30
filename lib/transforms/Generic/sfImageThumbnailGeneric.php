@@ -65,8 +65,10 @@ class sfImageThumbnailGeneric extends sfImageTransformAbstract
    */
   public function __construct($width, $height, $method='fit', $background=null)
   {   
-    $this->setWidth($width);
-    $this->setHeight($height);
+    if(!$this->setWidth($width) || !$this->setHeight($height))
+		{
+			throw new sfImageTransformException(sprintf('Cannot perform thumbnail, a valid width and height must be supplied'));
+		}
     $this->setMethod($method);
     $this->setBackground($background);    
   }
@@ -111,8 +113,10 @@ class sfImageThumbnailGeneric extends sfImageTransformAbstract
     {
       $this->width = (int)$width;
       
-      return false;
+      return true;
     }
+    
+    return false;
   }
 
   /**
