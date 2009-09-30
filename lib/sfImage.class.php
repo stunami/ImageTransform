@@ -447,7 +447,7 @@ class sfImage
 
     foreach($this->types as $mime => $extension)
     {
-      if (in_array($pathinfo['extension'],$extension))
+      if (in_array(strtolower($pathinfo['extension']),$extension))
       {
         return $mime;
       }
