@@ -510,7 +510,6 @@ class sfImage
           {
             $finfo = finfo_open(FILEINFO_MIME);
           }
-          $finfo = finfo_open(FILEINFO_MIME);
 
           return finfo_file($finfo, $filename);
         }
