@@ -179,7 +179,10 @@ class sfImage
    */
   public function load($filename, $mime='')
   {
-    if (file_exists($filename))
+
+    $filename = realpath($filename);
+
+    if (file_exists($filename) && is_readable($filename))
     {
 
       if ('' == $mime)
