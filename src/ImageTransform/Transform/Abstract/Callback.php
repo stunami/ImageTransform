@@ -1,24 +1,27 @@
 <?php
-/*
+/**
  * This file is part of the ImageTransform package.
- * (c) 2009 Stuart Lowes <stuart.lowes@gmail.com>
+ * (c) 2007 Stuart Lowes <stuart.lowes@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @category   ImageTransform
+ * @package    Transform
+ * @version    $Id:$
  */
+
 /**
- * ImageTransformCallbackGeneric class
- *
- * Callback transform
- *
  * Allows the calling of external methods or functions as a transform
  *
- * @package sfImageTransform
- * @subpackage transforms
+ * @category   ImageTransform
+ * @package    Transform
+ * @subpackage Abstract
+ *
  * @author Stuart Lowes <stuart.lowes@gmail.com>
- * @version SVN: $Id$
+ * @author Jan Schumann <js@schumann-it.com>
  */
-class BaseImageTransformCallback extends BaseImageTransform
+abstract class ImageTransform_Transform_Callback extends ImageTransform_Transform_Abstract
 {
 
   /**
@@ -59,14 +62,14 @@ class BaseImageTransformCallback extends BaseImageTransform
    */
   public function setFunction($function)
   {
-    if(is_callable($function))
+    if (is_callable($function))
     {
       $this->function = $function;
 
       return true;
     }
 
-    throw new sfImageTransformException(sprintf('Callback method does not exist'));
+    throw new ImageTransform_Transform_Exception(sprintf('Callback method does not exist'));
   }
 
   /**
@@ -95,17 +98,5 @@ class BaseImageTransformCallback extends BaseImageTransform
   public function getArguments()
   {
     return $this->arguments;
-  }
-
-  /**
-   *
-   * @param sfImage $image
-   * @return sfImage
-   */
-  public function transform(sfImage $image)
-  {
-    call_user_func_array($this->getFunction(), array('image' => $image, 'arguments' => $this->getArguments()));
-
-    return $image;
   }
 }

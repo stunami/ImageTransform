@@ -24,6 +24,9 @@
  */
 abstract class ImageTransform_Transform_Abstract implements ImageTransform_Transform_Interface
 {
+  private $image;
+  private $resource;
+
   /**
    * Apply the transform to the sfImage object.
    *
@@ -38,7 +41,21 @@ abstract class ImageTransform_Transform_Abstract implements ImageTransform_Trans
       $message = 'Cannot perform transform: %s invalid image resource';
       throw new ImageTransform_Transform_Exception(sprintf($message, get_class($this)));
     }
+
+	  $this->image = $image;
+	  $this->resource = $image->getAdapter()->getHolder();
+
     return $this->transform($image);
+  }
+
+  protected function getImage()
+  {
+	  return $this->image;
+  }
+
+  protected function getResource()
+  {
+	  return $this->resource;
   }
 
   abstract protected function transform(ImageTransform_Source $image);

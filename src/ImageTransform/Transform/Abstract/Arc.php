@@ -21,7 +21,7 @@
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @author Jan Schumann <js@schumann-it.com>
  */
-abstract class ImageTransform_Tranform_Abstract_Arc extends ImageTransform_Transform_Abstract
+abstract class ImageTransform_Transform_Abstract_Arc extends ImageTransform_Transform_Abstract
 {
   /**
    * X-coordinate of the center.

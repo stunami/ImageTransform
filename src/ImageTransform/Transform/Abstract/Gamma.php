@@ -1,24 +1,27 @@
 <?php
-/*
- * This file is part of the sfImageTransform package.
+/**
+ * This file is part of the ImageTransform package.
  * (c) 2007 Stuart Lowes <stuart.lowes@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @category   ImageTransform
+ * @package    Transform
+ * @version    $Id:$
  */
 
 /**
+ * Apply a gamma correction to an image.
  *
- * sfImageGammaGD class.
+ * @category   ImageTransform
+ * @package    Transform
+ * @subpackage Abstract
  *
- * Apply a gamma correction to a GD image.
- *
- * @package sfImageTransform
- * @subpackage transforms
  * @author Stuart Lowes <stuart.lowes@gmail.com>
- * @version SVN: $Id$
+ * @author Jan Schumann <js@schumann-it.com>
  */
-class BaseImageTransformGamma extends BaseImageTransform
+abstract class ImageTransform_Tranform_Abstract_Gamma extends ImageTransform_Transform_Abstract
 {
   /**
    * The input gamma.
@@ -95,16 +98,5 @@ class BaseImageTransformGamma extends BaseImageTransform
   public function getOuputGamma()
   {
     return $this->ouput_gamma;
-  }
-
-  /**
-   * Apply the transform to the sfImage object.
-   *
-   * @param sfImage
-   * @return sfImage
-   */
-  protected function transform(sfImage $image)
-  {
-    return $image;
   }
 }

@@ -1,26 +1,27 @@
 <?php
-/*
- * This file is part of the sfImageTransform package.
+/**
+ * This file is part of the ImageTransform package.
  * (c) 2007 Stuart Lowes <stuart.lowes@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @category   ImageTransform
+ * @package    Transform
+ * @version    $Id:$
  */
 
 /**
- *
- * BaseImageTransformScale class.
- *
- * Scales the image.
- *
  * Scales an image by the set amount.
  *
- * @package sfImageTransform
- * @subpackage transforms
+ * @category   ImageTransform
+ * @package    Transform
+ * @subpackage Abstract
+ *
  * @author Stuart Lowes <stuart.lowes@gmail.com>
- * @version SVN: $Id$
+ * @author Jan Schumann <js@schumann-it.com>
  */
-class BaseImageTransformScale extends BaseImageTransform
+abstract class ImageTransform_Transform_Abstract_Scale extends ImageTransform_Tranform_Abstract
 {
 
   /**
@@ -31,7 +32,7 @@ class BaseImageTransformScale extends BaseImageTransform
   protected $scale = 1;
 
   /**
-   * Construct an sfImageScale object.
+   * Construct.
    *
    * @param float
    */
@@ -63,14 +64,4 @@ class BaseImageTransformScale extends BaseImageTransform
     return $this->scale;
   }
 
-  /**
-   * Apply the transform to the sfImage object.
-   *
-   * @param sfImage
-   * @return sfImage
-   */
-  protected function transform(sfImage $image)
-  {
-    return $image;
-  }
 }

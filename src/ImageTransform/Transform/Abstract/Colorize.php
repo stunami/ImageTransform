@@ -1,24 +1,27 @@
 <?php
-/*
- * This file is part of the sfImageTransform package.
+/**
+ * This file is part of the ImageTransform package.
  * (c) 2007 Stuart Lowes <stuart.lowes@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @category   ImageTransform
+ * @package    Transform
+ * @version    $Id:$
  */
 
 /**
+ * Colorizes an image
  *
- * sfImageColorizeImageMagick class.
+ * @category   ImageTransform
+ * @package    Transform
+ * @subpackage Abstract
  *
- * Colorizes a ImageMagick image.
- *
- * @package sfImageTransform
- * @subpackage transforms
  * @author Stuart Lowes <stuart.lowes@gmail.com>
- * @version SVN: $Id$
- */
-class BaseImageTransformColorize  extends BaseImageTransform
+ * @author Jan Schumann <js@schumann-it.com>
+ */ 
+abstract class ImageTransform_Transform_Abstract_Colorize  extends ImageTransform_Transform_Abstract
 {
   /**
    * Red Tint.
@@ -166,17 +169,5 @@ class BaseImageTransformColorize  extends BaseImageTransform
   public function getAlpha()
   {
     return $this->alpha;
-  }
-
-  /**
-   * Apply the transform to the sfImage object.
-   *
-   * @access protected
-   * @param sfImage
-   * @return sfImage
-   */
-  protected function transform(sfImage $image)
-  {
-    return $image;
   }
 }

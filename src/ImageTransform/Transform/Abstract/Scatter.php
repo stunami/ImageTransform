@@ -1,26 +1,27 @@
 <?php
-/*
- * This file is part of the sfImageTransform package.
+/**
+ * This file is part of the ImageTransform package.
  * (c) 2007 Stuart Lowes <stuart.lowes@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @category   ImageTransform
+ * @package    Transform
+ * @version    $Id:$
  */
 
 /**
- *
- * BaseImageTransformScatter class.
- *
- * Scatters the image pixels.
- *
  * Gives the image a disintegrated look
  *
- * @package sfImageTransform
- * @subpackage transforms
+ * @category   ImageTransform
+ * @package    Transform
+ * @subpackage Abstract
+ *
  * @author Stuart Lowes <stuart.lowes@gmail.com>
- * @version SVN: $Id$
+ * @author Jan Schumann <js@schumann-it.com>
  */
-class BaseImageTransformScatter extends BaseImageTransform
+abstract class ImageTransform_Tranform_Abstract_Scatter extends ImageTransform_Transform_Abstract
 {
   /**
    * Scatter factor.
@@ -55,16 +56,5 @@ class BaseImageTransformScatter extends BaseImageTransform
   public function getScatterFactor()
   {
     return $this->width;
-  }
-
-  /**
-   * Apply the transform to the sfImage object.
-   *
-   * @param sfImage
-   * @return sfImage
-   */
-  protected function transform(sfImage $image)
-  {
-    return $image;
   }
 }

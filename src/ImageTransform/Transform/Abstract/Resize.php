@@ -1,24 +1,29 @@
 <?php
-/*
- * This file is part of the sfImageTransform package.
- * (c) 2009 Stuart Lowes <stuart.lowes@gmail.com>
+/**
+ * This file is part of the ImageTransform package.
+ * (c) 2007 Stuart Lowes <stuart.lowes@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- */
-/**
- * BaseImageTransformResize class
  *
+ * @category   ImageTransform
+ * @package    Transform
+ * @version    $Id:$
+ */
+
+/**
  * generic resize transform
  *
- * @package sfImageTransform
- * @subpackage transforms
+ * @category   ImageTransform
+ * @package    Transform
+ * @subpackage Abstract
+ *
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @author Miloslav Kmet <miloslav.kmet@gmail.com>
  * @author Victor Berchet <vberchet-sf@yahoo.com>
- * @version SVN: $Id$
+ * @author Jan Schumann <js@schumann-it.com>
  */
-class BaseImageTransformResize extends BaseImageTransform
+abstract class ImageTransform_Tranform_Abstract_Resize extends ImageTransform_Transform_Abstract
 {
   /**
    * width of the target
@@ -54,10 +59,10 @@ class BaseImageTransformResize extends BaseImageTransform
     if(is_numeric($height) && $height > 0)
     {
       $this->height = (int)$height;
-      
+
       return true;
     }
-    
+
     return false;
   }
 
@@ -82,7 +87,7 @@ class BaseImageTransformResize extends BaseImageTransform
     if(is_numeric($width) && $width > 0)
     {
       $this->width = (int)$width;
-      
+
       return false;
     }
   }
@@ -95,10 +100,5 @@ class BaseImageTransformResize extends BaseImageTransform
   public function getWidth()
   {
     return $this->width;
-  }
-
-  public function transform(sfImage $image)
-  {
-    return $image;
   }
 }

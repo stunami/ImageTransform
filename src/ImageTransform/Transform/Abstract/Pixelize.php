@@ -1,26 +1,27 @@
 <?php
-/*
- * This file is part of the sfImageTransform package.
+/**
+ * This file is part of the ImageTransform package.
  * (c) 2007 Stuart Lowes <stuart.lowes@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @category   ImageTransform
+ * @package    Transform
+ * @version    $Id:$
  */
 
 /**
+ * Pixelizes an image.
  *
- * sfImagePixelizeGD class.
+ * @category   ImageTransform
+ * @package    Transform
+ * @subpackage Abstract
  *
- * Pixelizes a GD image.
- *
- * Reduces the level of detail of a GD image.
- *
- * @package sfImageTransform
- * @subpackage transforms
  * @author Stuart Lowes <stuart.lowes@gmail.com>
- * @version SVN: $Id$
+ * @author Jan Schumann <js@schumann-it.com>
  */
-class BaseImageTransformPixelize extends BaseImageTransform
+abstract class ImageTransform_Tranform_Abstract_Pixelize extends ImageTransform_Transform_Abstract
 {
   /**
    * The size of the pixelization.
@@ -63,16 +64,5 @@ class BaseImageTransformPixelize extends BaseImageTransform
   public function getSize()
   {
     return $this->block_size;
-  }
-
-  /**
-   * Apply the transform to the sfImage object.
-   *
-   * @param sfImage
-   * @return sfImage
-   */
-  protected function transform(sfImage $image)
-  {
-    return $image;
   }
 }

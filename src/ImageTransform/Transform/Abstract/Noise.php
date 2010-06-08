@@ -1,26 +1,27 @@
 <?php
-/*
- * This file is part of the sfImageTransform package.
+/**
+ * This file is part of the ImageTransform package.
  * (c) 2007 Stuart Lowes <stuart.lowes@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @category   ImageTransform
+ * @package    Transform
+ * @version    $Id:$
  */
 
 /**
+ * Base class for drawing an arc
  *
- * ImageTransformNoiseGD class.
+ * @category   ImageTransform
+ * @package    Transform
+ * @subpackage Abstract
  *
- * Adds noise to the GD image.
- *
- * Reduces the level of detail of an image.
- *
- * @package sfImageTransform
- * @subpackage transforms
  * @author Stuart Lowes <stuart.lowes@gmail.com>
- * @version SVN: $Id$
+ * @author Jan Schumann <js@schumann-it.com>
  */
-class ImageTransformNoiseGD extends BaseImageTransformNoise
+abstract class ImageTransform_Tranform_Abstract_Noise extends ImageTransform_Transform_Abstract
 {
   /**
    * Noise density.
@@ -63,16 +64,5 @@ class ImageTransformNoiseGD extends BaseImageTransformNoise
   public function getdensity()
   {
     return $this->density;
-  }
-
-  /**
-   * Apply the transform to the sfImage object.
-   *
-   * @param sfImage
-   * @return sfImage
-   */
-  protected function transform(sfImage $image)
-  {
-    return $image;
   }
 }

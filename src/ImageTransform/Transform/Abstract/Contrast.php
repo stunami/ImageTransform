@@ -1,26 +1,29 @@
 <?php
-/*
- * This file is part of the sfImageTransform package.
+/**
+ * This file is part of the ImageTransform package.
  * (c) 2007 Stuart Lowes <stuart.lowes@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @category   ImageTransform
+ * @package    Transform
+ * @version    $Id:$
  */
 
 /**
+ * Sets the contrast of an image.
+ * 
+ * Reduces the level of detail of an image.
+ * 
+ * @category   ImageTransform
+ * @package    Transform
+ * @subpackage Abstract
  *
- * sfImageContrastGD class.
- *
- * Sets the contrast of an GD image.
- *
- * Reduces the level of detail of an GD image.
- *
- * @package sfImageTransform
- * @subpackage transforms
  * @author Stuart Lowes <stuart.lowes@gmail.com>
- * @version SVN: $Id$
- */
-class BaseImageTransformContrast extends BaseImageTransform
+ * @author Jan Schumann <js@schumann-it.com>
+ */  
+abstract class ImageTransform_Transform_Abstract_Contrast extends ImageTransform_Transform_Abstract
 {
   /**
    * Constract level to be applied.
@@ -64,29 +67,4 @@ class BaseImageTransformContrast extends BaseImageTransform
   {
     return $this->contrast;
   }
-
-  /**
-   * Apply the transform to the sfImage object.
-   *
-   * @access protected
-   * @param sfImage
-   * @return sfImage
-   */
-  protected function transform(sfImage $image)
-  {
-    $resource = $image->getAdapter()->getHolder();
-
-    if (function_exists('imagefilter'))
-    {
-      imagefilter($resource, IMG_FILTER_CONTRAST, $this->contrast);
-    }
-
-    else
-    {
-      throw new sfImageTransformException(sprintf('Cannot perform transform, GD does not support imagefilter '));
-    }
-
-    return $image;
-  }
-
 }

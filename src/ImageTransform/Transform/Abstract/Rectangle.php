@@ -1,66 +1,90 @@
 <?php
-/*
- * This file is part of the sfImageTransform package.
+/**
+ * This file is part of the ImageTransform package.
  * (c) 2007 Stuart Lowes <stuart.lowes@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @category   ImageTransform
+ * @package    Transform
+ * @version    $Id:$
  */
 
 /**
+ * Draws a rectangle on an image.
  *
- * sfImageLineImageMagick class.
+ * @category   ImageTransform
+ * @package    Transform
+ * @subpackage Abstract
  *
- * Draws a line on a ImageMagick image.
- *
- * @package sfImageTransform
- * @subpackage transforms
  * @author Stuart Lowes <stuart.lowes@gmail.com>
- * @version SVN: $Id$
+ * @author Jan Schumann <js@schumann-it.com>
  */
-class BaseImageTransformLine extends BaseImageTransforms
+abstract class ImageTransform_Tranform_Abstract_Rectangle extends ImageTransform_Transform_Abstract
 {
   /**
    * Start X coordinate.
+   *
+   * @var integer
   */
   protected $x1 = 0;
 
   /**
    * Start Y coordinate.
+   *
+   * @var integer
   */
   protected $y1 = 0;
 
   /**
    * Finish X coordinate.
+   *
+   * @var integer
   */
   protected $x2 = 0;
 
   /**
    * Finish Y coordinate
+   *
+   * @var integer
   */
   protected $y2 = 0;
 
   /**
-   * Line thickness.
+   * Rectangle thickness.
+   *
+   * @var integer
   */
   protected $thickness = 1;
 
   /**
    * Hex color.
+   *
+   * @var string
   */
-  protected $color = '#000000';
+  protected $color = '';
 
   /**
-   * The number of pixels used for the blur.
+   * Fill.
+   *
+   * @var string/object hex or ImageTransform_Source object
   */
-  protected $style = null;
+  protected $fill = null;
 
   /**
    * Construct an sfImageBlur object.
    *
-   * @param array integer
+   * @param integer
+   * @param integer
+   * @param integer
+   * @param integer
+   * @param integer
+   * @param integer
+   * @param string/object hex or ImageTransform_Source object
+   * @param integer
    */
-  public function __construct($x1, $y1, $x2, $y2, $thickness=1, $color='#000000')
+  public function __construct($x1, $y1, $x2, $y2, $thickness=1, $color=null, $fill=null)
   {
     $this->setStartX($x1);
     $this->setStartY($y1);
@@ -68,6 +92,7 @@ class BaseImageTransformLine extends BaseImageTransforms
     $this->setEndY($y2);
     $this->setThickness($thickness);
     $this->setColor($color);
+    $this->setFill($fill);
   }
 
   /**
@@ -221,10 +246,8 @@ class BaseImageTransformLine extends BaseImageTransforms
     if (preg_match('/#[\d\w]{6}/',$color))
     {
       $this->color = $color;
-
       return true;
     }
-
     return false;
   }
 
@@ -239,13 +262,30 @@ class BaseImageTransformLine extends BaseImageTransforms
   }
 
   /**
-   * Apply the transform to the sfImage object.
+   * Sets the fill
    *
-   * @param sfImage
-   * @return sfImage
+   * @param mixed
+   * @return boolean
    */
-  protected function transform(sfImage $image)
+  public function setFill($fill)
   {
-    return $image;
+    if (preg_match('/#[\d\w]{6}/',$fill) || ($fill instanceof ImageTransform_Source))
+    {
+      $this->fill = $fill;
+
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * Gets the fill
+   *
+   * @return mixed
+   */
+  public function getFill()
+  {
+    return $this->fill;
   }
 }

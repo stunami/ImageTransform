@@ -1,33 +1,38 @@
 <?php
-/*
- * This file is part of the sfImageTransform package.
+/**
+ * This file is part of the ImageTransform package.
  * (c) 2007 Stuart Lowes <stuart.lowes@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- */
-/**
- * sfImageThumbnailGeneric class
  *
+ * @category   ImageTransform
+ * @package    Transform
+ * @version    $Id:$
+ */
+
+/**
  * generic thumbnail transform
  *
  * Create a thumbnail 100 x 100, with the image resized to fit
  * <code>
  * <?php
- * $img = new sfImage('image1.jpg');
+ * $img = new ImageTransform_Source('image1.jpg');
  * $img->thumbnail(100, 100);
  * $img->setQuality(50);
  * $img->saveAs('thumbnail.png');
  * ?>
  * </code>
  *
- * @package sfImageTransform
- * @subpackage transforms
+ * @category   ImageTransform
+ * @package    Transform
+ * @subpackage Abstract
+ *
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @author Miloslav Kmet <miloslav.kmet@gmail.com>
- * @version SVN: $Id$
+ * @author Jan Schumann <js@schumann-it.com>
  */
-class BaseImageTransformThumbnail extends BaseImageTransform
+abstract class ImageTransform_Tranform_Abstract_Thumbnail extends ImageTransform_Transform_Abstract
 {
   /**
    * width of the thumbnail
@@ -67,7 +72,7 @@ class BaseImageTransformThumbnail extends BaseImageTransform
   {
     if(!$this->setWidth($width) || !$this->setHeight($height))
 		{
-			throw new sfImageTransformException(sprintf('Cannot perform thumbnail, a valid width and height must be supplied'));
+			throw new ImageTransform_Transform_Exception(sprintf('Cannot perform thumbnail, a valid width and height must be supplied'));
 		}
     $this->setMethod($method);
     $this->setBackground($background);
@@ -176,13 +181,5 @@ class BaseImageTransformThumbnail extends BaseImageTransform
   public function getBackground()
   {
     return $this->background;
-  }
-
-  /**
-   * Apply the transformation to the image and returns the image thumbnail
-   */
-  protected function transform(sfImage $image)
-  {
-    return $image;
   }
 }

@@ -1,26 +1,27 @@
 <?php
-/*
- * This file is part of the sfImageTransform package.
+/**
+ * This file is part of the ImageTransform package.
  * (c) 2007 Stuart Lowes <stuart.lowes@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @category   ImageTransform
+ * @package    Transform
+ * @version    $Id:$
  */
 
 /**
+ * Crops an image.
  *
- * BaseImageTransformCropclass.
+ * @category   ImageTransform
+ * @package    Transform
+ * @subpackage Abstract
  *
- * Crops image.
- *
- * This class crops a image to a set size.
- *
- * @package smageTransform
- * @subpackage transforms
  * @author Stuart Lowes <stuart.lowes@gmail.com>
- * @version SVN: $Id$
+ * @author Jan Schumann <js@schumann-it.com>
  */
-class BaseImageTransformCrop extends BaseImageTransform
+abstract class ImageTransform_Transform_Abstract_Crop extends ImageTransform_Transform_Abstract
 {
   /**
    * Left coordinate.
@@ -164,17 +165,5 @@ class BaseImageTransformCrop extends BaseImageTransform
   public function getHeight()
   {
     return $this->height;
-  }
-
-  /**
-   * Apply the transform to the sfImage object.
-   *
-   * @access protected
-   * @param sfImage
-   * @return sfImage
-   */
-  protected function transform(sfImage $image)
-  {
-    return $image;
   }
 }

@@ -1,24 +1,27 @@
 <?php
-/*
- * This file is part of the sfImageTransform package.
+/**
+ * This file is part of the ImageTransform package.
  * (c) 2007 Stuart Lowes <stuart.lowes@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @category   ImageTransform
+ * @package    Transform
+ * @version    $Id:$
  */
 
 /**
- *
- * BaseImageTransformFill class.
- *
  * Fills the set area with a color or tile image.
  *
- * @package sfImageTransform
- * @subpackage transforms
+ * @category   ImageTransform
+ * @package    Transform
+ * @subpackage Abstract
+ *
  * @author Stuart Lowes <stuart.lowes@gmail.com>
- * @version SVN: $Id$
+ * @author Jan Schumann <js@schumann-it.com>
  */
-class BaseImageTransformFill extends BaseImageTransform
+abstract class ImageTransform_Transform_Abstract_Fill extends ImageTransform_Transform_Abstract
 {
   /**
    * x-coordinate.
@@ -42,7 +45,7 @@ class BaseImageTransformFill extends BaseImageTransform
    *
    * @param integer
    * @param integer
-   * @param string/object hex color or sfImage object
+   * @param string/object hex color or ImageTransform_Source object
    */
   public function __construct($x=0, $y=0, $fill='#000000')
   {
@@ -115,7 +118,7 @@ class BaseImageTransformFill extends BaseImageTransform
    */
   public function setFill($fill)
   {
-    if (preg_match('/#[\d\w]{6}/',$fill) || (is_object($fill) && class_name($fill) === 'sfImage'))
+    if (preg_match('/#[\d\w]{6}/',$fill) || ($fill instanceof ImageTransform_Source))
     {
       $this->fill = $fill;
 
@@ -133,16 +136,5 @@ class BaseImageTransformFill extends BaseImageTransform
   public function getFill()
   {
     return $this->fill;
-  }
-
-  /**
-   * Apply the transform to the sfImage object.
-   *
-   * @param sfImage
-   * @return sfImage
-   */
-  protected function transform(sfImage $image)
-  {
-    return $image;
   }
 }

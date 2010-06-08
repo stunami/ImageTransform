@@ -1,24 +1,28 @@
 <?php
-/*
- * This file is part of the sfImageTransform package.
- * (c) 2007 Stuart <stuart.lowes@gmail.com>
+/**
+ * This file is part of the ImageTransform package.
+ * (c) 2007 Stuart Lowes <stuart.lowes@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- */
-/**
- * BaseImageTransformReflection class
  *
+ * @category   ImageTransform
+ * @package    Transform
+ * @version    $Id:$
+ */
+
+/**
  * adds a mirrored reflection effect to an image
  *
- * @package sfImageTransform
- * @subpackage transforms
- * @author Stuard Lowes <stuart.lowes@gmail.com>
- * @author Colin MacDonald <colin@oneweb.co.uk>
+ * @category   ImageTransform
+ * @package    Transform
+ * @subpackage Abstract
  *
- * @version SVN: $Id$
+ * @author Stuart Lowes <stuart.lowes@gmail.com>
+ * @author Colin MacDonald <colin@oneweb.co.uk>
+ * @author Jan Schumann <js@schumann-it.com>
  */
-class BaseImageTransformReflection extends BaseImageTransform
+abstract class ImageTransform_Tranform_Abstract_Reflection extends ImageTransform_Transform_Abstract
 {
 	 /**
    * The reflection height for the image
@@ -91,17 +95,5 @@ class BaseImageTransformReflection extends BaseImageTransform
   public function getStartTransparency()
   {
     return $this->start_transparency;
-  }
-
-  /**
-   * Apply the opacity transformation to the sfImage object
-   *
-   * @param sfImage
-   *
-   * @return sfImage
-   */
-  public function transform(sfImage $image)
-  {
-    return $image;
   }
 }

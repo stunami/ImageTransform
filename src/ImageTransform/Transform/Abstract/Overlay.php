@@ -1,26 +1,29 @@
 <?php
-/*
- * This file is part of the sfImageTransform package.
- * (c) 2007 Stuart <stuart.lowes@gmail.com>
+/**
+ * This file is part of the ImageTransform package.
+ * (c) 2007 Stuart Lowes <stuart.lowes@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @category   ImageTransform
+ * @package    Transform
+ * @version    $Id:$
  */
 
 /**
- *
- * BaseImageTransformOverlay class.
- *
  * Overlays an image on top of another image.
  *
  * Overlays an image at a set point on the image.
  *
- * @package sfImageTransform
- * @subpackage transforms
+ * @category   ImageTransform
+ * @package    Transform
+ * @subpackage Abstract
+ *
  * @author Stuart Lowes <stuart.lowes@gmail.com>
- * @version SVN: $Id$
+ * @author Jan Schumann <js@schumann-it.com>
  */
-class BaseImageTransformOverlay extends BaseImageTransform
+abstract class ImageTransform_Tranform_Abstract_Overlay extends ImageTransform_Transform_Abstract
 {
   /**
    * The overlay sfImage.
@@ -58,7 +61,7 @@ class BaseImageTransformOverlay extends BaseImageTransform
    *
    * @param array mixed
    */
-  public function __construct(sfImage $overlay, $position='top-left')
+  public function __construct(ImageTransform_Source $overlay, $position='top-left')
   {
     $this->setOverlay($overlay);
 
@@ -82,9 +85,9 @@ class BaseImageTransformOverlay extends BaseImageTransform
   /**
    * sets the over image.
    *
-   * @param sfImage
+   * @param ImageTransform_Source
    */
-  function setOverlay(sfImage $overlay)
+  function setOverlay(ImageTransform_Source $overlay)
   {
     $this->overlay = $overlay;
   }
@@ -92,7 +95,7 @@ class BaseImageTransformOverlay extends BaseImageTransform
   /**
    * returns the overlay sfImage object.
    *
-   * @return sfImage
+   * @return ImageTransform_Source
    */
   function getOverlay()
   {
@@ -195,11 +198,11 @@ class BaseImageTransformOverlay extends BaseImageTransform
    * Computes the offset of the overlayed image and sets
    * the top and left coordinates based on the named position
    *
-   * @param sfImage $image canvas image
+   * @param ImageTransform_Source $image canvas image
    *
    * @return boolean
    */
-  public function computeCoordinates(sfImage $image)
+  public function computeCoordinates(ImageTransform_Source $image)
   {
     $position = $this->getPosition();
 
@@ -269,16 +272,5 @@ class BaseImageTransformOverlay extends BaseImageTransform
     }
 
     return true;
-  }
-
-  /**
-   * Apply the transform to the sfImage object.
-   *
-   * @param integer
-   * @return sfImage
-   */
-  protected function transform(sfImage $image)
-  {
-    return $image;
   }
 }

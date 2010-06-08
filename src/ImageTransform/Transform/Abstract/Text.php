@@ -1,25 +1,27 @@
 <?php
-/*
- * This file is part of the sfImageTransform package.
- * (c) 2007 Stuart <stuart.lowes@gmail.com>
+/**
+ * This file is part of the ImageTransform package.
+ * (c) 2007 Stuart Lowes <stuart.lowes@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @category   ImageTransform
+ * @package    Transform
+ * @version    $Id:$
  */
 
 /**
- *
- * ImageTransformTextImageMagick class.
- *
  * Adds text to the image.
  *
- * Text.
+ * @category   ImageTransform
+ * @package    Transform
+ * @subpackage Abstract
  *
- * @package sfImageTransform
- * @author Robin Corps <robin@ngse.co.uk>
- * @version SVN: $Id$
+ * @author Stuart Lowes <stuart.lowes@gmail.com>
+ * @author Jan Schumann <js@schumann-it.com>
  */
-class BaseImageTransformText extends BaseImageTransform
+abstract class ImageTransform_Tranform_Abstract_Text extends ImageTransform_Transform_Abstract
 {
   /**
    * Font face.
@@ -59,16 +61,19 @@ class BaseImageTransformText extends BaseImageTransform
   /**
    * Path to font.
   */
-  protected $font_dir = '';
+  protected $font_dir = '/usr/share/fonts/truetype/msttcorefonts';
 
   /**
    * Construct an sfImageText object.
    *
    * @param array integer
    */
-  public function __construct($text, $x=0, $y=0, $size=10, $font='Arial', $color='#000000', $angle=0)
+  public function __construct($text, $x=0, $y=0, $size=10, $font='Arial', $color='#000000', $angle=0, $fontDir = '')
   {
-    $this->font_dir = sfConfig::get('app_sfImageTransformPlugin_font_dir','/usr/share/fonts/truetype/msttcorefonts');
+    if ($fontDir)
+    {
+      $this->font_dir = $fontDir;
+    }
     $this->setText($text);
     $this->setX($x);
     $this->setY($y);
@@ -216,17 +221,5 @@ class BaseImageTransformText extends BaseImageTransform
   public function getAngle()
   {
     return $this->angle;
-  }
-
-  /**
-   * Apply the transform to the sfImage object.
-   *
-   * @access protected
-   * @param sfImage
-   * @return sfImage
-   */
-  protected function transform(sfImage $image)
-  {
-    return $image;
   }
 }
