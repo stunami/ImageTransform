@@ -39,7 +39,7 @@ class ImageTransform_Transform_Factory
       $arguments[] = $funcArgs[$i];
     }
 
-    return self::create($adapterName, $method, $arguments);
+    return self::createWithArgumentsArray($adapterName, $method, $arguments);
   }
 
   /**

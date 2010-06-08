@@ -21,7 +21,7 @@
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @author Jan Schumann <js@schumann-it.com>
  */
-class ImageTransform_Tranform_Gd_Arc extends ImageTransform_Tranform_Abstract_Arc
+class ImageTransform_Tranform_Gd_Arc extends ImageTransform_Transform_Abstract_Arc
 {
   /**
    * Apply the transform to the ImageTransform_Source object.
