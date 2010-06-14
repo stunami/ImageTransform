@@ -145,6 +145,17 @@ class ImageTransform_Source
   }
 
   /**
+   * Returns the image resource
+   * Convenience method for $i->getAdapter()->getHolder()
+   *
+   * @return resource
+   */
+  public function getResource()
+  {
+    return $this->getAdapter()->getHolder();
+  }
+
+  /**
    * Creates a blank image (Defaults are loaded by $this->defaultImage @todo move configuration to seperate class)
    *
    * @access public
@@ -260,9 +271,13 @@ class ImageTransform_Source
    *
    * @return boolean
    */
-  public function save()
+  public function save($transform = true)
   {
-    $this->transform();
+    if (true === $transform)
+    {
+      $this->transform();
+    }
+
     return $this->getAdapter()->save();
   }
 
@@ -292,9 +307,9 @@ class ImageTransform_Source
       throw new ImageTransform_Source_Exception(sprintf('Unsupported file %s', $filepath));
     }
 
-    $this->transform();
-
     $copy = $this->copy();
+
+    $this->transform();
 
     $copy->getAdapter()->saveAs($filepath, $mime);
 
@@ -313,7 +328,6 @@ class ImageTransform_Source
   public function copy()
   {
     $copy = clone $this;
-    $copy->resetTransforms();
     $copy->setAdapter($this->getAdapter()->copy());
 
     return $copy;
@@ -564,7 +578,7 @@ class ImageTransform_Source
   }
 
   /**
-   * Add a tranform to the queue
+   * Add a Transform to the queue
    *
    * @param string $method
    * @param array $arguments
