@@ -23,8 +23,6 @@ class ImageTransform_Adapter_Factory
 {
   const DEFAULT_ADAPTER = 'Gd';
 
-  private static $createdAdapters = array();
-
   /**
    * Returns a adapter class of the specified type.
    * To improve performance all created instances are stored privatly.
@@ -35,7 +33,7 @@ class ImageTransform_Adapter_Factory
    *
    * @return ImageTransform_Adapter_Interface
    */
-  public static function createAdapter($name = '', $clone = false)
+  public static function createAdapter($name = '')
   {
     // No adapter set so use default
     if ('' === $name)
@@ -43,12 +41,8 @@ class ImageTransform_Adapter_Factory
       $name = self::DEFAULT_ADAPTER;
     }
 
-    if (!isset(self::$createdAdapters[$name]))
-    {
-      $adapterClass = 'ImageTransform_Adapter_' . ucfirst($name);
-      self::$createdAdapters[$name] = new $adapterClass();
-    }
+    $adapterClass = 'ImageTransform_Adapter_' . ucfirst($name);
 
-    return true === $clone ? clone self::$createdAdapters[$name] : self::$createdAdapters[$name];
+    return new $adapterClass();
   }
 }
