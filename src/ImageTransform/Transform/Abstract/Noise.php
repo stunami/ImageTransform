@@ -21,15 +21,15 @@
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @author Jan Schumann <js@schumann-it.com>
  */
-abstract class ImageTransform_Tranform_Abstract_Noise extends ImageTransform_Transform_Abstract
+abstract class ImageTransform_Transform_Abstract_Noise extends ImageTransform_Transform_Abstract
 {
   /**
    * Noise density.
   */
-  protected $density = 20;
+  private $density = 20;
 
   /**
-   * Construct an sfImageDuotone object.
+   * Construct an Duotone object.
    *
    * @param integer
    */
@@ -44,7 +44,7 @@ abstract class ImageTransform_Tranform_Abstract_Noise extends ImageTransform_Tra
    * @param integer
    * @return boolean
    */
-  public function setDensity($density)
+  private function setDensity($density)
   {
     if (is_numeric($density))
     {
@@ -61,7 +61,7 @@ abstract class ImageTransform_Tranform_Abstract_Noise extends ImageTransform_Tra
    *
    * @return integer
    */
-  public function getdensity()
+  protected function getdensity()
   {
     return $this->density;
   }

@@ -23,16 +23,16 @@
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @author Jan Schumann <js@schumann-it.com>
  */
-abstract class ImageTransform_Tranform_Abstract_PixelBlur extends ImageTransform_Transform_Abstract
+abstract class ImageTransform_Transform_Abstract_PixelBlur extends ImageTransform_Transform_Abstract
 {
   /**
    * The number of pixels used for the blur.
    * @var integer
   */
-  protected $blur_pixels = 1;
+  private $blur_pixels = 1;
 
   /**
-   * Construct an sfImageBlur object.
+   * Construct an Blur object.
    *
    * @param array integer
    */
@@ -47,7 +47,7 @@ abstract class ImageTransform_Tranform_Abstract_PixelBlur extends ImageTransform
    * @param integer
    * @return boolean
    */
-  public function setBlur($pixels)
+  private function setBlur($pixels)
   {
     if (is_numeric($pixels))
     {
@@ -64,7 +64,7 @@ abstract class ImageTransform_Tranform_Abstract_PixelBlur extends ImageTransform
    *
    * @return integer
    */
-  public function getBlur()
+  protected function getBlur()
   {
     return $this->blur_pixels;
   }

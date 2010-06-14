@@ -33,165 +33,25 @@
  * @author Miloslav Kmet <miloslav.kmet@gmail.com>
  * @author Jan Schumann <js@schumann-it.com>
  */
-class ImageTransform_Transform_Generic_Thumbnail extends ImageTransform_Transform_Abstract
+class ImageTransform_Transform_Generic_Thumbnail extends ImageTransform_Transform_Abstract_Thumbnail
 {
   /**
-   * width of the thumbnail
+   * @var int
    */
-  protected $width;
+  private $resource_w;
+  /**
+   * @var int
+   */
+  private $resource_h;
 
   /**
-   * height of the thumbnail
+   * @var float
    */
-  protected $height;
-
+  private $scale_w;
   /**
-   * method to be used for thumbnail creation. default is scale.
+   * @var float
    */
-  protected $method = 'fit';
-
-  /**
-   * available methods for thumbnail creation
-   */
-  protected $methods = array('fit', 'scale', 'inflate','deflate', 'left' ,'right', 'top', 'bottom', 'center');
-
-  /*
-   * background color in hex or null for transparent
-   */
-  protected $background = null;
-
-  /**
-   * constructor
-   *
-   * @param integer $width of the thumbnail
-   * @param integer $height of the thumbnail
-   * @param string type of thumbnail method to be created
-   *
-   * @return void
-   */
-  public function __construct($width, $height, $method='fit', $background=null)
-  {
-    if (!$this->setWidth($width) || !$this->setHeight($height))
-		{
-		  $message = 'Cannot perform thumbnail, a valid width and height must be supplied';
-			throw new ImageTransform_Transform_Generic_Exception(sprintf($message));
-		}
-    $this->setMethod($method);
-    $this->setBackground($background);
-  }
-
-  /**
-   * sets the height of the thumbnail
-   * @param integer $height of the image
-   *
-   * @return void
-   */
-  public function setHeight($height)
-  {
-    if (is_numeric($height) && $height > 0)
-    {
-      $this->height = (int)$height;
-
-      return true;
-    }
-
-    return false;
-  }
-
-  /**
-   * returns the height of the thumbnail
-   *
-   * @return integer
-   */
-  public function getHeight()
-  {
-    return $this->height;
-  }
-
-  /**
-   * sets the width of the thumbnail
-   * @param integer $width of the image
-   *
-   * @return void
-   */
-  public function setWidth($width)
-  {
-    if (is_numeric($width) && $width > 0)
-    {
-      $this->width = (int)$width;
-
-      return true;
-    }
-
-    return false;
-  }
-
-  /**
-   * returns the width of the thumbnail
-   *
-   * @return integer
-   */
-  public function getWidth()
-  {
-    return $this->width;
-  }
-
-  /**
-   * returns the width of the thumbnail
-   * @param string thumbnail method. Options are scale (default), deflate (or inflate), right, left, top, bottom, scale
-   *
-   * @return integer
-   */
-  public function setMethod($method)
-  {
-    // Backwards compatibility
-    $map = array('left' => 'west', 'right' => 'east', 'top' => 'north', 'bottom' => 'south');
-    if ($key = array_search($method, $map))
-    {
-      // @TODO implement logging
-      //$message = sprintf('sfImageTransformPlugin thumbnail method \'%s\' is depreciated use \'%s\'', $method, $key);
-      //sfContext::getInstance()->getEventDispatcher()->notify(new sfEvent($this, 'application.log', array($message, 'priority' => sfLogger::ERR)));
-    }
-
-    if (in_array($method, $this->methods))
-    {
-      $this->method = strtolower($method);
-
-      return true;
-    }
-
-    return false;
-  }
-
-  /**
-   * returns the method for thumbnail creation
-   *
-   * @return integer
-   */
-  public function getMethod()
-  {
-    return $this->method;
-  }
-
-  /**
-   * Sets background color.
-   *
-   * @param string
-   */
-  public function setBackground($color)
-  {
-    $this->background = $color;
-  }
-
-  /**
-   * Gets background color.
-   *
-   * @return string
-   */
-  public function getBackground()
-  {
-    return $this->background;
-  }
+  private $scale_h;
 
   /**
    * Apply the transformation to the image and returns the image thumbnail
@@ -199,69 +59,90 @@ class ImageTransform_Transform_Generic_Thumbnail extends ImageTransform_Transfor
    * @param ImageTransform_Source
    * @return ImageTransform_Source
    */
-  protected function transform(ImageTransform_Source $image)
+  protected function transform()
   {
-    $resource_w = $image->getWidth();
-    $resource_h = $image->getHeight();
+    $this->resource_w = $this->getImage()->getWidth();
+    $this->resource_h = $this->getImage()->getHeight();
 
-    $scale_w    = $this->getWidth()/$resource_w;
-    $scale_h    = $this->getHeight()/$resource_h;
+    $this->scale_w    = $this->getWidth() / $this->resource_w;
+    $this->scale_h    = $this->getHeight() / $this->resource_h;
 
-    switch ($this->getMethod())
+    $method = $this->getMethod();
+
+    if (false === method_exists($this, $method))
     {
-      case 'deflate':
-      case 'inflate':
-
-        return $image->resize($this->getWidth(), $this->getHeight());
-
-      case 'left':
-        $image->scale(max($scale_w, $scale_h));
-
-        return $image->crop(0, (int)round(($image->getHeight() - $this->getHeight()) / 2), $this->getWidth(), $this->getHeight());
-
-      case 'right':
-        $image->scale(max($scale_w, $scale_h));
-
-        return $image->crop(($image->getWidth() - $this->getWidth()), (int)round(($image->getHeight() - $this->getHeight()) / 2),$this->getWidth(), $this->getHeight());
-
-      case 'top':
-        $image->scale(max($scale_w, $scale_h));
-
-        return $image->crop((int)round(($image->getWidth() - $this->getWidth()) / 2), 0, $this->getWidth(), $this->getHeight());
-
-      case 'bottom':
-        $image->scale(max($scale_w, $scale_h));
-
-        return $image->crop((int)round(($image->getWidth() - $this->getWidth()) / 2), ($image->getHeight() - $this->getHeight()), $this->getWidth(), $this->getHeight());
-
-      case 'center':
-        $image->scale(max($scale_w, $scale_h));
-
-        $left = (int)round(($image->getWidth() - $this->getWidth()) / 2);
-        $top  = (int)round(($image->getHeight() - $this->getHeight()) / 2);
-
-        return $image->crop($left, $top, $this->getWidth(), $this->getHeight());
-      case 'scale':
-        return $image->scale(min($scale_w, $scale_h));
-
-      case 'fit':
-      default:
-        $img = clone $image;
-
-        $image->create($this->getWidth(), $this->getHeight());
-
-        // Set a background color if specified
-        if (!is_null($this->getBackground()) && $this->getBackground() != '')
-        {
-          $image->fill(0,0, $this->getBackground());
-        }
-
-        $img->scale(min($this->getWidth() / $img->getWidth(), $this->getHeight() / $img->getHeight()));
-
-        $image->overlay($img, 'center');
-
-        return $image;
-
+      $method = 'fit';
     }
+
+    return $this->$method();
+
+  }
+
+  private function inflate()
+  {
+    return $this->deflate();
+  }
+
+  private function deflate()
+  {
+    return $this->getImage()->resize($this->getWidth(), $this->getHeight());
+  }
+
+  private function left()
+  {
+    $this->getImage()->scale(max($this->scale_w, $this->scale_h));
+    $top = (int) round(($this->getImage()->getHeight() - $this->getHeight()) / 2);
+    return $this->getImage()->crop(0, $top, $this->getWidth(), $this->getHeight());
+  }
+
+  private function right()
+  {
+    $this->getImage()->scale(max($this->scale_w, $this->scale_h));
+    $left = $this->getImage()->getWidth() - $this->getWidth();
+    $top = (int) round(($this->getImage()->getHeight() - $this->getHeight()) / 2);
+    return $this->getImage()->crop($left, $top, $this->getWidth(), $this->getHeight());
+  }
+
+  private function top()
+  {
+    $this->getImage()->scale(max($this->scale_w, $this->scale_h));
+    $left = (int) round(($this->getImage()->getWidth() - $this->getWidth()) / 2);
+    return $this->getImage()->crop($left, 0, $this->getWidth(), $this->getHeight());
+  }
+
+  private function bottom()
+  {
+    $this->getImage()->scale(max($this->scale_w, $this->scale_h));
+    $left = (int) round(($this->getImage()->getWidth() - $this->getWidth()) / 2);
+    $top = $this->getImage()->getHeight() - $this->getHeight();
+    return $this->getImage()->crop($left, $top, $this->getWidth(), $this->getHeight());
+  }
+
+  private function center()
+  {
+    $this->getImage()->scale(max($this->scale_w, $this->scale_h));
+    $left = (int) round(($this->getImage()->getWidth() - $this->getWidth()) / 2);
+    $top  = (int) round(($this->getImage()->getHeight() - $this->getHeight()) / 2);
+    return $this->getImage()->crop($left, $top, $this->getWidth(), $this->getHeight());
+  }
+
+  private function scale()
+  {
+    return $this->getImage()->scale(min($this->scale_w, $this->scale_h));
+  }
+
+  private function fit()
+  {
+    $img = clone $this->getImage();
+    $this->getImage()->create($this->getWidth(), $this->getHeight());
+
+    // Set a background color if specified
+    if (!is_null($this->getBackground()) && $this->getBackground() != '')
+    {
+      $this->getImage()->fill(0,0, $this->getBackground());
+    }
+
+    $img->scale(min($this->getWidth() / $img->getWidth(), $this->getHeight() / $img->getHeight()));
+    return $this->getImage()->overlay($img, 'center');
   }
 }

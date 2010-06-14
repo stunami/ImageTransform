@@ -21,15 +21,15 @@
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @author Jan Schumann <js@schumann-it.com>
  */
-abstract class ImageTransform_Tranform_Abstract_Scatter extends ImageTransform_Transform_Abstract
+abstract class ImageTransform_Transform_Abstract_Scatter extends ImageTransform_Transform_Abstract
 {
   /**
    * Scatter factor.
   */
-  protected $scatter_factor = 4;
+  private $scatter_factor = 4;
 
   /**
-   * Construct an sfImageDuotone object.
+   * Construct an Duotone object.
    *
    * @param integer
    */
@@ -43,7 +43,7 @@ abstract class ImageTransform_Tranform_Abstract_Scatter extends ImageTransform_T
    *
    * @param integer
    */
-  public function setScatterFactor($width)
+  private function setScatterFactor($width)
   {
     $this->width = (int)$width;
   }
@@ -53,7 +53,7 @@ abstract class ImageTransform_Tranform_Abstract_Scatter extends ImageTransform_T
    *
    * @return integer
    */
-  public function getScatterFactor()
+  protected function getScatterFactor()
   {
     return $this->width;
   }

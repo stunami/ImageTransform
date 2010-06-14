@@ -23,32 +23,32 @@
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @author Jan Schumann <js@schumann-it.com>
  */
-abstract class ImageTransform_Tranform_Abstract_Overlay extends ImageTransform_Transform_Abstract
+abstract class ImageTransform_Transform_Abstract_Overlay extends ImageTransform_Transform_Abstract
 {
   /**
-   * The overlay sfImage.
+   * The overlay ImageTransform_Source.
   */
-  protected $overlay;
+  private $overlay;
 
   /**
    * The left coordinate for the overlay position.
   */
-  protected $left = 0;
+  private $left = 0;
 
   /**
    * The top coordinate for the overlay position.
   */
-  protected $top = 0;
+  private $top = 0;
 
   /**
    * The named position for the overlay
    */
-  protected $position = null;
+  private $position = null;
 
   /**
    * available labels for overlay positions
    */
-  protected $labels = array(
+  private $labels = array(
                             'top', 'bottom','left' ,'right', 'middle', 'center',
                             'top-left', 'top-right', 'top-center',
                             'middle-left', 'middle-right', 'middle-center',
@@ -57,7 +57,7 @@ abstract class ImageTransform_Tranform_Abstract_Overlay extends ImageTransform_T
 
 
   /**
-   * Construct an sfImageOverlay object.
+   * Construct an Overlay object.
    *
    * @param array mixed
    */
@@ -87,13 +87,13 @@ abstract class ImageTransform_Tranform_Abstract_Overlay extends ImageTransform_T
    *
    * @param ImageTransform_Source
    */
-  function setOverlay(ImageTransform_Source $overlay)
+  private private function setOverlay(ImageTransform_Source $overlay)
   {
     $this->overlay = $overlay;
   }
 
   /**
-   * returns the overlay sfImage object.
+   * returns the overlay object.
    *
    * @return ImageTransform_Source
    */
@@ -107,9 +107,9 @@ abstract class ImageTransform_Tranform_Abstract_Overlay extends ImageTransform_T
    *
    * @param integer
    */
-  public function setLeft($left)
+  private private function setLeft($left)
   {
-    if(is_numeric($left))
+    if (is_numeric($left))
     {
       $this->left = $left;
 
@@ -124,7 +124,7 @@ abstract class ImageTransform_Tranform_Abstract_Overlay extends ImageTransform_T
    *
    * @return integer
    */
-  public function getLeft()
+  protected function getLeft()
   {
     return $this->left;
   }
@@ -134,9 +134,9 @@ abstract class ImageTransform_Tranform_Abstract_Overlay extends ImageTransform_T
    *
    * @param integer
    */
-  public function setTop($top)
+  private private function setTop($top)
   {
-    if(is_numeric($top))
+    if (is_numeric($top))
     {
       $this->top = $top;
 
@@ -151,7 +151,7 @@ abstract class ImageTransform_Tranform_Abstract_Overlay extends ImageTransform_T
    *
    * @return integer
    */
-  public function getTop()
+  protected function getTop()
   {
     return $this->top;
   }
@@ -171,10 +171,9 @@ abstract class ImageTransform_Tranform_Abstract_Overlay extends ImageTransform_T
    *
    * @return boolean
    */
-  public function setPosition($position)
+  private private function setPosition($position)
   {
-
-    if(in_array($position, $this->labels))
+    if (in_array($position, $this->labels))
     {
       $this->position = strtolower($position);
 
@@ -189,7 +188,7 @@ abstract class ImageTransform_Tranform_Abstract_Overlay extends ImageTransform_T
    *
    * @return string
    */
-  public function getPosition()
+  protected function getPosition()
   {
     return $this->position;
   }
@@ -198,11 +197,9 @@ abstract class ImageTransform_Tranform_Abstract_Overlay extends ImageTransform_T
    * Computes the offset of the overlayed image and sets
    * the top and left coordinates based on the named position
    *
-   * @param ImageTransform_Source $image canvas image
-   *
    * @return boolean
    */
-  public function computeCoordinates(ImageTransform_Source $image)
+  protected function computeCoordinates()
   {
     $position = $this->getPosition();
 
@@ -211,13 +208,13 @@ abstract class ImageTransform_Tranform_Abstract_Overlay extends ImageTransform_T
       return false;
     }
 
-    $resource   = $image->getAdapter()->getHolder();
-    $resource_x = ImageSX($resource);
-    $resource_y = ImageSY($resource);
+    $adapter = $this->getImage()->getAdapter();
+    $resource_x = $adapter->getWidth();
+    $resource_y = $adapter->getHeight();
 
-    $overlay    = $this->getOverlay()->getAdapter()->getHolder();
-    $overlay_x  = ImageSX($overlay);
-    $overlay_y  = ImageSY($overlay);
+    $adapter    = $this->getOverlay()->getAdapter();
+    $overlay_x  = $adapter->getWidth();
+    $overlay_y  = $adapter->getHeight();
 
     switch (strtolower($position))
     {

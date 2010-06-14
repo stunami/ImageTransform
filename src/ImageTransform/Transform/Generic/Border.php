@@ -27,11 +27,12 @@ class ImageTransform_Transform_Generic_Border extends ImageTransform_Transform_A
 {
   /**
    * Apply the transformation to the image and returns the image thumbnail
-   * @param ImageTransform_Source $image
    * @return ImageTransform_Source
    */
-  protected function transform(ImageTransform_Source $image)
+  protected function transform()
   {
+    $image = $this->getImage();
+
     // Work out where we need to draw to
     $offset = $this->getThickness() / 2;
     $mod = $this->getThickness() % 2;

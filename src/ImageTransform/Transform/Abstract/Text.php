@@ -21,50 +21,50 @@
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @author Jan Schumann <js@schumann-it.com>
  */
-abstract class ImageTransform_Tranform_Abstract_Text extends ImageTransform_Transform_Abstract
+abstract class ImageTransform_Transform_Abstract_Text extends ImageTransform_Transform_Abstract
 {
   /**
    * Font face.
   */
-  protected $font = 'Arial';
+  private $font = 'Arial';
 
   /**
    * Font size.
   */
-  protected $size = 10;
+  private $size = 10;
 
   /**
    * Text.
   */
-  protected $text = '';
+  private $text = '';
 
   /**
    * Angel of the text.
   */
-  protected $angle = 0;
+  private $angle = 0;
 
   /**
    * X coordinate.
   */
-  protected $x = 0;
+  private $x = 0;
 
   /**
    * Y coordinate.
   */
-  protected $y = 0;
+  private $y = 0;
 
   /**
    * Font Color.
   */
-  protected $color = '#000000';
+  private $color = '#000000';
 
   /**
    * Path to font.
   */
-  protected $font_dir = '/usr/share/fonts/truetype/msttcorefonts';
+  private $font_dir = '/usr/share/fonts/truetype/msttcorefonts';
 
   /**
-   * Construct an sfImageText object.
+   * Construct an Text object.
    *
    * @param array integer
    */
@@ -88,7 +88,7 @@ abstract class ImageTransform_Tranform_Abstract_Text extends ImageTransform_Tran
    *
    * @param string
    */
-  public function setText($text)
+  private function setText($text)
   {
     $this->text = $text;
   }
@@ -98,7 +98,7 @@ abstract class ImageTransform_Tranform_Abstract_Text extends ImageTransform_Tran
    *
    * @return string
    */
-  public function getText()
+  protected function getText()
   {
     return $this->text;
   }
@@ -108,7 +108,7 @@ abstract class ImageTransform_Tranform_Abstract_Text extends ImageTransform_Tran
    *
    * @param integer
    */
-  public function setX($x)
+  private function setX($x)
   {
     $this->x = $x;
   }
@@ -118,7 +118,7 @@ abstract class ImageTransform_Tranform_Abstract_Text extends ImageTransform_Tran
    *
    * @return integer
    */
-  public function getX()
+  protected function getX()
   {
     return $this->x;
   }
@@ -128,7 +128,7 @@ abstract class ImageTransform_Tranform_Abstract_Text extends ImageTransform_Tran
    *
    * @param integer
    */
-  public function setY($y)
+  private function setY($y)
   {
     $this->y = $y;
   }
@@ -138,7 +138,7 @@ abstract class ImageTransform_Tranform_Abstract_Text extends ImageTransform_Tran
    *
    * @return integer
    */
-  public function getY()
+  protected function getY()
   {
     return $this->y;
   }
@@ -148,7 +148,7 @@ abstract class ImageTransform_Tranform_Abstract_Text extends ImageTransform_Tran
    *
    * @param integer
    */
-  public function setSize($size)
+  private function setSize($size)
   {
     $this->size = $size;
   }
@@ -158,7 +158,7 @@ abstract class ImageTransform_Tranform_Abstract_Text extends ImageTransform_Tran
    *
    * @return integer
    */
-  public function getSize()
+  protected function getSize()
   {
     return $this->size;
   }
@@ -168,7 +168,7 @@ abstract class ImageTransform_Tranform_Abstract_Text extends ImageTransform_Tran
    *
    * @param string
    */
-  public function setFont($font)
+  private function setFont($font)
   {
     $this->font = str_replace(' ', '_', $font);
   }
@@ -178,7 +178,7 @@ abstract class ImageTransform_Tranform_Abstract_Text extends ImageTransform_Tran
    *
    * @return string
    */
-  public function getFont()
+  protected function getFont()
   {
     return $this->font;
   }
@@ -188,7 +188,7 @@ abstract class ImageTransform_Tranform_Abstract_Text extends ImageTransform_Tran
    *
    * @param string
    */
-  public function setColor($color)
+  private function setColor($color)
   {
     $this->color = $color;
   }
@@ -198,7 +198,7 @@ abstract class ImageTransform_Tranform_Abstract_Text extends ImageTransform_Tran
    *
    * @return string
    */
-  public function getColor()
+  protected function getColor()
   {
     return $this->color;
   }
@@ -208,7 +208,7 @@ abstract class ImageTransform_Tranform_Abstract_Text extends ImageTransform_Tran
    *
    * @param string
    */
-  public function setAngle($angle)
+  private function setAngle($angle)
   {
     $this->angle = $angle;
   }
@@ -218,7 +218,7 @@ abstract class ImageTransform_Tranform_Abstract_Text extends ImageTransform_Tran
    *
    * @return string
    */
-  public function getAngle()
+  protected function getAngle()
   {
     return $this->angle;
   }

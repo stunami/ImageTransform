@@ -22,63 +22,22 @@
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @author Jan Schumann <js@schumann-it.com>
  */
-class ImageTransform_Transform_Gd_Scale extends ImageTransform_Transform_Abstract
+class ImageTransform_Transform_Gd_Scale extends ImageTransform_Transform_Abstract_Scale
 {
   /**
-   * The amount to scale the image by.
+   * Apply the transform to the object.
    *
-   * @var float
-  */
-  protected $scale = 1;
-
-  /**
-   * Construct an sfImageScale object.
-   *
-   * @param float
-   */
-  public function __construct($scale)
-  {
-    $this->setScale($scale);
-  }
-
-  /**
-   * Set the scale factor.
-   *
-   * @param float
-   */
-  public function setScale($scale)
-  {
-    if (is_numeric($scale))
-    {
-      $this->scale = $scale;
-    }
-  }
-
-  /**
-   * Gets the scale factor.
-   *
-   * @return float
-   */
-  public function getScale()
-  {
-    return $this->scale;
-  }
-
-  /**
-   * Apply the transform to the sfImage object.
-   *
-   * @param ImageTransform_Source
    * @return ImageTransform_Source
    */
-  protected function transform(ImageTransform_Source $image)
+  protected function transform()
   {
-    $resource = $image->getAdapter()->getHolder();
+    $resource = $this->getResource();
 
     $x = imagesx($resource);
     $y = imagesy($resource);
 
-    $image->resize(round($x * $this->scale),round($y * $this->scale));
+    $this->getImage()->resize(round($x * $this->getScale()),round($y * $this->getScale()));
 
-    return $image;
+    return $this->getImage();
   }
 }

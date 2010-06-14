@@ -24,92 +24,15 @@
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @author Jan Schumann <js@schumann-it.com>
  */
-class ImageTransform_Transform_Generic_Callback extends ImageTransform_Transform_Abstract
+class ImageTransform_Transform_Generic_Callback extends ImageTransform_Transform_Abstract_Callback
 {
-
   /**
-   * Callback function or class/object method.
-   * @access protected
-   * @var object
-  */
-  protected $function = null;
-
-  /**
-   * Any arguments for the callback function.
-   * @access protected
-   * @var object
-  */
-  protected $arguments = null;
-
-  /**
-   * constructor
-   *
-   * @param integer $width of the thumbnail
-   * @param integer $height of the thumbnail
-   * @param boolean could the target image be larger than the source ?
-   * @param boolean should the target image keep the source aspect ratio ?
-   *
-   * @return void
-   */
-  public function __construct($function, $arguments = null)
-  {
-    $this->setFunction($function);
-    $this->setArguments($arguments);
-
-  }
-
-  /**
-   *
-   * @param mixed $function
-   * @return boolean
-   */
-  public function setFunction($function)
-  {
-    if (is_callable($function))
-    {
-      $this->function = $function;
-
-      return true;
-    }
-
-    throw new ImageTransform_Transform_Generic_Exception(sprintf('Callback method does not exist'));
-  }
-
-  /**
-   *
-   * @return mixed
-   */
-  public function getFunction()
-  {
-    return $this->function;
-  }
-
-
-  /**
-   *
-   * @param mixed $arguments
-   */
-  public function setArguments($arguments)
-  {
-    $this->arguments = $arguments;
-  }
-
-  /**
-   *
-   * @return mixed
-   */
-  public function getArguments()
-  {
-    return $this->arguments;
-  }
-
-  /**
-   *
-   * @param ImageTransform_Source $image
    * @return ImageTransform_Source
    */
-  public function transform(ImageTransform_Source $image)
+  public function transform()
   {
+    $image = $this->getImage();
+
     call_user_func_array($this->getFunction(), array('image' => $image, 'arguments' => $this->getArguments()));
 
     return $image;

@@ -26,17 +26,17 @@ abstract class ImageTransform_Transform_Abstract_Border extends ImageTransform_T
   /**
    * thickness of the border
    */
-  protected $thickness = 1;
+  private $thickness = 1;
 
   /**
    * Hex color.
    *
    * @var string
   */
-  protected $color = '';
+  private $color = '';
 
   /**
-   * Construct an sfImageBorderGeneric object.
+   * Construct an Border Transform object.
    *
    * @param integer
    * @param string
@@ -53,7 +53,7 @@ abstract class ImageTransform_Transform_Abstract_Border extends ImageTransform_T
    * @param integer
    * @return boolean
    */
-  public function setThickness($thickness)
+  private function setThickness($thickness)
   {
     if (is_numeric($thickness))
     {
@@ -70,7 +70,7 @@ abstract class ImageTransform_Transform_Abstract_Border extends ImageTransform_T
    *
    * @return integer
    */
-  public function getThickness()
+  protected function getThickness()
   {
     return $this->thickness;
   }
@@ -80,7 +80,7 @@ abstract class ImageTransform_Transform_Abstract_Border extends ImageTransform_T
    *
    * @return boolean
    */
-  public function setColor($color)
+  private function setColor($color)
   {
     if (preg_match('/#[\d\w]{6}/',$color))
     {
@@ -97,7 +97,7 @@ abstract class ImageTransform_Transform_Abstract_Border extends ImageTransform_T
    *
    * @return integer
    */
-  public function getColor()
+  protected function getColor()
   {
     return $this->color;
   }

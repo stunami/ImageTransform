@@ -21,22 +21,22 @@
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @author Jan Schumann <js@schumann-it.com>
  */
-abstract class ImageTransform_Tranform_Abstract_Gamma extends ImageTransform_Transform_Abstract
+abstract class ImageTransform_Transform_Abstract_Gamma extends ImageTransform_Transform_Abstract
 {
   /**
    * The input gamma.
    * @var float
   */
-  protected $input_gamma = 1.0;
+  private $input_gamma = 1.0;
 
   /**
    * The number of pixels used for the blur.
    * @var float
   */
-  protected $output_gamma = 1.6;
+  private $output_gamma = 1.6;
 
   /**
-   * Construct an sfImageGamma object.
+   * Construct an Gamma object.
    *
    * @param float
    * @param float
@@ -53,7 +53,7 @@ abstract class ImageTransform_Tranform_Abstract_Gamma extends ImageTransform_Tra
    * @param float
    * @return boolean
    */
-  public function setInputGamma($gamma)
+  private function setInputGamma($gamma)
   {
     if (is_float($gamma))
     {
@@ -70,7 +70,7 @@ abstract class ImageTransform_Tranform_Abstract_Gamma extends ImageTransform_Tra
    *
    * @return integer
    */
-  public function getInputGamma()
+  protected function getInputGamma()
   {
     return $this->input_gamma;
   }
@@ -80,7 +80,7 @@ abstract class ImageTransform_Tranform_Abstract_Gamma extends ImageTransform_Tra
    *
    * @param float
    */
-  public function setOutputGamma($gamma)
+  private function setOutputGamma($gamma)
   {
     if (is_numeric($gamma))
     {
@@ -95,7 +95,7 @@ abstract class ImageTransform_Tranform_Abstract_Gamma extends ImageTransform_Tra
    *
    * @return integer
    */
-  public function getOuputGamma()
+  protected function getOuputGamma()
   {
     return $this->ouput_gamma;
   }

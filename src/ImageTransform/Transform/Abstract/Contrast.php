@@ -13,25 +13,25 @@
 
 /**
  * Sets the contrast of an image.
- * 
+ *
  * Reduces the level of detail of an image.
- * 
+ *
  * @category   ImageTransform
  * @package    Transform
  * @subpackage Abstract
  *
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @author Jan Schumann <js@schumann-it.com>
- */  
+ */
 abstract class ImageTransform_Transform_Abstract_Contrast extends ImageTransform_Transform_Abstract
 {
   /**
    * Constract level to be applied.
   */
-  protected $contrast = 0;
+  private $contrast = 0;
 
   /**
-   * Construct an sfImageContrast object.
+   * Construct an Contrast object.
    *
    * @param integer
    */
@@ -46,7 +46,7 @@ abstract class ImageTransform_Transform_Abstract_Contrast extends ImageTransform
    * @param integer
    * @return boolean
    */
-  public function setContrast($contrast)
+  private function setContrast($contrast)
   {
     if (is_numeric($contrast))
     {
@@ -63,7 +63,7 @@ abstract class ImageTransform_Transform_Abstract_Contrast extends ImageTransform
    *
    * @return integer
    */
-  public function getContrast()
+  protected function getContrast()
   {
     return $this->contrast;
   }

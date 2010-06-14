@@ -12,7 +12,7 @@
  */
 
 /**
- * Base tranform to set the brightnes of an image.
+ * Base Transform to set the brightnes of an image.
  *
  * @category   ImageTransform
  * @package    Transform
@@ -21,15 +21,15 @@
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @author Jan Schumann <js@schumann-it.com>
  */
-abstract class ImageTransform_Tranform_Abstract_Brightness extends ImageTransform_Transform_Abstract
+abstract class ImageTransform_Transform_Abstract_Brightness extends ImageTransform_Transform_Abstract
 {
   /**
    * Constract level to be applied.
   */
-  protected $brightness = 0;
+  private $brightness = 0;
 
   /**
-   * Construct an sfImageBrightness object.
+   * Construct an Brightness object.
    *
    * @param integer
    */
@@ -44,7 +44,7 @@ abstract class ImageTransform_Tranform_Abstract_Brightness extends ImageTransfor
    * @param integer
    * @return boolean
    */
-  public function setBrightness($brightness)
+  private function setBrightness($brightness)
   {
     if (is_numeric($brightness))
     {
@@ -61,7 +61,7 @@ abstract class ImageTransform_Tranform_Abstract_Brightness extends ImageTransfor
    *
    * @return integer
    */
-  public function getBrightness()
+  protected function getBrightness()
   {
     return $this->brightness;
   }

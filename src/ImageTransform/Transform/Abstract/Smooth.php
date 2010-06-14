@@ -21,15 +21,15 @@
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @author Jan Schumann <js@schumann-it.com>
  */
-abstract class ImageTransform_Tranform_Abstract_Smooth extends ImageTransform_Transform_Abstract
+abstract class ImageTransform_Transform_Abstract_Smooth extends ImageTransform_Transform_Abstract
 {
   /**
    * Smoothness level to be applied.
   */
-  protected $smoothness = 0;
+  private $smoothness = 0;
 
   /**
-   * Construct an sfImageSmooth object.
+   * Construct an Smooth object.
    *
    * @param integer
    */
@@ -44,7 +44,7 @@ abstract class ImageTransform_Tranform_Abstract_Smooth extends ImageTransform_Tr
    * @param integer
    * @return boolean
    */
-  public function setSmoothness($smoothness)
+  private function setSmoothness($smoothness)
   {
     if (is_numeric($smoothness))
     {
@@ -61,7 +61,7 @@ abstract class ImageTransform_Tranform_Abstract_Smooth extends ImageTransform_Tr
    *
    * @return integer
    */
-  public function getSmoothness()
+  protected function getSmoothness()
   {
     return $this->smoothness;
   }

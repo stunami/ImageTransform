@@ -26,25 +26,25 @@ abstract class ImageTransform_Transform_Abstract_Crop extends ImageTransform_Tra
   /**
    * Left coordinate.
   */
-  protected $left = 0;
+  private $left = 0;
 
   /**
    * Top coordinate
   */
-  protected $top = 0;
+  private $top = 0;
 
   /**
    * Cropped area width.
   */
-  protected $width;
+  private $width;
 
   /**
    * Cropped area height
   */
-  protected $height;
+  private $height;
 
   /**
-   * Construct an sfImageCrop object.
+   * Construct an Crop object.
    *
    * @param integer
    * @param integer
@@ -64,7 +64,7 @@ abstract class ImageTransform_Transform_Abstract_Crop extends ImageTransform_Tra
    *
    * @param integer
    */
-  public function setLeft($left)
+  private function setLeft($left)
   {
     if (is_numeric($left))
     {
@@ -81,7 +81,7 @@ abstract class ImageTransform_Transform_Abstract_Crop extends ImageTransform_Tra
    *
    * @return integer
    */
-  public function getLeft()
+  protected function getLeft()
   {
     return $this->left;
   }
@@ -91,7 +91,7 @@ abstract class ImageTransform_Transform_Abstract_Crop extends ImageTransform_Tra
    *
    * @param integer
    */
-  public function setTop($top)
+  private function setTop($top)
   {
     if (is_numeric($top))
     {
@@ -108,7 +108,7 @@ abstract class ImageTransform_Transform_Abstract_Crop extends ImageTransform_Tra
    *
    * @return integer
    */
-  public function getTop()
+  protected function getTop()
   {
     return $this->top;
   }
@@ -118,7 +118,7 @@ abstract class ImageTransform_Transform_Abstract_Crop extends ImageTransform_Tra
    *
    * @param integer
    */
-  public function setWidth($width)
+  private function setWidth($width)
   {
     if (is_numeric($width))
     {
@@ -135,7 +135,7 @@ abstract class ImageTransform_Transform_Abstract_Crop extends ImageTransform_Tra
    *
    * @return integer
    */
-  public function getWidth()
+  protected function getWidth()
   {
     return $this->width;
   }
@@ -145,7 +145,7 @@ abstract class ImageTransform_Transform_Abstract_Crop extends ImageTransform_Tra
    *
    * @param integer
    */
-  public function setHeight($height)
+  private function setHeight($height)
   {
     if (is_numeric($height))
     {
@@ -162,7 +162,7 @@ abstract class ImageTransform_Transform_Abstract_Crop extends ImageTransform_Tra
    *
    * @return integer
    */
-  public function getHeight()
+  protected function getHeight()
   {
     return $this->height;
   }

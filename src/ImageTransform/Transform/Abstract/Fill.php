@@ -27,21 +27,21 @@ abstract class ImageTransform_Transform_Abstract_Fill extends ImageTransform_Tra
    * x-coordinate.
    * @var integer
   */
-  protected $x = 0;
+  private $x = 0;
 
   /**
    * y-coordinate
    * @var integer
   */
-  protected $y = 0;
+  private $y = 0;
 
   /**
    * Fill.
   */
-  protected $fill = null;
+  private $fill = null;
 
   /**
-   * Construct an sfImageDuotone object.
+   * Construct an Duotone object.
    *
    * @param integer
    * @param integer
@@ -60,7 +60,7 @@ abstract class ImageTransform_Transform_Abstract_Fill extends ImageTransform_Tra
    * @param integer
    * @return boolean
    */
-  public function setX($x)
+  private function setX($x)
   {
     if (is_numeric($x))
     {
@@ -77,7 +77,7 @@ abstract class ImageTransform_Transform_Abstract_Fill extends ImageTransform_Tra
    *
    * @return integer
    */
-  public function getX()
+  protected function getX()
   {
     return $this->x;
   }
@@ -88,7 +88,7 @@ abstract class ImageTransform_Transform_Abstract_Fill extends ImageTransform_Tra
    * @param integer
    * @return boolean
    */
-  public function setY($y)
+  private function setY($y)
   {
     if (is_numeric($y))
     {
@@ -105,7 +105,7 @@ abstract class ImageTransform_Transform_Abstract_Fill extends ImageTransform_Tra
    *
    * @return integer
    */
-  public function getY()
+  protected function getY()
   {
     return $this->y;
   }
@@ -116,7 +116,7 @@ abstract class ImageTransform_Transform_Abstract_Fill extends ImageTransform_Tra
    * @param mixed
    * @return boolean
    */
-  public function setFill($fill)
+  private function setFill($fill)
   {
     if (preg_match('/#[\d\w]{6}/',$fill) || ($fill instanceof ImageTransform_Source))
     {
@@ -133,7 +133,7 @@ abstract class ImageTransform_Transform_Abstract_Fill extends ImageTransform_Tra
    *
    * @return mixed
    */
-  public function getFill()
+  protected function getFill()
   {
     return $this->fill;
   }

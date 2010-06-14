@@ -32,32 +32,32 @@
  * @author Miloslav Kmet <miloslav.kmet@gmail.com>
  * @author Jan Schumann <js@schumann-it.com>
  */
-abstract class ImageTransform_Tranform_Abstract_Thumbnail extends ImageTransform_Transform_Abstract
+abstract class ImageTransform_Transform_Abstract_Thumbnail extends ImageTransform_Transform_Abstract
 {
   /**
    * width of the thumbnail
    */
-  protected $width;
+  private $width;
 
   /**
    * height of the thumbnail
    */
-  protected $height;
+  private $height;
 
   /**
    * method to be used for thumbnail creation. default is scale.
    */
-  protected $method = 'fit';
+  private $method = 'fit';
 
   /**
    * available methods for thumbnail creation
    */
-  protected $methods = array('fit', 'scale', 'inflate','deflate', 'left' ,'right', 'top', 'bottom', 'center');
+  private $methods = array('fit', 'scale', 'inflate','deflate', 'left' ,'right', 'top', 'bottom', 'center');
 
   /*
    * background color in hex or null for transparent
    */
-  protected $background = null;
+  private $background = null;
 
   /**
    * constructor
@@ -84,7 +84,7 @@ abstract class ImageTransform_Tranform_Abstract_Thumbnail extends ImageTransform
    *
    * @return void
    */
-  public function setHeight($height)
+  private function setHeight($height)
   {
     if(is_numeric($height) && $height > 0)
     {
@@ -101,7 +101,7 @@ abstract class ImageTransform_Tranform_Abstract_Thumbnail extends ImageTransform
    *
    * @return integer
    */
-  public function getHeight()
+  protected function getHeight()
   {
     return $this->height;
   }
@@ -112,7 +112,7 @@ abstract class ImageTransform_Tranform_Abstract_Thumbnail extends ImageTransform
    *
    * @return void
    */
-  public function setWidth($width)
+  private function setWidth($width)
   {
     if(is_numeric($width) && $width > 0)
     {
@@ -129,7 +129,7 @@ abstract class ImageTransform_Tranform_Abstract_Thumbnail extends ImageTransform
    *
    * @return integer
    */
-  public function getWidth()
+  protected function getWidth()
   {
     return $this->width;
   }
@@ -140,7 +140,7 @@ abstract class ImageTransform_Tranform_Abstract_Thumbnail extends ImageTransform
    *
    * @return integer
    */
-  public function setMethod($method)
+  private function setMethod($method)
   {
 
     if(in_array($method, $this->methods))
@@ -158,7 +158,7 @@ abstract class ImageTransform_Tranform_Abstract_Thumbnail extends ImageTransform
    *
    * @return integer
    */
-  public function getMethod()
+  protected function getMethod()
   {
     return $this->method;
   }
@@ -168,7 +168,7 @@ abstract class ImageTransform_Tranform_Abstract_Thumbnail extends ImageTransform
    *
    * @param string
    */
-  public function setBackground($color)
+  private function setBackground($color)
   {
     $this->background = $color;
   }
@@ -178,7 +178,7 @@ abstract class ImageTransform_Tranform_Abstract_Thumbnail extends ImageTransform
    *
    * @return string
    */
-  public function getBackground()
+  protected function getBackground()
   {
     return $this->background;
   }

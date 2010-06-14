@@ -23,17 +23,17 @@
  * @author Victor Berchet <vberchet-sf@yahoo.com>
  * @author Jan Schumann <js@schumann-it.com>
  */
-abstract class ImageTransform_Tranform_Abstract_Resize extends ImageTransform_Transform_Abstract
+abstract class ImageTransform_Transform_Abstract_Resize extends ImageTransform_Transform_Abstract
 {
   /**
    * width of the target
    */
-  protected $width = 0;
+  private $width = 0;
 
   /**
    * height of the target
    */
-  protected $height = 0;
+  private $height = 0;
 
   /**
    * constructor
@@ -54,9 +54,9 @@ abstract class ImageTransform_Tranform_Abstract_Resize extends ImageTransform_Tr
    *
    * @return void
    */
-  public function setHeight($height)
+  protected function setHeight($height)
   {
-    if(is_numeric($height) && $height > 0)
+    if (is_numeric($height) && $height > 0)
     {
       $this->height = (int)$height;
 
@@ -71,7 +71,7 @@ abstract class ImageTransform_Tranform_Abstract_Resize extends ImageTransform_Tr
    *
    * @return integer
    */
-  public function getHeight()
+  protected function getHeight()
   {
     return $this->height;
   }
@@ -82,9 +82,9 @@ abstract class ImageTransform_Tranform_Abstract_Resize extends ImageTransform_Tr
    *
    * @return void
    */
-  public function setWidth($width)
+  protected function setWidth($width)
   {
-    if(is_numeric($width) && $width > 0)
+    if (is_numeric($width) && $width > 0)
     {
       $this->width = (int)$width;
 
@@ -97,7 +97,7 @@ abstract class ImageTransform_Tranform_Abstract_Resize extends ImageTransform_Tr
    *
    * @return integer
    */
-  public function getWidth()
+  protected function getWidth()
   {
     return $this->width;
   }

@@ -21,36 +21,35 @@
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @author Jan Schumann <js@schumann-it.com>
  */
-class ImageTransform_Tranform_Gd_Arc extends ImageTransform_Transform_Abstract_Arc
+class ImageTransform_Transform_Gd_Arc extends ImageTransform_Transform_Abstract_Arc
 {
   /**
    * Apply the transform to the ImageTransform_Source object.
    *
-   * @param ImageTransform_Source
-   * @return ImageTransform_Source
+   * @return ImageTransform_Souce
    */
-  protected function transform(ImageTransform_Source $image)
+  protected function transform()
   {
-    $resource = $image->getAdapter()->getHolder();
+    $resource = $this->getResource();
 
-    imagesetthickness($resource, $this->thickness);
+    imagesetthickness($resource, $this->getThickness);
 
-    if (!is_null($this->fill))
+    if (!is_null($this->getFill()))
     {
-      if (!is_object($this->fill))
+      if (!is_object($this->getFill()))
       {
-        imagefilledarc($resource, $this->x, $this->y, $this->width, $this->height, $this->start_angle, $this->end_angle, $image->getAdapter()->getColorByHex($resource, $this->fill), $this->style);
+        imagefilledarc($resource, $this->getX(), $this->getY(), $this->getWidth(), $this->getHeight(), $this->getStartAngle(), $this->getEndAngle(), $this->getImage()->getAdapter()->getColorByHex($resource, $this->getFill()), $this->getStyle());
       }
-      if ($this->color !== "" && $this->fill !== $this->color)
+      if ($this->color !== "" && $this->getFill() !== $this->color)
       {
-        imagearc($resource, $this->x, $this->y, $this->width, $this->height, $this->start_angle, $this->end_angle, $image->getAdapter()->getColorByHex($resource, $this->color));
+        imagearc($resource, $this->getX(), $this->getY(), $this->getWidth(), $this->getHeight(), $this->getStartAngle(), $this->getEndAngle(), $this->getImage()->getAdapter()->getColorByHex($resource, $this->getColor()));
       }
     }
     else
     {
-      imagearc($resource, $this->x, $this->y, $this->width, $this->height, $this->start_angle, $this->end_angle, $image->getAdapter()->getColorByHex($resource, $this->color));
+      imagearc($resource, $this->getX(), $this->getY(), $this->getWidth(), $this->getHeight(), $this->getStartAngle(), $this->getEndAngle(), $ $this->getImage()->getAdapter()->getColorByHex($resource, $this->getColor()));
     }
 
-    return $image;
+    return $this->getImage();
   }
 }

@@ -22,20 +22,20 @@
  * @author Colin MacDonald <colin@oneweb.co.uk>
  * @author Jan Schumann <js@schumann-it.com>
  */
-abstract class ImageTransform_Tranform_Abstract_Reflection extends ImageTransform_Transform_Abstract
+abstract class ImageTransform_Transform_Abstract_Reflection extends ImageTransform_Transform_Abstract
 {
 	 /**
    * The reflection height for the image
    */
-  protected $reflection_height = 20;
+  private $reflection_height = 20;
 
 	 /**
    * The starting transparency
    */
-  protected $start_transparency = 30;
+  private $start_transparency = 30;
 
   /**
-   * Constructor of an sfImageReflection transformation
+   * Constructor of an Reflection transformation
    *
    * @param float $reflection_height
    */
@@ -50,7 +50,7 @@ abstract class ImageTransform_Tranform_Abstract_Reflection extends ImageTransfor
    * @param int $reflection_height
    * @return boolean
    */
-  public function setReflectionHeight($reflection_height)
+  private function setReflectionHeight($reflection_height)
   {
     if (is_numeric($reflection_height))
     {
@@ -66,7 +66,7 @@ abstract class ImageTransform_Tranform_Abstract_Reflection extends ImageTransfor
    * @param int $reflection_height
    * @return integer
    */
-  public function getReflectionHeight()
+  protected function getReflectionHeight()
   {
     return $this->reflection_height;
   }
@@ -76,7 +76,7 @@ abstract class ImageTransform_Tranform_Abstract_Reflection extends ImageTransfor
    * @param int $start_transparency
    * @return boolean
    */
-  public function setStartTransparency($start_transparency)
+  private function setStartTransparency($start_transparency)
   {
     if (is_numeric($start_transparency))
     {
@@ -92,7 +92,7 @@ abstract class ImageTransform_Tranform_Abstract_Reflection extends ImageTransfor
    * @param int $start_transparency
    * @return integer
    */
-  public function getStartTransparency()
+  protected function getStartTransparency()
   {
     return $this->start_transparency;
   }

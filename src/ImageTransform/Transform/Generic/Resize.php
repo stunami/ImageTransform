@@ -24,27 +24,40 @@
  * @author Victor Berchet <vberchet-sf@yahoo.com>
  * @author Jan Schumann <js@schumann-it.com>
  */
-class ImageTransform_Transform_Generic_Resize extends ImageTransform_Transform_Abstract
+class ImageTransform_Transform_Generic_Resize extends ImageTransform_Transform_Abstract_Resize
 {
   /**
-   * width of the target
-   */
-  protected $width = 0;
-
-  /**
-   * height of the target
-   */
-  protected $height = 0;
-
-  /**
    * do we want to inflate the source image ?
+   * @var bool
    */
-  protected $inflate = true;
+  private $inflate = true;
 
   /**
    * do we want to keep the aspect ratio of the source image ?
+   * @var bool
    */
-  protected $proportinal = false;
+  private $proportinal = false;
+
+  /**
+   * The width of the image to transform
+   * @var int
+   */
+  private $source_w;
+  /**
+   * The hight of the image to transform
+   * @var int
+   */
+  private $source_h;
+  /**
+   * The width of the transformed image
+   * @var int
+   */
+  private $target_w;
+  /**
+   * The hight of the transformed image
+   * @var int
+   */
+  private $target_h;
 
   /**
    * constructor
@@ -58,64 +71,10 @@ class ImageTransform_Transform_Generic_Resize extends ImageTransform_Transform_A
    */
   public function __construct($width, $height, $inflate = true, $proportional = false)
   {
-    $this->setWidth($width);
-    $this->setHeight($height);
+    parent::__construct($width, $height);
+
     $this->setInflate($inflate);
     $this->setProportional($proportional);
-  }
-
-  /**
-   * sets the height of the thumbnail
-   * @param integer $height of the image
-   *
-   * @return void
-   */
-  public function setHeight($height)
-  {
-    if (is_numeric($height) && $height > 0)
-    {
-      $this->height = (int)$height;
-
-      return true;
-    }
-
-    return false;
-  }
-
-  /**
-   * returns the height of the thumbnail
-   *
-   * @return integer
-   */
-  public function getHeight()
-  {
-    return $this->height;
-  }
-
-  /**
-   * sets the width of the thumbnail
-   * @param integer $width of the image
-   *
-   * @return void
-   */
-  public function setWidth($width)
-  {
-    if (is_numeric($width) && $width > 0)
-    {
-      $this->width = (int)$width;
-
-      return false;
-    }
-  }
-
-  /**
-   * returns the width of the thumbnail
-   *
-   * @return integer
-   */
-  public function getWidth()
-  {
-    return $this->width;
   }
 
   /**
@@ -124,9 +83,9 @@ class ImageTransform_Transform_Generic_Resize extends ImageTransform_Transform_A
    *
    * @return boolean true if the parameter is valid
    */
-  public function setInflate($inflate)
+  private function setInflate($inflate)
   {
-    if ($inflate === true || $inflate === false)
+    if (is_bool($inflate))
     {
       $this->inflate = $inflate;
 
@@ -141,7 +100,7 @@ class ImageTransform_Transform_Generic_Resize extends ImageTransform_Transform_A
    *
    * @return boolean
    */
-  public function getInflate()
+  private function getInflate()
   {
     return $this->inflate;
   }
@@ -152,9 +111,9 @@ class ImageTransform_Transform_Generic_Resize extends ImageTransform_Transform_A
    *
    * @return boolean true if the parameter is valid
    */
-  public function setProportional($proportional)
+  private function setProportional($proportional)
   {
-    if ($proportional === true || $proportional === false)
+    if (is_bool($proportional))
     {
       $this->proportional = $proportional;
 
@@ -169,7 +128,7 @@ class ImageTransform_Transform_Generic_Resize extends ImageTransform_Transform_A
    *
    * @return boolean
    */
-  public function getProportional()
+  private function getProportional()
   {
     return $this->proportional;
   }
@@ -177,73 +136,86 @@ class ImageTransform_Transform_Generic_Resize extends ImageTransform_Transform_A
   /**
    * Apply the transformation to the image and returns the resized image
    *
-   * @param ImageTransform_Source $image
-   *
    * @return ImageTransform_Source
    */
-  protected function transform(ImageTransform_Source $image)
+  protected function transform()
   {
-    list($target_w, $target_h) = $this->computeTargetSize($image->getWidth(), $image->getHeight());
+    $image = $this->getImage();
 
-    return $image->resizeSimple($target_w, $target_h);
+    $this->target_w = $this->source_w = $image->getWidth();
+    $this->target_h = $this->source_h = $image->getHeight();
+
+    $this->computeTargetSize();
+
+    return $image->resizeSimple($this->target_w, $this->target_h);
   }
 
   /**
    * Compute target size
-   *
-   * @param integer $source_w
-   * @param integer $source_h
-   * @return array Target width and height
    */
-  protected function computeTargetSize($source_w, $source_h)
+  private function computeTargetSize()
   {
-    $target_w = $source_w;
-    $target_h = $source_h;
+    $this->handleWidth();
+    $this->handleHeight();
+  }
 
-    if (null !== $this->width)
+  /**
+   * Computes target size for width
+   */
+  private function handleWidth()
+  {
+    if (is_null($this->getWidth()))
     {
-      $target_w = $this->width;
-      if (!$this->inflate && $target_w > $source_w)
-      {
-        $target_w = $source_w;
-      }
-
-      if ($this->proportional && $source_w > 0)
-      {
-        // Compute the new height in order to keep the aspect ratio
-        // and clamp it to the maximum height
-        $target_h = round(($source_h / $source_w) * $target_w);
-
-        if (null !== $this->height && $this->height < $target_h && $source_h > 0)
-        {
-          $target_h = $this->height;
-          $target_w = round(($source_w / $source_h) * $target_h);
-        }
-      }
+      return;
     }
 
-    if (null !== $this->height)
+    $this->target_w = $this->getWidth();
+    if (!$this->getInflate() && $this->target_w > $this->source_w)
     {
-      $target_h = $this->height;
-      if (!$this->inflate && $target_h > $source_h)
-      {
-        $target_h = $source_h;
-      }
-
-      if ($this->proportional && $source_h > 0)
-      {
-        // Compute the new width in order to keep the aspect ratio
-        // and clamp it to the maximum width
-        $target_w = round(($source_w / $source_h) * $target_h);
-
-        if (null !== $this->width && $this->width < $target_w && $target_w > 0)
-        {
-          $target_w = $this->width;
-          $target_h = round(($source_h / $source_w) * $target_w);
-        }
-      }
+      $this->target_w = $this->source_w;
     }
 
-    return array($target_w, $target_h);
+    if ($this->getProportional() && $this->source_w > 0)
+    {
+      // Compute the new height in order to keep the aspect ratio
+      // and clamp it to the maximum height
+      $this->target_h = round(($this->source_h / $this->source_w) * $this->target_w);
+
+      if (null !== $this->getHeight() && $this->getHeight() < $this->target_h && $this->source_h > 0)
+      {
+        $this->target_h = $this->getHeight();
+        $this->target_w = round(($this->source_w / $this->source_h) * $this->target_h);
+      }
+    }
+  }
+
+  /**
+   * Computes target size for height
+   */
+  private function handleHeight()
+  {
+    if (is_null($this->getHeight()))
+    {
+      return;
+    }
+
+    $this->target_h = $this->getHeight();
+    if (!$this->getInflate() && $this->target_h > $this->source_h)
+    {
+      $this->target_h = $this->source_h;
+    }
+
+    if ($this->getProportional() && $this->source_h > 0)
+    {
+      // Compute the new width in order to keep the aspect ratio
+      // and clamp it to the maximum width
+      $this->target_w = round(($this->source_w / $this->source_h) * $this->target_h);
+
+      if (null !== $this->getWidth() && $this->getWidth() < $this->target_w && $this->target_w > 0)
+      {
+        $this->target_w = $this->getWidth();
+        $this->target_h = round(($this->source_h / $this->source_w) * $this->target_w);
+      }
+    }
   }
 }

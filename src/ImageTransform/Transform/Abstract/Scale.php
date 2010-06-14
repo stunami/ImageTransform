@@ -21,7 +21,7 @@
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @author Jan Schumann <js@schumann-it.com>
  */
-abstract class ImageTransform_Transform_Abstract_Scale extends ImageTransform_Tranform_Abstract
+abstract class ImageTransform_Transform_Abstract_Scale extends ImageTransform_Transform_Abstract
 {
 
   /**
@@ -29,7 +29,7 @@ abstract class ImageTransform_Transform_Abstract_Scale extends ImageTransform_Tr
    *
    * @var float
   */
-  protected $scale = 1;
+  private $scale = 1;
 
   /**
    * Construct.
@@ -46,7 +46,7 @@ abstract class ImageTransform_Transform_Abstract_Scale extends ImageTransform_Tr
    *
    * @param float
    */
-  public function setScale($scale)
+  private function setScale($scale)
   {
     if (is_numeric($scale))
     {
@@ -59,7 +59,7 @@ abstract class ImageTransform_Transform_Abstract_Scale extends ImageTransform_Tr
    *
    * @return float
    */
-  public function getScale()
+  protected function getScale()
   {
     return $this->scale;
   }

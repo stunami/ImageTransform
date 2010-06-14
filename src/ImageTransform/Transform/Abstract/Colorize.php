@@ -20,31 +20,31 @@
  *
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @author Jan Schumann <js@schumann-it.com>
- */ 
+ */
 abstract class ImageTransform_Transform_Abstract_Colorize  extends ImageTransform_Transform_Abstract
 {
   /**
    * Red Tint.
   */
-  protected $red_tint = 0;
+  private $red_tint = 0;
 
   /**
    * Green Tint.
   */
-  protected $green_tint = 0;
+  private $green_tint = 0;
 
   /**
    * Blue Tint.
   */
-  protected $blue_tint = 0;
+  private $blue_tint = 0;
 
   /**
    * Alpha.
   */
-  protected $alpha = 0;
+  private $alpha = 0;
 
   /**
-   * Construct an sfImageColorize object.
+   * Construct an Colorize object.
    *
    * @param integer
    * @param integer
@@ -65,7 +65,7 @@ abstract class ImageTransform_Transform_Abstract_Colorize  extends ImageTransfor
    * @param integer
    * @return boolean
    */
-  public function setRed($red)
+  private function setRed($red)
   {
     if (is_numeric($red))
     {
@@ -82,7 +82,7 @@ abstract class ImageTransform_Transform_Abstract_Colorize  extends ImageTransfor
    *
    * @return integer
    */
-  public function getRed()
+  protected function getRed()
   {
     return $this->red_tint;
   }
@@ -93,7 +93,7 @@ abstract class ImageTransform_Transform_Abstract_Colorize  extends ImageTransfor
    * @param integer
    * @return boolean
    */
-  public function setGreen($green)
+  private function setGreen($green)
   {
     if (is_numeric($green))
     {
@@ -110,7 +110,7 @@ abstract class ImageTransform_Transform_Abstract_Colorize  extends ImageTransfor
    *
    * @return integer
    */
-  public function getGreen()
+  protected function getGreen()
   {
     return $this->green_tint;
   }
@@ -121,7 +121,7 @@ abstract class ImageTransform_Transform_Abstract_Colorize  extends ImageTransfor
    * @param integer
    * @return boolean
    */
-  public function setBlue($blue)
+  private function setBlue($blue)
   {
     if (is_numeric($blue))
     {
@@ -138,7 +138,7 @@ abstract class ImageTransform_Transform_Abstract_Colorize  extends ImageTransfor
    *
    * @return integer
    */
-  public function getBlue()
+  protected function getBlue()
   {
     return $this->blue_tint;
   }
@@ -149,7 +149,7 @@ abstract class ImageTransform_Transform_Abstract_Colorize  extends ImageTransfor
    * @param integer
    * @return boolean
    */
-  public function setAlpha($alpha)
+  private function setAlpha($alpha)
   {
     if (is_numeric($alpha))
     {
@@ -166,7 +166,7 @@ abstract class ImageTransform_Transform_Abstract_Colorize  extends ImageTransfor
    *
    * @return integer
    */
-  public function getAlpha()
+  protected function getAlpha()
   {
     return $this->alpha;
   }

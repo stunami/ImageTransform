@@ -22,15 +22,15 @@
  * @author Miloslav Kmet <miloslav.kmet@gmail.com>
  * @author Jan Schumann <js@schumann-it.com>
  */
-abstract class ImageTransform_Tranform_Abstract_Opacity extends ImageTransform_Transform_Abstract
+abstract class ImageTransform_Transform_Abstract_Opacity extends ImageTransform_Transform_Abstract
 {
   /**
    * The opacity applied to the image
    */
-  protected $opacity = 1;
+  private $opacity = 1;
 
   /**
-   * Constructor of an sfImageOpacity transformation
+   * Constructor of an Opacity transformation
    *
    * @param float $opacity If greater than 1, will be divided by 100
    */
@@ -44,7 +44,7 @@ abstract class ImageTransform_Tranform_Abstract_Opacity extends ImageTransform_T
    * @param float $opacity Image between 0 and 1. If $opacity > 1, will be diveded by 100
    * @return void
    */
-  public function setOpacity($opacity)
+  private function setOpacity($opacity)
   {
     if (is_numeric($opacity) or is_float($opacity))
     {
@@ -66,7 +66,7 @@ abstract class ImageTransform_Tranform_Abstract_Opacity extends ImageTransform_T
    *
    * @return float opacity
    */
-  public function getOpacity()
+  protected function getOpacity()
   {
     return $this->opacity;
   }

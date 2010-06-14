@@ -21,15 +21,15 @@
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @author Jan Schumann <js@schumann-it.com>
  */
-abstract class ImageTransform_Tranform_Abstract_Pixelize extends ImageTransform_Transform_Abstract
+abstract class ImageTransform_Transform_Abstract_Pixelize extends ImageTransform_Transform_Abstract
 {
   /**
    * The size of the pixelization.
   */
-  protected $block_size = 10;
+  private $block_size = 10;
 
   /**
-   * Construct an sfImagePixelize object.
+   * Construct an Pixelize object.
    *
    * @param array integer
    */
@@ -44,7 +44,7 @@ abstract class ImageTransform_Tranform_Abstract_Pixelize extends ImageTransform_
    * @param integer
    * @return boolean
    */
-  public function setSize($pixels)
+  private function setSize($pixels)
   {
     if (is_numeric($pixels) && $pixels > 0)
     {
@@ -61,7 +61,7 @@ abstract class ImageTransform_Tranform_Abstract_Pixelize extends ImageTransform_
    *
    * @return integer
    */
-  public function getSize()
+  protected function getSize()
   {
     return $this->block_size;
   }

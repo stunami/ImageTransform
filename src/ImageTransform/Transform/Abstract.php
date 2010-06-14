@@ -45,18 +45,24 @@ abstract class ImageTransform_Transform_Abstract implements ImageTransform_Trans
 	  $this->image = $image;
 	  $this->resource = $image->getAdapter()->getHolder();
 
-    return $this->transform($image);
+    return $this->transform();
   }
 
+  /**
+   * @return ImageTransform_Source
+   */
   protected function getImage()
   {
 	  return $this->image;
   }
 
+  /**
+   * @return resource
+   */
   protected function getResource()
   {
 	  return $this->resource;
   }
 
-  abstract protected function transform(ImageTransform_Source $image);
+  abstract protected function transform();
 }

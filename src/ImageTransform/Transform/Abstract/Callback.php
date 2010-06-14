@@ -21,7 +21,7 @@
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @author Jan Schumann <js@schumann-it.com>
  */
-abstract class ImageTransform_Transform_Callback extends ImageTransform_Transform_Abstract
+abstract class ImageTransform_Transform_Abstract_Callback extends ImageTransform_Transform_Abstract
 {
 
   /**
@@ -29,14 +29,14 @@ abstract class ImageTransform_Transform_Callback extends ImageTransform_Transfor
    * @access protected
    * @var object
   */
-  protected $function = null;
+  private $function = null;
 
   /**
    * Any arguments for the callback function.
    * @access protected
    * @var object
   */
-  protected $arguments = null;
+  private $arguments = null;
 
   /**
    * constructor
@@ -60,7 +60,7 @@ abstract class ImageTransform_Transform_Callback extends ImageTransform_Transfor
    * @param mixed $function
    * @return boolean
    */
-  public function setFunction($function)
+  private function setFunction($function)
   {
     if (is_callable($function))
     {
@@ -76,7 +76,7 @@ abstract class ImageTransform_Transform_Callback extends ImageTransform_Transfor
    *
    * @return mixed
    */
-  public function getFunction()
+  protected function getFunction()
   {
     return $this->function;
   }
@@ -86,7 +86,7 @@ abstract class ImageTransform_Transform_Callback extends ImageTransform_Transfor
    *
    * @param mixed $arguments
    */
-  public function setArguments($arguments)
+  private function setArguments($arguments)
   {
     $this->arguments = $arguments;
   }
@@ -95,7 +95,7 @@ abstract class ImageTransform_Transform_Callback extends ImageTransform_Transfor
    *
    * @return mixed
    */
-  public function getArguments()
+  protected function getArguments()
   {
     return $this->arguments;
   }

@@ -44,7 +44,7 @@ class sfImageScatterGD extends sfImageTransformAbstract
    */
   public function setScatterFactor($width)
   {
-    $this->width = (int)$width;
+    $this->getWidth() = (int)$width;
   }
 
   /**
@@ -54,7 +54,7 @@ class sfImageScatterGD extends sfImageTransformAbstract
    */
   public function getScatterFactor()
   {
-    return $this->width;
+    return $this->getWidth();
   }
 
   /**

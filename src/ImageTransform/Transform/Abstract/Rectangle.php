@@ -21,59 +21,59 @@
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @author Jan Schumann <js@schumann-it.com>
  */
-abstract class ImageTransform_Tranform_Abstract_Rectangle extends ImageTransform_Transform_Abstract
+abstract class ImageTransform_Transform_Abstract_Rectangle extends ImageTransform_Transform_Abstract
 {
   /**
    * Start X coordinate.
    *
    * @var integer
   */
-  protected $x1 = 0;
+  private $x1 = 0;
 
   /**
    * Start Y coordinate.
    *
    * @var integer
   */
-  protected $y1 = 0;
+  private $y1 = 0;
 
   /**
    * Finish X coordinate.
    *
    * @var integer
   */
-  protected $x2 = 0;
+  private $x2 = 0;
 
   /**
    * Finish Y coordinate
    *
    * @var integer
   */
-  protected $y2 = 0;
+  private $y2 = 0;
 
   /**
    * Rectangle thickness.
    *
    * @var integer
   */
-  protected $thickness = 1;
+  private $thickness = 1;
 
   /**
    * Hex color.
    *
    * @var string
   */
-  protected $color = '';
+  private $color = '';
 
   /**
    * Fill.
    *
    * @var string/object hex or ImageTransform_Source object
   */
-  protected $fill = null;
+  private $fill = null;
 
   /**
-   * Construct an sfImageBlur object.
+   * Construct an Blur object.
    *
    * @param integer
    * @param integer
@@ -101,7 +101,7 @@ abstract class ImageTransform_Tranform_Abstract_Rectangle extends ImageTransform
    * @param integer
    * @return boolean
    */
-  public function setStartX($x)
+  private function setStartX($x)
   {
     if (is_numeric($x))
     {
@@ -118,7 +118,7 @@ abstract class ImageTransform_Tranform_Abstract_Rectangle extends ImageTransform
    *
    * @return integer
    */
-  public function getStartX()
+  protected function getStartX()
   {
     return $this->x1;
   }
@@ -129,7 +129,7 @@ abstract class ImageTransform_Tranform_Abstract_Rectangle extends ImageTransform
    * @param integer
    * @return boolean
    */
-  public function setStartY($y)
+  private function setStartY($y)
   {
     if (is_numeric($y))
     {
@@ -146,7 +146,7 @@ abstract class ImageTransform_Tranform_Abstract_Rectangle extends ImageTransform
    *
    * @return integer
    */
-  public function getStartY()
+  protected function getStartY()
   {
     return $this->y1;
   }
@@ -157,7 +157,7 @@ abstract class ImageTransform_Tranform_Abstract_Rectangle extends ImageTransform
    * @param integer
    * @return boolean
    */
-  public function setEndX($x)
+  private function setEndX($x)
   {
     if (is_numeric($x))
     {
@@ -174,7 +174,7 @@ abstract class ImageTransform_Tranform_Abstract_Rectangle extends ImageTransform
    *
    * @return integer
    */
-  public function getEndX()
+  protected function getEndX()
   {
     return $this->x2;
   }
@@ -185,7 +185,7 @@ abstract class ImageTransform_Tranform_Abstract_Rectangle extends ImageTransform
    * @param integer
    * @return boolean
    */
-  public function setEndY($y)
+  private function setEndY($y)
   {
     if (is_numeric($y))
     {
@@ -202,7 +202,7 @@ abstract class ImageTransform_Tranform_Abstract_Rectangle extends ImageTransform
    *
    * @return integer
    */
-  public function getEndY()
+  protected function getEndY()
   {
     return $this->y2;
   }
@@ -213,7 +213,7 @@ abstract class ImageTransform_Tranform_Abstract_Rectangle extends ImageTransform
    * @param integer
    * @return boolean
    */
-  public function setThickness($thickness)
+  private function setThickness($thickness)
   {
     if (is_numeric($thickness))
     {
@@ -230,7 +230,7 @@ abstract class ImageTransform_Tranform_Abstract_Rectangle extends ImageTransform
    *
    * @return integer
    */
-  public function getThickness()
+  protected function getThickness()
   {
     return $this->thickness;
   }
@@ -241,7 +241,7 @@ abstract class ImageTransform_Tranform_Abstract_Rectangle extends ImageTransform
    * @param string
    * @return boolean
    */
-  public function setColor($color)
+  private function setColor($color)
   {
     if (preg_match('/#[\d\w]{6}/',$color))
     {
@@ -256,7 +256,7 @@ abstract class ImageTransform_Tranform_Abstract_Rectangle extends ImageTransform
    *
    * @return integer
    */
-  public function getColor()
+  protected function getColor()
   {
     return $this->color;
   }
@@ -267,7 +267,7 @@ abstract class ImageTransform_Tranform_Abstract_Rectangle extends ImageTransform
    * @param mixed
    * @return boolean
    */
-  public function setFill($fill)
+  private function setFill($fill)
   {
     if (preg_match('/#[\d\w]{6}/',$fill) || ($fill instanceof ImageTransform_Source))
     {
@@ -284,7 +284,7 @@ abstract class ImageTransform_Tranform_Abstract_Rectangle extends ImageTransform
    *
    * @return mixed
    */
-  public function getFill()
+  protected function getFill()
   {
     return $this->fill;
   }

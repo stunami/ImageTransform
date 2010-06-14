@@ -28,14 +28,14 @@ abstract class ImageTransform_Transform_Abstract_Rotate extends ImageTransform_T
    *
    * @param integer
    */
-  protected $angle;
+  private $angle;
 
   /**
    * Background color.
    *
    * @param integer
    */
-  protected $background = '';
+  private $background = '';
   /**
    * Construct.
    *
@@ -53,7 +53,7 @@ abstract class ImageTransform_Transform_Abstract_Rotate extends ImageTransform_T
    *
    * @param integer
    */
-  public function setAngle($angle)
+  private function setAngle($angle)
   {
     $this->angle = $angle;
   }
@@ -63,7 +63,7 @@ abstract class ImageTransform_Transform_Abstract_Rotate extends ImageTransform_T
    *
    * @return integer
    */
-  public function getAngle()
+  protected function getAngle()
   {
     return $this->angle;
   }
@@ -73,7 +73,7 @@ abstract class ImageTransform_Transform_Abstract_Rotate extends ImageTransform_T
    *
    * @param integer
    */
-  public function setBackgroundColor($color)
+  private function setBackgroundColor($color)
   {
     $this->background = $color;
   }
@@ -83,7 +83,7 @@ abstract class ImageTransform_Transform_Abstract_Rotate extends ImageTransform_T
    *
    * @return integer
    */
-  public function getBackgroundColor()
+  protected function getBackgroundColor()
   {
     return $this->background;
   }

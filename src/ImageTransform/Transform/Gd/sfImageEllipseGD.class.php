@@ -157,7 +157,7 @@ class sfImageEllipseGD extends sfImageTransformAbstract
   {
     if (is_numeric($width))
     {
-      $this->width = (int)$width;
+      $this->getWidth() = (int)$width;
 
       return true;
     }
@@ -172,7 +172,7 @@ class sfImageEllipseGD extends sfImageTransformAbstract
    */
   public function getWidth()
   {
-    return $this->width;
+    return $this->getWidth();
   }
 
   /**
@@ -185,7 +185,7 @@ class sfImageEllipseGD extends sfImageTransformAbstract
   {
     if (is_numeric($height))
     {
-      $this->height = (int)$height;
+      $this->getHeight() = (int)$height;
 
       return true;
     }
@@ -200,7 +200,7 @@ class sfImageEllipseGD extends sfImageTransformAbstract
    */
   public function getHeight()
   {
-    return $this->height;
+    return $this->getHeight();
   }
 
   /**
@@ -330,25 +330,25 @@ class sfImageEllipseGD extends sfImageTransformAbstract
     {
       if (!is_object($this->fill))
       {
-        imagefilledellipse($resource, $this->x, $this->y, $this->width, $this->height, $image->getAdapter()->getColorByHex($resource, $this->fill));
+        imagefilledellipse($resource, $this->x, $this->y, $this->getWidth(), $this->getHeight(), $image->getAdapter()->getColorByHex($resource, $this->fill));
       }
 
       if (is_object($this->fill))
       {
-        imagefilledellipse($resource, $this->x, $this->y, $this->width, $this->height, $image->getAdapter()->getColorByHex($resource, $this->color));
+        imagefilledellipse($resource, $this->x, $this->y, $this->getWidth(), $this->getHeight(), $image->getAdapter()->getColorByHex($resource, $this->color));
         $image->fill($this->x, $this->y, $this->fill);
       }
 
       if ($this->color !== "" && $this->fill !== $this->color)
       {
-        imageellipse($resource, $this->x, $this->y, $this->width, $this->height, $image->getAdapter()->getColorByHex($resource, $this->color));
+        imageellipse($resource, $this->x, $this->y, $this->getWidth(), $this->getHeight(), $image->getAdapter()->getColorByHex($resource, $this->color));
       }
 
     }
 
     else
     {
-      imageellipse($resource, $this->x, $this->y, $this->width, $this->height, $image->getAdapter()->getColorByHex($resource, $this->color));
+      imageellipse($resource, $this->x, $this->y, $this->getWidth(), $this->getHeight(), $image->getAdapter()->getColorByHex($resource, $this->color));
     }
 
     return $image;

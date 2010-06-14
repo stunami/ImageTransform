@@ -22,97 +22,33 @@
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @author Jan Schumann <js@schumann-it.com>
  */
-class ImageTransform_Transform_Gd_ResizeSimple extends ImageTransform_Transform_Abstract
+class ImageTransform_Transform_Gd_ResizeSimple extends ImageTransform_Transform_Abstract_Resize
 {
-  /**
-   * Image width.
-   * var integer width of the image is to be reized to
-  */
-  protected $width = 0;
-
-  /**
-   * Image height.
-   * var integer height of the image is to be reized to
-  */
-  protected $height = 0;
-
-  /**
-   * Construct an sfImageCrop object.
-   *
-   * @param integer
-   * @param integer
-   */
-  public function __construct($width, $height)
-  {
-    $this->setWidth($width);
-    $this->setHeight($height);
-  }
-
-  /**
-   * Set the images new width.
-   *
-   * @param integer
-   */
-  public function setWidth($width)
-  {
-    $this->width = (int)$width;
-  }
-
-  /**
-   * Gets the images new width
-   *
-   * @return integer
-   */
-  public function getWidth()
-  {
-    return $this->width;
-  }
-
-  /**
-   * Set the images new height.
-   *
-   * @param integer
-   */
-  public function setHeight($height)
-  {
-    $this->height = (int)$height;
-  }
-
-  /**
-   * Gets the images new height
-   *
-   * @return integer
-   */
-  public function getHeight()
-  {
-    return $this->height;
-  }
-
   /**
    * Apply the transform to the sfImage object.
    *
-   * @param ImageTransform_Source
    * @return ImageTransform_Source
    */
-  protected function transform(ImageTransform_Source $image)
+  protected function transform()
   {
-    $resource = $image->getAdapter()->getHolder();
+    $image = $this->getImage();
+    $resource = $this->getResource();
 
     $x = imagesx($resource);
     $y = imagesy($resource);
 
     // If the width or height is not valid then enforce the aspect ratio
-    if (!is_numeric($this->width) || $this->width < 1)
+    if (!is_numeric($this->getWidth()) || $this->getWidth() < 1)
     {
-      $this->width = round(($x / $y) * $this->height);
+      $this->setWidth(round(($x / $y) * $this->getHeight()));
     }
 
-    else if (!is_numeric($this->height) || $this->height < 1)
+    else if (!is_numeric($this->getHeight()) || $this->getHeight() < 1)
     {
-      $this->height = round(($y / $x) * $this->width);
+      $this->setHeight(round(($y / $x) * $this->getWidth()));
     }
 
-    $dest_resource = $image->getAdapter()->getTransparentImage($this->width, $this->height);
+    $dest_resource = $image->getAdapter()->getTransparentImage($this->getWidth(), $this->getHeight());
 
     // Preserving transparency for alpha PNGs
     if ($image->getMIMEType() == 'image/png')
@@ -122,7 +58,7 @@ class ImageTransform_Transform_Gd_ResizeSimple extends ImageTransform_Transform_
     }
 
     // Finally do our resizing
-    imagecopyresampled($dest_resource,$resource,0, 0, 0, 0, $this->width, $this->height,$x, $y);
+    imagecopyresampled($dest_resource,$resource,0, 0, 0, 0, $this->getWidth(), $this->getHeight(),$x, $y);
     imagedestroy($resource);
 
     $image->getAdapter()->setHolder($dest_resource);

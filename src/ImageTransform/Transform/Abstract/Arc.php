@@ -27,64 +27,64 @@ abstract class ImageTransform_Transform_Abstract_Arc extends ImageTransform_Tran
    * X-coordinate of the center.
    * @var integer
   */
-  protected $x = 0;
+  private $x = 0;
 
   /**
    * Y-coordinate of the center.
    * @var integer
   */
-  protected $y = 0;
+  private $y = 0;
 
   /**
    * The arc width
    * @var integer
   */
-  protected $width = 0;
+  private $width = 0;
 
   /**
    * The arc height
    * @var integer
   */
-  protected $height = 0;
+  private $height = 0;
 
   /**
    * Line thickness
    * @var integer
   */
-  protected $thickness = 0;
+  private $thickness = 0;
 
   /**
    * The arc start angle, in degrees.
    * @var integer
   */
-  protected $start_angle = 0;
+  private $start_angle = 0;
 
   /**
    * The arc end angle, in degrees.
    * @var integer
   */
-  protected $end_angle = 90;
+  private $end_angle = 90;
 
   /**
    * Line color.
    * @var string hex
   */
-  protected $color = '#000000';
+  private $color = '#000000';
 
   /**
    * Fill.
    * @var string/ImageTransform_Source hex color or ImageTransform_Source
   */
-  protected $fill = null;
+  private $fill = null;
 
   /**
    * Line style.
    * @var integer
   */
-  protected $style = null;
+  private $style = null;
 
   /**
-   * Construct an sfImageArc object.
+   * Construct an Arc Transform object.
    *
    * @param integer $x x coordinate
    * @param integer $y y coordinate
@@ -97,7 +97,7 @@ abstract class ImageTransform_Transform_Abstract_Arc extends ImageTransform_Tran
    * @param string/object $fill string color or fill object
    * @param integer $style fill style, only applicable if using a fill object
    */
-  public function __construct($x, $y, $width, $height, $start_angle, $end_angle, $thickness = 1, $color = '#000000', $fill=null,$style = null )
+  public function __construct($x, $y, $width, $height, $start_angle, $end_angle, $thickness = 1, $color = '#000000', $fill=null, $style = null )
   {
     $this->setX($x);
     $this->setY($y);
@@ -117,7 +117,7 @@ abstract class ImageTransform_Transform_Abstract_Arc extends ImageTransform_Tran
    * @param integer
    * @return boolean
    */
-  public function setX($x)
+  private function setX($x)
   {
     if (is_numeric($x))
     {
@@ -134,7 +134,7 @@ abstract class ImageTransform_Transform_Abstract_Arc extends ImageTransform_Tran
    *
    * @return integer
    */
-  public function getX()
+  protected function getX()
   {
     return $this->x;
   }
@@ -145,7 +145,7 @@ abstract class ImageTransform_Transform_Abstract_Arc extends ImageTransform_Tran
    * @param integer
    * @return boolean
    */
-  public function setY($y)
+  private function setY($y)
   {
     if (is_numeric($y))
     {
@@ -162,7 +162,7 @@ abstract class ImageTransform_Transform_Abstract_Arc extends ImageTransform_Tran
    *
    * @return integer
    */
-  public function getY()
+  protected function getY()
   {
     return $this->y;
   }
@@ -173,7 +173,7 @@ abstract class ImageTransform_Transform_Abstract_Arc extends ImageTransform_Tran
    * @param integer
    * @return boolean
    */
-  public function setWidth($width)
+  private function setWidth($width)
   {
     if (is_numeric($width))
     {
@@ -190,7 +190,7 @@ abstract class ImageTransform_Transform_Abstract_Arc extends ImageTransform_Tran
    *
    * @return integer
    */
-  public function getWidth()
+  protected function getWidth()
   {
     return $this->width;
   }
@@ -201,7 +201,7 @@ abstract class ImageTransform_Transform_Abstract_Arc extends ImageTransform_Tran
    * @param integer
    * @return boolean
    */
-  public function setHeight($height)
+  private function setHeight($height)
   {
     if (is_numeric($height))
     {
@@ -218,7 +218,7 @@ abstract class ImageTransform_Transform_Abstract_Arc extends ImageTransform_Tran
    *
    * @return integer
    */
-  public function getHeight()
+  protected function getHeight()
   {
     return $this->height;
   }
@@ -229,7 +229,7 @@ abstract class ImageTransform_Transform_Abstract_Arc extends ImageTransform_Tran
    * @param integer
    * @return boolean
    */
-  public function setStartAngle($start_angle)
+  private function setStartAngle($start_angle)
   {
     if (is_numeric($start_angle))
     {
@@ -246,7 +246,7 @@ abstract class ImageTransform_Transform_Abstract_Arc extends ImageTransform_Tran
    *
    * @return integer
    */
-  public function getStartAngle()
+  protected function getStartAngle()
   {
     return $this->start_angle;
   }
@@ -257,7 +257,7 @@ abstract class ImageTransform_Transform_Abstract_Arc extends ImageTransform_Tran
    * @param integer
    * @return boolean
    */
-  public function setEndAngle($end_angle)
+  private function setEndAngle($end_angle)
   {
     if (is_numeric($end_angle))
     {
@@ -274,7 +274,7 @@ abstract class ImageTransform_Transform_Abstract_Arc extends ImageTransform_Tran
    *
    * @return integer
    */
-  public function getEndAngle()
+  protected function getEndAngle()
   {
     return $this->end_angle;
   }
@@ -285,7 +285,7 @@ abstract class ImageTransform_Transform_Abstract_Arc extends ImageTransform_Tran
    * @param integer
    * @return boolean
    */
-  public function setThickness($thickness)
+  private function setThickness($thickness)
   {
     if (is_numeric($thickness))
     {
@@ -301,7 +301,7 @@ abstract class ImageTransform_Transform_Abstract_Arc extends ImageTransform_Tran
    *
    * @return integer
    */
-  public function getThickness()
+  protected function getThickness()
   {
     return $this->thickness;
   }
@@ -312,7 +312,7 @@ abstract class ImageTransform_Transform_Abstract_Arc extends ImageTransform_Tran
    * @param string
    * @return boolean
    */
-  public function setColor($color)
+  private function setColor($color)
   {
     if (preg_match('/#[\d\w]{6}/',$color))
     {
@@ -327,7 +327,7 @@ abstract class ImageTransform_Transform_Abstract_Arc extends ImageTransform_Tran
    *
    * @return integer
    */
-  public function getColor()
+  protected function getColor()
   {
     return $this->color;
   }
@@ -338,7 +338,7 @@ abstract class ImageTransform_Transform_Abstract_Arc extends ImageTransform_Tran
    * @param mixed
    * @return boolean
    */
-  public function setFill($fill)
+  private function setFill($fill)
   {
     if (preg_match('/#[\d\w]{6}/',$fill) || (is_object($fill) && get_class($fill) === 'ImageTransform_Source'))
     {
@@ -355,7 +355,7 @@ abstract class ImageTransform_Transform_Abstract_Arc extends ImageTransform_Tran
    *
    * @return mixed
    */
-  public function getFill()
+  protected function getFill()
   {
     return $this->fill;
   }
@@ -366,7 +366,7 @@ abstract class ImageTransform_Transform_Abstract_Arc extends ImageTransform_Tran
    * @param integer
    * @return boolean
    */
-  public function setStyle($style)
+  private function setStyle($style)
   {
     if (is_numeric($style))
     {
@@ -383,7 +383,7 @@ abstract class ImageTransform_Transform_Abstract_Arc extends ImageTransform_Tran
    *
    * @return integer
    */
-  public function getStyle()
+  protected function getStyle()
   {
     return $this->style;
   }
