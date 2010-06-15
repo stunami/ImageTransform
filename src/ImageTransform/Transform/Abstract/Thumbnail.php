@@ -70,9 +70,10 @@ abstract class ImageTransform_Transform_Abstract_Thumbnail extends ImageTransfor
    */
   public function __construct($width, $height, $method='fit', $background=null)
   {
-    if(!$this->setWidth($width) || !$this->setHeight($height))
+    if (!$this->setWidth($width) || !$this->setHeight($height))
 		{
-			throw new ImageTransform_Transform_Exception(sprintf('Cannot perform thumbnail, a valid width and height must be supplied'));
+		  $message = 'Cannot perform thumbnail, a valid width and height must be supplied';
+			throw new ImageTransform_Transform_Exception($message);
 		}
     $this->setMethod($method);
     $this->setBackground($background);
@@ -86,7 +87,7 @@ abstract class ImageTransform_Transform_Abstract_Thumbnail extends ImageTransfor
    */
   private function setHeight($height)
   {
-    if(is_numeric($height) && $height > 0)
+    if (is_numeric($height) && $height > 0)
     {
       $this->height = (int)$height;
 
@@ -114,7 +115,7 @@ abstract class ImageTransform_Transform_Abstract_Thumbnail extends ImageTransfor
    */
   private function setWidth($width)
   {
-    if(is_numeric($width) && $width > 0)
+    if (is_numeric($width) && $width > 0)
     {
       $this->width = (int)$width;
 
@@ -142,8 +143,7 @@ abstract class ImageTransform_Transform_Abstract_Thumbnail extends ImageTransfor
    */
   private function setMethod($method)
   {
-
-    if(in_array($method, $this->methods))
+    if (in_array($method, $this->methods))
     {
       $this->method = strtolower($method);
 
