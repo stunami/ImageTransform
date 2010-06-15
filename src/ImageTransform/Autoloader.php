@@ -24,7 +24,7 @@ class ImageTransform_Autoloader
 
   private function __construct()
   {
-    $this->dir = realpath(dirname(__FILE__) . '../../');
+    $this->dir = realpath(dirname(__FILE__) . '/../');
   }
 
   /**
