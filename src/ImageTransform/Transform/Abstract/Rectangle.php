@@ -73,7 +73,14 @@ abstract class ImageTransform_Transform_Abstract_Rectangle extends ImageTransfor
   private $fill = null;
 
   /**
-   * Construct an Blur object.
+   * Line style.
+   *
+   * @var integer
+  */
+  private $style = null;
+
+  /**
+   * Construct an Rectangle object.
    *
    * @param integer
    * @param integer
@@ -84,7 +91,7 @@ abstract class ImageTransform_Transform_Abstract_Rectangle extends ImageTransfor
    * @param string/object hex or ImageTransform_Source object
    * @param integer
    */
-  public function __construct($x1, $y1, $x2, $y2, $thickness=1, $color=null, $fill=null)
+  public function __construct($x1, $y1, $x2, $y2, $thickness=1, $color=null, $fill=null, $style = null)
   {
     $this->setStartX($x1);
     $this->setStartY($y1);
@@ -93,6 +100,7 @@ abstract class ImageTransform_Transform_Abstract_Rectangle extends ImageTransfor
     $this->setThickness($thickness);
     $this->setColor($color);
     $this->setFill($fill);
+    $this->setStyle($style);
   }
 
   /**
@@ -288,4 +296,34 @@ abstract class ImageTransform_Transform_Abstract_Rectangle extends ImageTransfor
   {
     return $this->fill;
   }
+
+  /**
+   * Sets the style
+   *
+   * @param integer
+   * @return boolean
+   */
+  private function setStyle($style)
+  {
+    if (is_numeric($style))
+    {
+      $this->style = (int)$style;
+      $this->color = IMG_COLOR_STYLED;
+
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * Gets the style
+   *
+   * @return integer
+   */
+  protected function getStyle()
+  {
+    return $this->style;
+  }
+
 }
