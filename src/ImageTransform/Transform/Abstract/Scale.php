@@ -34,7 +34,7 @@ abstract class ImageTransform_Transform_Abstract_Scale extends ImageTransform_Tr
   /**
    * Construct.
    *
-   * @param float
+   * @param float The scale factor
    */
   public function __construct($scale)
   {
