@@ -309,7 +309,7 @@ class ImageTransform_Source
 
     $copy = $this->copy();
 
-    $this->transform();
+    $copy->transform();
 
     $copy->getAdapter()->saveAs($filepath, $mime);
 
