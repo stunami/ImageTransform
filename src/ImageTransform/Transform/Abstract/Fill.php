@@ -116,7 +116,7 @@ abstract class ImageTransform_Transform_Abstract_Fill extends ImageTransform_Tra
    * @param mixed
    * @return boolean
    */
-  private function setFill($fill)
+  protected function setFill($fill)
   {
     if (preg_match('/#[\d\w]{6}/',$fill) || ($fill instanceof ImageTransform_Source))
     {
