@@ -20,7 +20,7 @@
  * @author Stuart Lowes <stuart.lowes@gmail.com>
  * @author Jan Schumann <js@schumann-it.com>
  */
-class ImageTransform_Adapter_ImageMagic extends ImageTransform_Adapter_Abstract
+class ImageTransform_Adapter_ImageMagick extends ImageTransform_Adapter_Abstract
 {
   /**
    * The image resource.
