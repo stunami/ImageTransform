@@ -24,10 +24,9 @@ class MimeType_ResolvingStrategy_MIMEType implements MimeType_ResolvingStrategy_
    * Resolve and return mime type of given filepath
    * 
    * @param  string $filepath Absolute path to the file of which to detect the mime type
-   * @param  string $mimetype Manually passed optional mime type for consideration
    * @return string           The resolved mime type or boolean false
    */
-  public function resolve($filepath, $mimetype = false)
+  public function resolve($filepath)
   {
     if (@include_once 'MIME/Type.php')
     {
