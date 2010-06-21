@@ -13,13 +13,13 @@
  */
 
 /**
- * Interfaces mime detection awareness
+ * Indicates an error on mime detection
  *
  * @category   ImageTransform
  * @package    MimeType
  * @subpackage Resolve_Strategy
  * @author     Jan Schumann <js@schumann-it.com>
  */
-class ImageTransform_MimeType_Resolve_Strategy_Exception extends Exception
+class ImageTransform_MimeType_Resolve_Strategy_Exception extends ImageTransform_Exception
 {
 }

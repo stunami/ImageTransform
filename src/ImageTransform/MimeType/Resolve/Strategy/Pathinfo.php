@@ -22,11 +22,14 @@
  * @author     Christian Schaefer <caefer@ical.ly>
  * @author     Jan Schumann <js@schumann-it.com>
  */
-class IImageTransform_MimeType_Resolve_Strategy_Pathinfo implements ImageTransform_MimeType_Resolve_Strategy_Interface
+class ImageTransform_MimeType_Resolve_Strategy_Pathinfo implements ImageTransform_MimeType_Resolve_Strategy_Interface
 {
   /**
-   * (non-PHPdoc)
-   * @see ImageTransform/MimeType/Resolve/Strategy/Interface#resolve()
+   * Resolve and return mime the mime type by extension (through pathinfo)
+   *
+   * @param  string $filepath Absolute path to the file of which to detect the mime type
+   *
+   * @return string|boolean   The resolved mime type or boolean false
    */
   public function resolve($filepath)
   {

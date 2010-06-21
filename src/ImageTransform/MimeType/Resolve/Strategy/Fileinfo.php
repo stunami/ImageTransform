@@ -33,8 +33,11 @@ class ImageTransform_MimeType_Resolve_Strategy_Fileinfo implements ImageTransfor
   }
 
   /**
-   * (non-PHPdoc)
-   * @see ImageTransform/MimeType/Resolve/Strategy/Interface#resolve()
+   * Resolve and return mime via finfo_file()
+   *
+   * @param  string $filepath Absolute path to the file of which to detect the mime type
+   *
+   * @return string|boolean   The resolved mime type or boolean false
    */
   public function resolve($filepath)
   {

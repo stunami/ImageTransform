@@ -28,6 +28,7 @@ interface ImageTransform_MimeType_Resolve_Strategy_Interface
    * Resolve and return mime type of given filepath
    *
    * @param  string $filepath Absolute path to the file of which to detect the mime type
+   *
    * @return string|boolean   The resolved mime type or boolean false
    */
   public function resolve($filepath);
