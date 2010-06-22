@@ -7,51 +7,27 @@
  * file that was distributed with this source code.
  *
  * @category   ImageTransform
- * @package    Source
- * @version    $Id:$
+ * @package    MimeType
+ * @subpackage Resolve
+ * @version    SVN: $Id$
  */
 
 /**
- * ImageTransform Source class
- *
- * A container class for the image resource.
- *
- * This class allows the manipulation using classes that implement ImageTransform_Transform_Interface
- *
- * Example 1 Chaining
- *
- * <code>
- * <?php
- * $img = new sfImage('image1.jpg', 'image/png', 'GD');
- * $response = $this->getResponse();
- * $response->setContentType($img->getMIMEType());
- * $response->setContent($img->resize(1000,null)->overlay(sfImage('logo.png','','')));
- * ?>
- * </code>
- *
- * Example 2 Standalone
- * <code>
-
- * $img = new sfImage('image1.jpg', 'image/jpg', 'ImageMagick');
- * $t = new sfImageScale(0.5);
- * $img = $t->execute($img);
- * $img->save('image2.jpg', 'image/jpg');
- * </code>
+ * Represents a file and its mime type
  *
  * @category   ImageTransform
- * @package    Source
- *
- * @author Stuart Lowes <stuart.lowes@gmail.com>
- * @author Jan Schumann <js@schumann-it.com>
+ * @package    File
+ * @author     Stuart Lowes <stuart.lowes@gmail.com>
+ * @author     Jan Schumann <js@schumann-it.com>
  */
-class ImageTransform_Source
+final class ImageTransform_Source
 {
   /**
    * An ImageTransform Adapter
    *
    * @var ImageTransform_Adapter_Interface
    */
-  protected $adapter;
+  private $adapter;
 
   /*
    * MIME type map and their associated file extension(s)
@@ -59,7 +35,7 @@ class ImageTransform_Source
    *
    * @todo move to seperate class
    */
-  protected $types = array(
+  private $types = array(
     'image/gif' => array('gif'),
     'image/jpeg' => array('jpg', 'jpeg'),
     'image/png' => array('png'),
@@ -72,7 +48,7 @@ class ImageTransform_Source
    * @todo move to config class
    * @var array
    */
-  protected $defaultImage = array(
+  private $defaultImage = array(
     'filename' => 'Untitled.png',
     'mime_type' => 'image/png',
     'width' => 100,
@@ -101,29 +77,25 @@ class ImageTransform_Source
    *
    * @access public
    *
-   * @param ImageTransform_Adapter_Interface An Adapter instance
-   * @param string Filepath of the image to be loaded
-   * @param string File MIME type
+   * @param ImageTransform_Adapter_Interface      An Adapter instance
+   * @param ImageTransform_MimeType_Resolve_Aware An object that provides MimeDetection
    */
-  public function __construct(ImageTransform_Adapter_Interface $adapter, $filepath = '', $mime = '')
+  public function __construct(ImageTransform_Adapter_Interface $adapter, ImageTransform_File $file = null)
   {
     $this->setAdapter($adapter);
 
-    if ('' === $filepath)
+    if (is_null($file) || !$file->exists())
     {
       $this->create();
     }
     else
     {
-      $this->load($filepath, $mime);
+      $this->load($file);
     }
   }
 
-
   /**
    * Sets the image library adapter object
-   *
-   * @access public
    *
    * @param ImageTransform_Adapter_Interface
    */
@@ -208,46 +180,21 @@ class ImageTransform_Source
   /**
    * Loads image from disk
    *
-   * Loads an image of specified MIME type from the filesystem
-   *
-   * @access public
-   *
    * @throws ImageTransform_Source_Exception
    *
-   * @param string Path of image file
-   * @param string MIME type of image
+   * @param ImageTransform_File The image file
    *
    * @return ImageTransform_Source
    */
-  public function load($filepath, $mime = '')
+  public function load(ImageTransform_File $file)
   {
-    if (file_exists($filepath))
-    {
+    $this->getAdapter()->load($file->getFilepath(), $file->getMimeType());
 
-      if ('' == $mime)
-      {
-        $mime = $this->autoDetectMIMETypeFromFile($filepath);
-      }
-
-      if ('' == $mime)
-      {
-        $message = 'You must either specify the MIME type for file %s or enable mime detection';
-        throw new ImageTransform_Source_Exception(sprintf($message, $filepath));
-      }
-
-      $this->getAdapter()->load($filepath, $mime);
-
-      return $this;
-    }
-
-    $message = 'Unable to load %s. File does not exist or is unreadable';
-    throw new ImageTransform_Source_Exception(sprintf($message, $filepath));
+    return $this;
   }
 
   /**
    * Loads image from a string
-   *
-   * @access public
    *
    * @param string Image string
    *
@@ -263,11 +210,7 @@ class ImageTransform_Source
   /**
    * Saves the image to disk
    *
-   * Saves the image to the filesystem
-   *
-   * @access public
-   *
-   * @param string
+   * @param boolean $transform Indicated weather to transfom before save.
    *
    * @return boolean
    */
@@ -278,40 +221,30 @@ class ImageTransform_Source
       $this->transform();
     }
 
-    return $this->getAdapter()->save();
+    if (false === $this->getAdapter()->save())
+    {
+      throw new ImageTransform_Source_Exception('The Imgage could not be saved');
+    }
+
+    return true;
   }
 
   /**
    * Saves the image to the specified filename
    *
-   * Allows the saving to a different filename
-   *
-   * @access public
-   *
    * @throws ImageTransform_Source_Exception
    *
-   * @param string Path of image file
-   * @param string MIME type of image
+   * @param  ImageTransform_File The image file
    *
    * @return ImageTransform_Source
    */
-  public function saveAs($filepath, $mime = '')
+  public function saveAs(ImageTransform_File $file)
   {
-    if ('' === $mime)
-    {
-      $mime = $this->autoDetectMIMETypeFromFilename($filepath);
-    }
-
-    if (!$mime)
-    {
-      throw new ImageTransform_Source_Exception(sprintf('Unsupported file %s', $filepath));
-    }
-
     $copy = $this->copy();
 
     $copy->transform();
 
-    $copy->getAdapter()->saveAs($filepath, $mime);
+    $copy->getAdapter()->saveAs($file->getFilepath(), $file->getMimeType());
 
     return $copy;
   }
@@ -466,96 +399,11 @@ class ImageTransform_Source
   }
 
   /**
-   * Returns mime type from the specified file type. Returns false for unsupported types
-   * @access protected
-   * @return string or boolean
-   */
-  protected function autoDetectMIMETypeFromFilename($filename)
-  {
-    $pathinfo = pathinfo($filename);
-
-    foreach ($this->types as $mime => $extension)
-    {
-      if (in_array(strtolower($pathinfo['extension']),$extension))
-      {
-        return $mime;
-      }
-
-    }
-
-    return false;
-  }
-
-  /**
-   * Returns mime type from the actual file using a detection library
-   * @TODO implement autodetection in seperate class
-   * @access protected
-   * @return string or boolean
-   */
-  protected function autoDetectMIMETypeFromFile($filename)
-  {
-    $settings = array(); //sfConfig::get('app_sfImageTransformPlugin_mime_type','GD');
-
-    $support_libraries = array('fileinfo', 'mime_type', 'gd_mime_type');
-
-    if (false === $settings['auto_detect'])
-    {
-      return false;
-    }
-
-    if (in_array(strtolower($settings['library']), $support_libraries) && '' !== $filename)
-    {
-      if ('gd_mime_type' === strtolower($settings['library']))
-      {
-        if (!extension_loaded('gd'))
-        {
-          throw new Exception ('GD not enabled. Cannot detect mime type using GD.');
-        }
-
-        $imgData = GetImageSize($filename);
-
-        if (isset($imgData['mime']))
-        {
-          return $imgData['mime'];
-        }
-
-        else
-        {
-          return false;
-        }
-      }
-
-      if ('fileinfo' === strtolower($settings["library"]))
-      {
-
-        if (function_exists('finfo_file'))
-        {
-          $finfo = finfo_open(FILEINFO_MIME);
-
-          return finfo_file($finfo, $filename);
-        }
-      }
-
-      if ('mime_type' === strtolower($settings["library"]))
-      {
-        // Supressing warning as PEAR is not strict compliant
-        @require_once 'MIME/Type.php';
-        if (method_exists('MIME_Type', 'autoDetect'))
-        {
-          return @MIME_Type::autoDetect($filename);
-        }
-      }
-    }
-
-    return false;
-  }
-
-  /**
    * Copies the image object and returns it
    *
-   * Returns a copy of the sfImage object
+   * Returns a copy of the ImageTransform_Source object
    *
-   * @return sfImage
+   * @return ImageTransform_Source
    */
   public function __clone()
   {
@@ -589,7 +437,7 @@ class ImageTransform_Source
     $this->transforms[] = array(
       'method' => $method,
       'arguments' => $arguments,
-      'adapterName' => empty($adapterName) ? $this->imageAdapterName : $adapterName
+      'adapterName' => '' === $adapterName ? $this->getAdapter()->getAdapterName() : $adapterName
     );
   }
 

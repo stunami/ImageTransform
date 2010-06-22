@@ -7,13 +7,15 @@
  * file that was distributed with this source code.
  *
  * @category   ImageTransform
- * @version    $Id:$
+ * @package    Autoload
+ * @version    SVN: $Id:$
  */
 
 /**
  * ImageTransform Autoloader
  *
  * @category   ImageTransform
+ * @package    Autoload
  *
  * @author Jan Schumann <js@schumann-it.com>
  */
