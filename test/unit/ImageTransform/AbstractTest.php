@@ -29,7 +29,7 @@ class ImageTransform_AbstractTest extends PHPUnit_Framework_TestCase
 
     $this->clearRunResources($run);
 
-    $this->fixturesPath = realpath(dirname(__FILE__) . '/../../fixtures/images');
+    $this->fixturesPath = realpath(dirname(__FILE__) . '/../../fixtures');
 
     require_once dirname(__FILE__) . '/../../../src/ImageTransform/bootstrap.php';
   }
@@ -79,9 +79,14 @@ class ImageTransform_AbstractTest extends PHPUnit_Framework_TestCase
     }
   }
 
-  protected function getFixturesPath($adapterName = 'Gd')
+  protected function getFixturesPath()
   {
-    return $this->fixturesPath . '/' . $adapterName;
+    return $this->fixturesPath;
+  }
+
+  protected function getImageFixturesPath($adapterName = 'Gd')
+  {
+    return $this->getFixturesPath() . '/images/' . $adapterName;
   }
 
   /**
