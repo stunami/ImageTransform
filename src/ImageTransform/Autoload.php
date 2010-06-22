@@ -19,10 +19,12 @@
  *
  * @author Jan Schumann <js@schumann-it.com>
  */
-class ImageTransform_Autoloader
+class ImageTransform_Autoload
 {
-  protected $prefix = 'ImageTransform_';
-  protected $dir;
+  private static $registered = false;
+
+  private $prefix = 'ImageTransform_';
+  private $dir;
 
   private function __construct()
   {
@@ -34,8 +36,12 @@ class ImageTransform_Autoloader
    */
   public static function register()
   {
-    $loader = new self();
-    spl_autoload_register(array ($loader, 'autoload'));
+    if (false === self::$registered)
+    {
+      $loader = new self();
+      spl_autoload_register(array($loader, 'autoload'));
+      self::$registered = true;
+    }
   }
 
   /**

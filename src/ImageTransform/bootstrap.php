@@ -1,3 +1,3 @@
 <?php
-require_once dirname(__FILE__) . '/Autoloader.php';
-ImageTransform_Autoloader::register();
+require_once dirname(__FILE__) . '/Autoload.php';
+ImageTransform_Autoload::register();
