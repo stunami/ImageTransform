@@ -11,7 +11,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
   {
     $image = new Image(array('ImageTransform\Image\Loader'));
     $image->from('/tmp/image.jpg');
-    $dumper = new Dumper($image));
+    $dumper = new Dumper($image);
     $this->assertInstanceOf('ImageTransform\Image\Dumper', $dumper);
 
     return $dumper;
