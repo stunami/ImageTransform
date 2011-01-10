@@ -4,18 +4,18 @@ Rewrite branch of the standalone PHP image manipulation library.
 
 ## Adding a new transformation
 
-namespace ImageTransform\Transformation;
-
-use ImageTransform\Image\Delegate;
-
-class Resize extends Delegate
-{
-  public function resize($width, $height)
-  {
-    // do something with $this->image
-    return $this->image;
-  }
-}
+    namespace ImageTransform\Transformation;
+    
+    use ImageTransform\Image\Delegate;
+    
+    class Resize extends Delegate
+    {
+      public function resize($width, $height)
+      {
+        // do something with $this->image
+        return $this->image;
+      }
+    }
 
 ## Registering the new transformation
 
