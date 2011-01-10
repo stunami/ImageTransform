@@ -4,11 +4,11 @@ namespace ImageTransform\Image;
 
 use ImageTransform\Image\Delegate;
 
-class Dumper extends Delegate
+abstract class Dumper extends Delegate
 {
-  public function out()
+  public function out($mimeType = false)
   {
-    echo 'barfoo'; // $this->image;
+    echo $this->dump($mimeType);
 
     return $this->image;
   }
@@ -25,8 +25,10 @@ class Dumper extends Delegate
 
   public function saveAs($filepath)
   {
-    file_put_contents($filepath, 'barfoo');
+    file_put_contents($filepath, $this->dump());
 
     return $this->image;
   }
+
+  abstract protected function dump($mimeType = false);
 }

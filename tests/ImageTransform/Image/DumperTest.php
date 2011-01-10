@@ -10,7 +10,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
   public function testNewDumper()
   {
     $image = new Image();
-    $dumper = new Dumper($image);
+    $dumper = $this->getMock('\ImageTransform\Image\Dumper', array('dump'), array($image));
     $this->assertInstanceOf('ImageTransform\Image\Dumper', $dumper);
 
     return $dumper;
@@ -22,20 +22,22 @@ class DumperTest extends \PHPUnit_Framework_TestCase
   public function testDumpingToStdout($dumper)
   {
     ob_start();
-    $dumper->out();
-    $this->assertNotEmpty(ob_get_contents());
+    $image = $dumper->out();
+    $this->assertInstanceOf('ImageTransform\Image', $image);
+    $this->assertEmpty(ob_get_contents());
     ob_end_clean();
   }
 
   public function testSavingOverOriginal()
   {
     $image = new Image();
-    $dumper = new Dumper($image);
+    $dumper = $this->getMock('\ImageTransform\Image\Dumper', array('dump'), array($image));
 
     $filepath = '/tmp/ImageTransformTestImage.jpg';
     $this->assertFileNotExists($filepath);
     $image->set('image.filepath', $filepath);
-    $dumper->save();
+    $image = $dumper->save();
+    $this->assertInstanceOf('ImageTransform\Image', $image);
     $this->assertFileExists($filepath);
 
     unlink($filepath);
@@ -47,7 +49,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
    */
   public function testSavingWithNoFilepath()
   {
-    $dumper = new Dumper(new Image());
+    $dumper = $this->getMock('\ImageTransform\Image\Dumper', array('dump'), array(new Image()));
     $dumper->save();
   }
 
@@ -58,7 +60,8 @@ class DumperTest extends \PHPUnit_Framework_TestCase
   {
     $filepath = '/tmp/ImageTransformTestImage.jpg';
     $this->assertFileNotExists($filepath);
-    $dumper->saveAs($filepath);
+    $image = $dumper->saveAs($filepath);
+    $this->assertInstanceOf('ImageTransform\Image', $image);
     $this->assertFileExists($filepath);
 
     unlink($filepath);
