@@ -1,6 +1,6 @@
 <?php
 
-namespace ImageTransform\Tests;
+namespace ImageTransform\Tests\Image;
 
 use ImageTransform\Image;
 use ImageTransform\Image\Delegate;
