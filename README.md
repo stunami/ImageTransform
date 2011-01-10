@@ -6,9 +6,9 @@ Rewrite branch of the standalone PHP image manipulation library.
 
 namespace ImageTransform\Transformation;
 
-use ImageTransform\Transformation\Transformation;
+use ImageTransform\Image\Delegate;
 
-class Resize extends Transformation
+class Resize extends Delegate
 {
   public function resize($width, $height)
   {
@@ -19,9 +19,11 @@ class Resize extends Transformation
 
 ## Registering the new transformation
 
-    $resize = new Resize();
-    $dispatcher = new EventDispatcher();
-    $dispatcher->connect(Image::EVENT_TRANSFORMATION, array($resize, 'execute'));
+    $transformationClasses = array(
+      'ImageTransform\Transformation\Resize',
+      ...
+    );
+    $image = new Image($transformationClasses);
 
 ## Executing the new transformation
 
