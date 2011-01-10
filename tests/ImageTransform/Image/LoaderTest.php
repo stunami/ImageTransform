@@ -9,7 +9,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
 {
   public function testNewLoader()
   {
-    $loader = new Loader(new Image());
+    $loader = $this->getMock('\ImageTransform\Image\Loader', array('createImage', 'loadImage'), array(new Image()));
     $this->assertInstanceOf('ImageTransform\Image\Loader', $loader);
 
     return $loader;
@@ -20,13 +20,8 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
    */
   public function testCreation($loader)
   {
-    $width = 80;
-    $height = 100;
-
-    $image = $loader->create($width, $height);
+    $image = $loader->create(10, 20);
     $this->assertInstanceOf('ImageTransform\Image', $image);
-    $this->assertEquals($width, $image->get('image.width'));
-    $this->assertEquals($height, $image->get('image.height'));
   }
 
   /**
