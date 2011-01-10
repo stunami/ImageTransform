@@ -2,45 +2,47 @@
 
 namespace ImageTransform\Tests;
 
-require_once __DIR__.'/../../src/ImageTransform/Image.php';
-
 use ImageTransform\Image;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class ImageTest extends \PHPUnit_Framework_TestCase
 {
-  protected $dispatcher, $stub;
-
-  protected function setUp()
-  {
-    $this->stub = $this->getMock('ImageTestEventListener', array('transformation'));
-
-    $this->dispatcher = new EventDispatcher();
-    $this->dispatcher->connect(Image::EVENT_TRANSFORMATION, array($this->stub, 'transformation'));
-  }
-
   public function testNewImage()
   {
-    $image = new Image($this->dispatcher);
+    $stubDelegate = $this->getMock('Delegate', array('dummyCallback'));
+    $stubDelegateClassName = get_class($stubDelegate);
+
+    $image = new Image(array($stubDelegateClassName));
+
     $this->assertInstanceOf('ImageTransform\Image', $image);
-  }
+    $this->assertArrayHasKey($stubDelegateClassName, $image->get('core.callback_classes'));
 
-  public function testCallingTransformation()
-  {
-    $image = new Image($this->dispatcher);
-    $this->stub->expects($this->once())->method('transformation')->will($this->returnCallback(function($event){return 'doesexist' == $event->get('method');}));
-
-    $image->doesexist();
+    return $image;
   }
 
   /**
-   * @expectedException ImageTransform\Transformation\Exception\TransformationNotFoundException
+   * @depends testNewImage
    */
-  public function testCallingUnknownMethod()
+  public function testAttributeAccess($image)
   {
-    $image = new Image($this->dispatcher);
-    $this->stub->expects($this->once())->method('transformation')->will($this->returnCallback(function($event){return 'doesexist' == $event->get('method');}));
+    $this->assertFalse($image->get('test.value'));
+    $image->set('test.value', 'barfoo');
+    $this->assertEquals('barfoo', $image->get('test.value'));
+  }
 
-    $image->doesnotexist();
+  /**
+   * @depends testNewImage
+   */
+  public function testSuccessfulDelegation($image)
+  {
+    $this->assertNull($image->dummyCallback());
+  }
+
+  /**
+   * @depends testNewImage
+   * @expectedException ImageTransform\Image\Exception\DelegateNotFoundException
+   */
+  public function testFailedDelegation($image)
+  {
+    $image->nonExistantCallback();
   }
 }

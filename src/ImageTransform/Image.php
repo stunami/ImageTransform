@@ -10,32 +10,45 @@ $loader = new UniversalClassLoader();
 $loader->registerNamespace('ImageTransform', __DIR__.'/..');
 $loader->register();
 
-use ImageTransform\Transformation\Exception\TransformationNotFoundException;
-use Symfony\Component\EventDispatcher\Event;
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use ImageTransform\Image\Exception\DelegateNotFoundException;
 
 class Image
 {
-  const EVENT_TRANSFORMATION = 'image_transform.transformation';
+  protected $attributes = array(
+    'core.callback_classes' => array()
+  );
 
-  protected $dispatcher;
-
-  public function __construct($dispatcher)
+  public function __construct($classNames = array())
   {
-    $this->dispatcher = $dispatcher;
+    $callbackClasses = array();
+    foreach($classNames as $className)
+    {
+      $callbackClasses[$className] = get_class_methods($className);
+    }
+    $this->set('core.callback_classes', $callbackClasses);
   }
 
   public function __call($method, $arguments)
   {
-    $event = new Event($this, self::EVENT_TRANSFORMATION, array('method' => $method, 'arguments' => $arguments));
-
-    $this->dispatcher->notifyUntil($event);
-
-    if ($event->isProcessed())
+    foreach ($this->get('core.callback_classes', array()) as $className => $callbacks)
     {
-      return $event->getReturnValue();
+      if (in_array($method, $callbacks))
+      {
+        $delegate = new $className($this);
+        return call_user_func_array(array($delegate, $method), $arguments);
+      }
     }
 
-    throw new TransformationNotFoundException($method . ' could not be found!');
+    throw new DelegateNotFoundException();
+  }
+
+  public function get($key, $default = false)
+  {
+    return array_key_exists($key, $this->attributes) ? $this->attributes[$key] : $default;
+  }
+
+  public function set($key, $value)
+  {
+    $this->attributes[$key] = $value;
   }
 }
