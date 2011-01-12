@@ -12,9 +12,60 @@ Multiple tranformations can be easily applied by chaining the transform calls as
 
 Load an image, resize it to 80 x 60 pixels.
 
-    $image->from('image1.jpg')
+    $image->open('image1.jpg')
       ->resize(80, 60)
       ->save();
+
+## Loading and Dumping Images
+
+### Loader
+
+The `Loader` delegate is used to create new images or to load existing ones.
+
+#### Description
+
+    ImageTransform\Image Loader::create(int $width , int $height)
+
+#### Parameters
+
+* int __$width__ Target width
+* int __$height__ Target height
+
+#### Example
+
+    use ImageTransform\Image;
+
+    $image = new Image(array(
+      '\ImageTransform\Image\Loader\GD'
+    ));
+    
+    $image->create(100, 120);
+
+The above example will create a new image with a width of 100 and a height of 120.
+
+* * *
+
+#### Description
+
+    ImageTransform\Image Loader::open(string $filepath)
+
+#### Parameters
+
+* string __$filepath__ Specifies the file to open
+
+#### Example
+
+    use ImageTransform\Image;
+
+    $image = new Image(array(
+      '\ImageTransform\Image\Loader\GD'
+    ));
+    
+    $image->open('/path/to/image.jpg');
+
+The above example will load the specified image.
+
+### Dumper
 
 ## Transformations
 
@@ -24,10 +75,7 @@ Resizes an image resource to a specified width and height. Special flags can inf
 
 #### Description
 
-    use ImageTransform\Image;
-    use ImageTransform\Image\Transformation\Resize\[GD] as Resize;
-
-    Image Resize::resize(int $width , int $height [, int $flags = 0])
+    ImageTransform\Image Resize::resize(int $width , int $height [, int $flags = 0])
 
 #### Parameters
 
@@ -44,7 +92,6 @@ Resizes an image resource to a specified width and height. Special flags can inf
 #### Example
 
     use ImageTransform\Image;
-    use ImageTransform\Image\Transformation\Resize\[GD] as Resize;
 
     $image = new Image(array(
       '\ImageTransform\Image\Loader\GD',
@@ -52,7 +99,7 @@ Resizes an image resource to a specified width and height. Special flags can inf
       '\ImageTransform\Image\Transformation\Resize\GD'
     ));
     
-    $image->from('/path/to/image.jpg')
+    $image->open('/path/to/image.jpg')
       ->resize(100, 100, Resize::PROPORTIONAL)
       ->save();
 
