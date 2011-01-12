@@ -2,7 +2,7 @@
 
 > *This is a rewrite of the standalone PHP image manipulation library ImageTransform for PHP 5.3.x.*
 
-The aim of ImageTransformis take the pain out of image manipulating in PHP. ImageTransform is great for but not limited to common tasks like creating thumbnails, adding text to dynamic images or watermarking.
+The aim of ImageTransform is take the pain out of image manipulating in PHP. ImageTransform is great for but not limited to common tasks like creating thumbnails, adding text to dynamic images or watermarking.
 
 ImageTransform works by applying one or more "transformations" to the image.  A transformation can be a simple action like resize, thumbnail or mirror or more complex like an overlay (watermarks) or pixelate.
 
@@ -15,6 +15,8 @@ Load an image, resize it to 80 x 60 pixels.
     $image->open('image1.jpg')
       ->resize(80, 60)
       ->save();
+
+Methods of `ImageTransform\Image` are added via so called `Delegates`. Image manipulating `Delegates` are called `Transformations`.
 
 ## Loading and Dumping Images
 
@@ -61,11 +63,59 @@ The above example will create a new image with a width of 100 and a height of 12
       '\ImageTransform\Image\Loader\GD'
     ));
     
-    $image->open('/path/to/image.jpg');
+    $image->open('/path/to/image.ppg');
 
 The above example will load the specified image.
 
 ### Dumper
+
+The `Dumper` delegate is used to flush images to `stdout` or to save them.
+
+#### Description
+
+    ImageTransform\Image Dumper::flush([string $mimeType = false])
+
+#### Parameters
+
+* string __$mimeType__ The mimetype of the image to be flushed. Mandatory if `ImageTransform\Image` attribute `image.mime_type` is not set.
+
+#### Example
+
+    use ImageTransform\Image;
+
+    $image = new Image(array(
+      '\ImageTransform\Image\Loader\GD',
+      '\ImageTransform\Image\Dumper\GD'
+    ));
+    
+    $image->create(100, 120)
+      ->flush('image/png');
+
+The above example will output a 100 x 120 PNG image to `stdout`.
+
+* * *
+
+#### Description
+
+    ImageTransform\Image Dumper::save([string $filepath = false])
+
+#### Parameters
+
+* string __$filepath__ Specifies the file to save. Mandatory if `ImageTransform\Image` attribute `image.filepath` is not set.
+
+#### Example
+
+    use ImageTransform\Image;
+
+    $image = new Image(array(
+      '\ImageTransform\Image\Loader\GD',
+      '\ImageTransform\Image\Dumper\GD'
+    ));
+    
+    $image->open('/path/to/image.png')
+      ->save('/path/to/image-copy.png');
+
+The above example will save the opened image under a different filename.
 
 ## Transformations
 
