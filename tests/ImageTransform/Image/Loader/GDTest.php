@@ -7,25 +7,26 @@ use ImageTransform\Image\Loader\GD as Loader;
 
 class GDTest extends \PHPUnit_Framework_TestCase
 {
-  public function testNewLoader()
+  protected function setUp()
   {
-    $image = new Image(array('\ImageTransform\Image\Loader\GD'));
-    $loader = new Loader($image);
-    $this->assertInstanceOf('ImageTransform\Image\Loader\GD', $loader);
-    $this->assertEquals('GD', $image->get('core.image_api'));
-
-    return $loader;
+    $this->image = new Image(array('\ImageTransform\Image\Loader\GD'));
+    $this->loader = new Loader($this->image);
   }
 
-  /**
-   * @depends testNewLoader
-   */
-  public function testCreation($loader)
+  public function testNewLoader()
+  {
+    $this->assertInstanceOf('ImageTransform\Image\Loader\GD', $this->loader);
+    $this->assertEquals('GD', $this->image->get('core.image_api'));
+
+    return $this->loader;
+  }
+
+  public function testCreation()
   {
     $width = 80;
     $height = 100;
 
-    $image = $loader->create($width, $height);
+    $image = $this->loader->create($width, $height);
 
     $this->assertInternalType('resource', $image->get('image.resource'));
     $this->assertFalse($image->get('image.mimeType'));
@@ -34,35 +35,40 @@ class GDTest extends \PHPUnit_Framework_TestCase
   }
 
   /**
-   * @depends testNewLoader
+   * @dataProvider fixtureImages
    */
-  public function testLoadingFromFile($loader)
+  public function testLoadingFromFile($filepath, $mimeType, $width, $height)
   {
-    $filepath = __DIR__.'/../../../fixtures/20x20-pattern.jpg';
-
-    $image = $loader->open($filepath);
+    $image = $this->loader->open($filepath);
 
     $this->assertInternalType('resource', $image->get('image.resource'));
-    $this->assertEquals('image/jpeg', $image->get('image.mime_type'));
-    $this->assertEquals(20, $image->get('image.width'));
-    $this->assertEquals(20, $image->get('image.height'));
+    $this->assertEquals($mimeType, $image->get('image.mime_type'));
+    $this->assertEquals($width, $image->get('image.width'));
+    $this->assertEquals($height, $image->get('image.height'));
   }
 
   /**
-   * @depends testNewLoader
    * @expectedException InvalidArgumentException
    */
-  public function testLoadingFromNonExistingFile($loader)
+  public function testLoadingFromNonExistingFile()
   {
-    $loader->open('/this/image/does/not/exist.jpg');
+    $this->loader->open('/this/image/does/not/exist.jpg');
   }
 
   /**
-   * @depends testNewLoader
    * @expectedException \ImageTransform\Image\Exception\MimeTypeNotSupportedException
    */
-  public function testLoadingFromFileOfWrongMimeType($loader)
+  public function testLoadingFromFileOfWrongMimeType()
   {
-    $loader->open(__FILE__);
+    $this->loader->open(__FILE__);
+  }
+
+  public static function fixtureImages()
+  {
+    return array(
+      array(__DIR__.'/../../../fixtures/20x20-pattern.gif', 'image/gif', 20, 20),
+      array(__DIR__.'/../../../fixtures/20x20-pattern.jpg', 'image/jpeg', 20, 20),
+      array(__DIR__.'/../../../fixtures/20x20-pattern.png', 'image/png', 20, 20)
+    );
   }
 }

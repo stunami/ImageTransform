@@ -13,11 +13,14 @@ class GDTest extends \PHPUnit_Framework_TestCase
     $this->dumper = new Dumper($this->image);
   }
 
-  public function testDumpingToStdout()
+  /**
+   * @dataProvider fixtureImages
+   */
+  public function testDumpingToStdout($imagecreateFunction, $fixtureImage, $mimeType)
   {
     $this->image->set('core.image_api', 'GD');
-    $this->image->set('image.resource', imagecreatefromjpeg(__DIR__.'/../../../fixtures/20x20-pattern.jpg'));
-    $this->image->set('image.mime_type', 'image/jpeg');
+    $this->image->set('image.resource', $imagecreateFunction($fixtureImage));
+    $this->image->set('image.mime_type', $mimeType);
 
     ob_start();
     $this->dumper->flush();
@@ -56,5 +59,14 @@ class GDTest extends \PHPUnit_Framework_TestCase
     $this->image->set('image.resource', true);
     $this->image->set('image.mime_type', false);
     $this->dumper->flush();
+  }
+
+  public static function fixtureImages()
+  {
+    return array(
+      array('imagecreatefromgif',  __DIR__.'/../../../fixtures/20x20-pattern.gif', 'image/gif'),
+      array('imagecreatefromjpeg', __DIR__.'/../../../fixtures/20x20-pattern.jpg', 'image/jpg'),
+      array('imagecreatefrompng',  __DIR__.'/../../../fixtures/20x20-pattern.png', 'image/png')
+    );
   }
 }
