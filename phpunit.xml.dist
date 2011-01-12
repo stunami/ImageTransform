@@ -13,6 +13,12 @@
          testSuiteLoaderClass="PHPUnit_Runner_StandardTestSuiteLoader"
          strict="true">
 
+  <filter>
+    <whitelist addUncoveredFilesFromWhitelist="true">
+      <directory suffix=".php">./src/ImageTransform</directory>
+    </whitelist>
+  </filter>
+
   <testsuites>
     <testsuite name="ImageTransform Test Suite">
       <directory>./tests/ImageTransform</directory>
