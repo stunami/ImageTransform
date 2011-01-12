@@ -22,33 +22,25 @@ abstract class Loader extends Delegate
 {
   public function create($width, $height)
   {
-    $this->createImage($width, $height);
+    $this->setMeta($this->doCreate($width, $height));
     return $this->image;
   }
 
-  public function from($filepath)
+  public function open($filepath)
   {
     $this->image->set('image.filepath', $filepath);
-    $this->loadImage($filepath);
+    $this->setMeta($this->doOpen($filepath));
     return $this->image;
   }
 
-  abstract protected function loadImage($filepath);
-  abstract protected function createImage($width, $height);
+  abstract protected function doOpen($filepath);
+  abstract protected function doCreate($width, $height);
 
-  protected function setResource($resource)
+  protected function setMeta($data)
   {
-    $this->image->set('image.resource', $resource);
-  }
-
-  protected function setMimeType($mimeType)
-  {
-    $this->image->set('image.mime_type', $mimeType);
-  }
-
-  protected function setDimensions($width, $height)
-  {
-    $this->image->set('image.width',  $width);
-    $this->image->set('image.height', $height);
+    $this->image->set('image.resource',  $data[0]);
+    $this->image->set('image.width',     $data[1]);
+    $this->image->set('image.height',    $data[2]);
+    $this->image->set('image.mime_type', $data[3]);
   }
 }

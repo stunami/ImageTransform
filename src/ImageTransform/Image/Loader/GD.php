@@ -28,15 +28,13 @@ class GD extends Loader
     $this->image->set('core.image_api', 'GD');
   }
 
-  protected function createImage($width, $height)
+  protected function doCreate($width, $height)
   {
     $resource = imagecreatetruecolor($width, $height);
-    $this->setResource($resource);
-    $this->setMimeType(false);
-    $this->setDimensions($width, $height);
+    return array($resource, $width, $height, false);
   }
 
-  protected function loadImage($filepath)
+  protected function doOpen($filepath)
   {
     if (!is_readable($filepath))
     {
@@ -61,8 +59,6 @@ class GD extends Loader
         throw new MimeTypeNotSupportedException('Images of type "'.$info['mime'].'" are not supported!');
     }
 
-    $this->setResource($resource);
-    $this->setMimeType($info['mime']);
-    $this->setDimensions($info[0], $info[1]);
+    return array($resource, $info[0], $info[1], $info['mime']);
   }
 }

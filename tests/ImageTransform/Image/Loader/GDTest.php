@@ -40,7 +40,7 @@ class GDTest extends \PHPUnit_Framework_TestCase
   {
     $filepath = __DIR__.'/../../../fixtures/20x20-pattern.jpg';
 
-    $image = $loader->from($filepath);
+    $image = $loader->open($filepath);
 
     $this->assertInternalType('resource', $image->get('image.resource'));
     $this->assertEquals('image/jpeg', $image->get('image.mime_type'));
@@ -54,7 +54,7 @@ class GDTest extends \PHPUnit_Framework_TestCase
    */
   public function testLoadingFromNonExistingFile($loader)
   {
-    $loader->from('/this/image/does/not/exist.jpg');
+    $loader->open('/this/image/does/not/exist.jpg');
   }
 
   /**
@@ -63,6 +63,6 @@ class GDTest extends \PHPUnit_Framework_TestCase
    */
   public function testLoadingFromFileOfWrongMimeType($loader)
   {
-    $loader->from(__FILE__);
+    $loader->open(__FILE__);
   }
 }
