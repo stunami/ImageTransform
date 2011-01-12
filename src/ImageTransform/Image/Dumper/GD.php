@@ -21,7 +21,7 @@ use ImageTransform\Image\Exception\MimeTypeNotSupportedException;
  */
 class GD extends Dumper
 {
-  protected function dump($mimeType = false)
+  protected function doFlush($mimeType = false)
   {
     if ('GD' != ($api = $this->image->get('core.image_api')))
     {

@@ -20,29 +20,26 @@ use ImageTransform\Image\Delegate;
  */
 abstract class Dumper extends Delegate
 {
-  public function out($mimeType = false)
+  public function flush($mimeType = false)
   {
-    echo $this->dump($mimeType);
+    echo $this->doFlush($mimeType);
 
     return $this->image;
   }
 
-  public function save()
+  public function save($filepath = false)
   {
-    if (!($filepath = $this->image->get('image.filepath')))
+    $filepath = $filepath ? $filepath : $this->image->get('image.filepath');
+
+    if (false === $filepath)
     {
       throw new \InvalidArgumentException('No filepath set on image! Use saveAs() instead.');
     }
 
-    return $this->saveAs($filepath);
-  }
-
-  public function saveAs($filepath)
-  {
-    file_put_contents($filepath, $this->dump());
+    file_put_contents($filepath, $this->doFlush());
 
     return $this->image;
   }
 
-  abstract protected function dump($mimeType = false);
+  abstract protected function doFlush($mimeType = false);
 }

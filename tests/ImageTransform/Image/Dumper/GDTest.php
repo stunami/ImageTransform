@@ -20,7 +20,7 @@ class GDTest extends \PHPUnit_Framework_TestCase
     $this->image->set('image.mime_type', 'image/jpeg');
 
     ob_start();
-    $this->dumper->out();
+    $this->dumper->flush();
     $this->assertNotEmpty(ob_get_contents());
     ob_end_clean();
   }
@@ -33,7 +33,7 @@ class GDTest extends \PHPUnit_Framework_TestCase
     $this->image->set('core.image_api', false);
     $this->image->set('image.resource', false);
     $this->image->set('image.mime_type', false);
-    $this->dumper->out();
+    $this->dumper->flush();
   }
 
   /**
@@ -44,7 +44,7 @@ class GDTest extends \PHPUnit_Framework_TestCase
     $this->image->set('core.image_api', 'GD');
     $this->image->set('image.resource', false);
     $this->image->set('image.mime_type', false);
-    $this->dumper->out();
+    $this->dumper->flush();
   }
 
   /**
@@ -55,6 +55,6 @@ class GDTest extends \PHPUnit_Framework_TestCase
     $this->image->set('core.image_api', 'GD');
     $this->image->set('image.resource', true);
     $this->image->set('image.mime_type', false);
-    $this->dumper->out();
+    $this->dumper->flush();
   }
 }
