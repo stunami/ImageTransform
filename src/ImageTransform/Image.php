@@ -9,14 +9,6 @@
 
 namespace ImageTransform;
 
-require_once __DIR__.'/../vendor/Symfony/Component/HttpFoundation/UniversalClassLoader.php';
-
-use Symfony\Component\HttpFoundation\UniversalClassLoader;
-
-$loader = new UniversalClassLoader();
-$loader->registerNamespace('ImageTransform', __DIR__.'/..');
-$loader->register();
-
 use ImageTransform\Image\Exception\DelegateNotFoundException;
 
 /**
