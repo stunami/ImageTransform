@@ -24,7 +24,6 @@ class Image
    * @var array $attributes Key / value store to be used for meta information by delegates.
    */
   protected $attributes = array(
-    'core.callback_classes' => array()
   );
 
   /**
@@ -32,37 +31,9 @@ class Image
    *
    * @param array $classNames List of Delegate inheriting classes providing transformations.
    */
-  public function __construct($classNames = array())
+  public function __construct($filepath = null)
   {
-    $callbackClasses = array();
-    foreach($classNames as $className)
-    {
-      $callbackClasses[$className] = get_class_methods($className);
-    }
-    $this->set('core.callback_classes', $callbackClasses);
-  }
-
-  /**
-   * Delegation mechanism.
-   *
-   * Fetches all calls to Image instances and forwards them to the appropriate Delegate.
-   *
-   * @param  string $method    Name of the method called
-   * @param  array  $arguments Arguments passed with the call
-   * @return Image             To prevent the fluent API Delegates must always returnan Image instance
-   */
-  public function __call($method, $arguments)
-  {
-    foreach ($this->get('core.callback_classes', array()) as $className => $callbacks)
-    {
-      if (in_array($method, $callbacks))
-      {
-        $delegate = new $className($this);
-        return call_user_func_array(array($delegate, $method), $arguments);
-      }
-    }
-
-    throw new DelegateNotFoundException();
+    $this->set('source.filepath', $filepath);
   }
 
   /**
