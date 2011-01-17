@@ -7,16 +7,16 @@
  * file that was distributed with this source code.
  */
 
-namespace ImageTransform\Image\Transformation;
+namespace ImageTransform\Transformation;
 
-use ImageTransform\Image\Delegate;
+use ImageTransform\Transformation;
 
 /**
  * Abstract implementation of the resize transformation. Includes the calculation of the target size.
  *
  * @author Christian Schaefer <caefer@ical.ly>
  */
-abstract class Resize extends Delegate
+abstract class Resize extends Transformation
 {
   const PROPORTIONAL = 1;
   const NO_INFLATE   = 2;
@@ -37,8 +37,6 @@ abstract class Resize extends Delegate
       $this->image->set('image.width', $finalWidth);
       $this->image->set('image.height', $finalHeight);
     }
-
-    return $this->image;
   }
 
   protected function computeFinalDimension($originalWidth, $originalHeight, $targetWidth, $targetHeight, $flags)

@@ -7,10 +7,10 @@
  * file that was distributed with this source code.
  */
 
-namespace ImageTransform\Image\Dumper;
+namespace ImageTransform\Transformation\Dumper;
 
-use ImageTransform\Image\Dumper;
-use ImageTransform\Image\Exception\MimeTypeNotSupportedException;
+use ImageTransform\Transformation\Dumper;
+use ImageTransform\Transformation\Exception\MimeTypeNotSupportedException;
 
 /**
  * GD Dumper

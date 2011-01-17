@@ -7,10 +7,10 @@
  * file that was distributed with this source code.
  */
 
-namespace ImageTransform\Image\Loader;
+namespace ImageTransform\Transformation\Loader;
 
-use ImageTransform\Image\Loader;
-use ImageTransform\Image\Exception\MimeTypeNotSupportedException;
+use ImageTransform\Transformation\Loader;
+use ImageTransform\Transformation\Exception\MimeTypeNotSupportedException;
 
 /**
  * GD Loader

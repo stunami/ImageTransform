@@ -7,18 +7,18 @@
  * file that was distributed with this source code.
  */
 
-namespace ImageTransform\Image;
+namespace ImageTransform\Transformation;
 
-use ImageTransform\Image\Delegate;
+use ImageTransform\Transformation;
 
 /**
  * Dumper class.
  *
- * Abstract Delegate class providing saving and output methods.
+ * Abstract Transformation class providing saving and output methods.
  *
  * @author Christian Schaefer <caefer@ical.ly>
  */
-abstract class Dumper extends Delegate
+abstract class Dumper extends Transformation
 {
   public function flush($mimeType = false)
   {

@@ -10,19 +10,19 @@
 namespace ImageTransform\Tests\Image\Loader;
 
 use ImageTransform\Image;
-use ImageTransform\Image\Loader\GD as Loader;
+use ImageTransform\Transformation\Loader\GD as Loader;
 
 class GDTest extends \PHPUnit_Framework_TestCase
 {
   protected function setUp()
   {
-    $this->image = new Image(array('\ImageTransform\Image\Loader\GD'));
+    $this->image = new Image(array('\ImageTransform\Transformation\Loader\GD'));
     $this->loader = new Loader($this->image);
   }
 
   public function testNewLoader()
   {
-    $this->assertInstanceOf('ImageTransform\Image\Loader\GD', $this->loader);
+    $this->assertInstanceOf('ImageTransform\Transformation\Loader\GD', $this->loader);
     $this->assertEquals('GD', $this->image->get('core.image_api'));
 
     return $this->loader;
@@ -63,7 +63,7 @@ class GDTest extends \PHPUnit_Framework_TestCase
   }
 
   /**
-   * @expectedException \ImageTransform\Image\Exception\MimeTypeNotSupportedException
+   * @expectedException \ImageTransform\Transformation\Exception\MimeTypeNotSupportedException
    */
   public function testLoadingFromFileOfWrongMimeType()
   {

@@ -7,9 +7,9 @@
  * file that was distributed with this source code.
  */
 
-namespace ImageTransform\Image\Transformation\Resize;
+namespace ImageTransform\Transformation\Resize;
 
-use ImageTransform\Image\Transformation\Resize;
+use ImageTransform\Transformation\Resize;
 
 /**
  * Concrete GD implementation of the resize transformation

@@ -7,18 +7,18 @@
  * file that was distributed with this source code.
  */
 
-namespace ImageTransform\Image;
+namespace ImageTransform\Transformation;
 
-use ImageTransform\Image\Delegate;
+use ImageTransform\Transformation;
 
 /**
  * Loader class.
  *
- * Abstract Delegate class providing creating and loading methods.
+ * Abstract Transformation class providing creating and loading methods.
  *
  * @author Christian Schaefer <caefer@ical.ly>
  */
-abstract class Loader extends Delegate
+abstract class Loader extends Transformation
 {
   public function create($width, $height)
   {

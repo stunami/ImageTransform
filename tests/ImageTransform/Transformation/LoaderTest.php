@@ -7,21 +7,21 @@
  * file that was distributed with this source code.
  */
 
-namespace ImageTransform\Tests\Image;
+namespace ImageTransform\Tests\Transformation;
 
 use ImageTransform\Image;
-use ImageTransform\Image\Loader;
+use ImageTransform\Transformation\Loader;
 
 class LoaderTest extends \PHPUnit_Framework_TestCase
 {
   protected function setUp()
   {
-    $this->loader = $this->getMock('\ImageTransform\Image\Loader', array('doCreate', 'doOpen'), array(new Image()));
+    $this->loader = $this->getMock('\ImageTransform\Transformation\Loader', array('doCreate', 'doOpen'), array(new Image()));
   }
 
   public function testNewLoader()
   {
-    $this->assertInstanceOf('ImageTransform\Image\Loader', $this->loader);
+    $this->assertInstanceOf('ImageTransform\Transformation\Loader', $this->loader);
   }
 
   public function testCreation()

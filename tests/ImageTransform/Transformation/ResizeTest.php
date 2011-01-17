@@ -7,17 +7,17 @@
  * file that was distributed with this source code.
  */
 
-namespace ImageTransfrom\Test\Image\Transformation\Resize;
+namespace ImageTransfrom\Test\Transformation\Transformation\Resize;
 
 use ImageTransform\Image;
-use ImageTransform\Image\Transformation\Resize;
+use ImageTransform\Transformation\Resize;
 
 class ResizeTest extends \PHPUnit_Framework_TestCase
 {
   protected function setUp()
   {
     $this->image = new Image();
-    $this->resize = $this->getMock('\ImageTransform\Image\Transformation\Resize', array('doResize'), array($this->image));
+    $this->resize = $this->getMock('\ImageTransform\Transformation\Resize', array('doResize'), array($this->image));
     $this->resize->expects($this->any())->method('doResize')->will($this->returnValue(true));
   }
 

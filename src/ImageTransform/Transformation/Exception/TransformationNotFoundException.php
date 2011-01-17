@@ -7,13 +7,13 @@
  * file that was distributed with this source code.
  */
 
-namespace ImageTransform\Image\Exception;
+namespace ImageTransform\Transformation\Exception;
 
 /**
- * Exception for calls to methods not defined in a registered delegate
+ * Exception for calls to methods not defined in a registered Transformation
  *
  * @author Christian Schaefer <caefer@ical.ly>
  */
-class DelegateNotFoundException extends \BadMethodCallException
+class TransformationNotFoundException extends \BadMethodCallException
 {
 }

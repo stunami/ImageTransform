@@ -7,10 +7,10 @@
  * file that was distributed with this source code.
  */
 
-namespace ImageTransform\Tests\Image\Dumper;
+namespace ImageTransform\Tests\Transformation\Dumper;
 
 use ImageTransform\Image;
-use ImageTransform\Image\Dumper\GD as Dumper;
+use ImageTransform\Transformation\Dumper\GD as Dumper;
 
 class GDTest extends \PHPUnit_Framework_TestCase
 {
@@ -58,7 +58,7 @@ class GDTest extends \PHPUnit_Framework_TestCase
   }
 
   /**
-   * @expectedException \ImageTransform\Image\Exception\MimeTypeNotSupportedException
+   * @expectedException \ImageTransform\Transformation\Exception\MimeTypeNotSupportedException
    */
   public function testDumpingUnknowMimeType()
   {

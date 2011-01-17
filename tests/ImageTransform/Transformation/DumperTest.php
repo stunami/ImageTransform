@@ -7,22 +7,22 @@
  * file that was distributed with this source code.
  */
 
-namespace ImageTransform\Tests\Image;
+namespace ImageTransform\Tests\Transformation;
 
 use ImageTransform\Image;
-use ImageTransform\Image\Dumper;
+use ImageTransform\Transformation\Dumper;
 
 class DumperTest extends \PHPUnit_Framework_TestCase
 {
   protected function setUp()
   {
     $this->image = new Image();
-    $this->dumper = $this->getMock('\ImageTransform\Image\Dumper', array('doFlush'), array($this->image));
+    $this->dumper = $this->getMock('\ImageTransform\Transformation\Dumper', array('doFlush'), array($this->image));
   }
 
   public function testNewDumper()
   {
-    $this->assertInstanceOf('ImageTransform\Image\Dumper', $this->dumper);
+    $this->assertInstanceOf('ImageTransform\Transformation\Dumper', $this->dumper);
   }
 
   public function testDumpingToStdout()

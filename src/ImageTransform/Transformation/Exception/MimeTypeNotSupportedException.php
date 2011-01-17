@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-namespace ImageTransform\Image\Exception;
+namespace ImageTransform\Transformation\Exception;
 
 /**
  * Exception for unsupported mime types
