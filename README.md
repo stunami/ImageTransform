@@ -12,110 +12,12 @@ Multiple tranformations can be easily applied by chaining the transform calls as
 
 Load an image, resize it to 80 x 60 pixels.
 
-    $image->open('image1.jpg')
-      ->resize(80, 60)
-      ->save();
+    $image = new Image('image1.jpg');
+    $transformer->resize(80, 60)
+                ->save()
+                ->process($image);
 
-Methods of `ImageTransform\Image` are added via so called `Delegates`. Image manipulating `Delegates` are called `Transformations`.
-
-## Loading and Dumping Images
-
-### Loader
-
-The `Loader` delegate is used to create new images or to load existing ones.
-
-#### Description
-
-    ImageTransform\Image Loader::create(int $width , int $height)
-
-#### Parameters
-
-* int __$width__ Target width
-* int __$height__ Target height
-
-#### Example
-
-    use ImageTransform\Image;
-
-    $image = new Image(array(
-      '\ImageTransform\Image\Loader\GD'
-    ));
-    
-    $image->create(100, 120);
-
-The above example will create a new image with a width of 100 and a height of 120.
-
-* * *
-
-#### Description
-
-    ImageTransform\Image Loader::open(string $filepath)
-
-#### Parameters
-
-* string __$filepath__ Specifies the file to open
-
-#### Example
-
-    use ImageTransform\Image;
-
-    $image = new Image(array(
-      '\ImageTransform\Image\Loader\GD'
-    ));
-    
-    $image->open('/path/to/image.ppg');
-
-The above example will load the specified image.
-
-### Dumper
-
-The `Dumper` delegate is used to flush images to `stdout` or to save them.
-
-#### Description
-
-    ImageTransform\Image Dumper::flush([string $mimeType = false])
-
-#### Parameters
-
-* string __$mimeType__ The mimetype of the image to be flushed. Mandatory if `ImageTransform\Image` attribute `image.mime_type` is not set.
-
-#### Example
-
-    use ImageTransform\Image;
-
-    $image = new Image(array(
-      '\ImageTransform\Image\Loader\GD',
-      '\ImageTransform\Image\Dumper\GD'
-    ));
-    
-    $image->create(100, 120)
-      ->flush('image/png');
-
-The above example will output a 100 x 120 PNG image to `stdout`.
-
-* * *
-
-#### Description
-
-    ImageTransform\Image Dumper::save([string $filepath = false])
-
-#### Parameters
-
-* string __$filepath__ Specifies the file to save. Mandatory if `ImageTransform\Image` attribute `image.filepath` is not set.
-
-#### Example
-
-    use ImageTransform\Image;
-
-    $image = new Image(array(
-      '\ImageTransform\Image\Loader\GD',
-      '\ImageTransform\Image\Dumper\GD'
-    ));
-    
-    $image->open('/path/to/image.png')
-      ->save('/path/to/image-copy.png');
-
-The above example will save the opened image under a different filename.
+Methods of `ImageTransform\Transformer` are added via so called `Transformations`.
 
 ## Transformations
 
@@ -125,7 +27,7 @@ Resizes an image resource to a specified width and height. Special flags can inf
 
 #### Description
 
-    ImageTransform\Image Resize::resize(int $width , int $height [, int $flags = 0])
+    void Resize::resize(int $width , int $height [, int $flags = 0])
 
 #### Parameters
 
@@ -142,43 +44,43 @@ Resizes an image resource to a specified width and height. Special flags can inf
 #### Example
 
     use ImageTransform\Image;
+    use ImageTransform\Transformer;
 
-    $image = new Image(array(
-      '\ImageTransform\Image\Loader\GD',
-      '\ImageTransform\Image\Dumper\GD',
-      '\ImageTransform\Image\Transformation\Resize\GD'
+    $transformation = new Transformation(array(
+      '\ImageTransform\Transformation\Loader\GD',
+      '\ImageTransform\Transformation\Dumper\GD',
+      '\ImageTransform\Transformation\Resize\GD'
     ));
     
-    $image->open('/path/to/image.jpg')
-      ->resize(100, 100, Resize::PROPORTIONAL)
-      ->save();
+    $image = new Image('/path/to/image.jpg');
+
+    $transformation->resize(100, 100, Resize::PROPORTIONAL)
+                   ->save()
+                   ->process($image);
 
 The image processed will keep its proportions, one of its sides will measure 100 pixels and the other will be equal or smaller.
 
 ## Writing your own transformation
 
-In ImageTransform everything is a `Delegate` - a class whose public methods are made available on the `Image` instance.
+In ImageTransform everything is a `Transformation` - a class whose public methods are made available on the `Transformer` instance.
 
-Writing a `Delegate` is easy. You only have to extend from `Delegate` and implement one or more public methods.
+Writing a `Transformation` is easy. You only have to extend from `Transformation` and implement one or more public methods.
 
 *Example 2. Simple implementation of a resize transformation*
 
     namespace ImageTransform\Transformation;
     
-    use ImageTransform\Image\Delegate;
+    use ImageTransform\Transformation;
     
-    class Resize extends Delegate
+    class Resize extends Transformation
     {
       public function resize($width, $height)
       {
         // do something with $this->image
-        return $this->image;
       }
     }
 
-> Please note that you must return `$this->image` to preserve the fluid API.
-
-To make this new transformation available on the `Image` instances you need to pass the name of your `Delegate` class to `Image::__construct()`.
+To make this new transformation available on the `Transformer` instances you need to pass the name of your `Transformation` class to `Transformer::__construct()`.
 
 *Example 3. Registering your transformation from example 2.*
 
@@ -186,9 +88,8 @@ To make this new transformation available on the `Image` instances you need to p
       'ImageTransform\Transformation\Resize',
       ...
     );
-    $image = new Image($transformationClasses);
+    $transformation = new Transformation($transformationClasses);
 
-Now your transformation is available on any `Image` instance and can be called like this.
+Now your transformation is available on any `Transformer` instance and can be called like this.
 
-    $image = new Image();
-    $image->resize(120, 160);
+    $transformation->resize(120, 160);
