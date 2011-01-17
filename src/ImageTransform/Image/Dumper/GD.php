@@ -33,28 +33,33 @@ class GD extends Dumper
       throw new \UnexpectedValueException('Could not read resource!');
     }
 
-    ob_start();
 
     $mimeType = $mimeType ? $mimeType : $this->image->get('image.mime_type');
 
     switch($mimeType)
     {
       case 'image/gif':
+        ob_start();
         imagegif($resource);
+        $dump = ob_get_contents();
+        ob_end_clean();
         break;
       case 'image/jpg':
       case 'image/jpeg':
+        ob_start();
         imagejpeg($resource);
+        $dump = ob_get_contents();
+        ob_end_clean();
         break;
       case 'image/png':
+        ob_start();
         imagepng($resource);
+        $dump = ob_get_contents();
+        ob_end_clean();
         break;
       default:
         throw new MimeTypeNotSupportedException('Images of type "'.$mimeType.'" are not supported!');
     }
-
-    $dump = ob_get_contents();
-    ob_end_clean();
 
     return $dump;
   }
