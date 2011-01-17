@@ -28,8 +28,8 @@ class DumperTest extends \PHPUnit_Framework_TestCase
   public function testDumpingToStdout()
   {
     ob_start();
-    $image = $this->dumper->flush();
-    $this->assertInstanceOf('ImageTransform\Image', $image);
+    $this->dumper->flush();
+    $this->assertInstanceOf('ImageTransform\Image', $this->image);
     $this->assertEmpty(ob_get_contents());
     ob_end_clean();
   }
@@ -39,8 +39,8 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     $filepath = '/tmp/ImageTransformTestImage.jpg';
     $this->assertFileNotExists($filepath);
     $this->image->set('image.filepath', $filepath);
-    $image = $this->dumper->save();
-    $this->assertInstanceOf('ImageTransform\Image', $image);
+    $this->dumper->save();
+    $this->assertInstanceOf('ImageTransform\Image', $this->image);
     $this->assertFileExists($filepath);
 
     unlink($filepath);
@@ -58,8 +58,8 @@ class DumperTest extends \PHPUnit_Framework_TestCase
   {
     $filepath = '/tmp/ImageTransformTestImage.jpg';
     $this->assertFileNotExists($filepath);
-    $image = $this->dumper->save($filepath);
-    $this->assertInstanceOf('ImageTransform\Image', $image);
+    $this->dumper->save($filepath);
+    $this->assertInstanceOf('ImageTransform\Image', $this->image);
     $this->assertFileExists($filepath);
 
     unlink($filepath);

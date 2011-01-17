@@ -23,8 +23,6 @@ abstract class Dumper extends Transformation
   public function flush($mimeType = false)
   {
     echo $this->doFlush($mimeType);
-
-    return $this->image;
   }
 
   public function save($filepath = false)
@@ -37,8 +35,6 @@ abstract class Dumper extends Transformation
     }
 
     file_put_contents($filepath, $this->doFlush());
-
-    return $this->image;
   }
 
   abstract protected function doFlush($mimeType = false);

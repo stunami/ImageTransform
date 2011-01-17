@@ -33,12 +33,12 @@ class GDTest extends \PHPUnit_Framework_TestCase
     $width = 80;
     $height = 100;
 
-    $image = $this->loader->create($width, $height);
+    $this->loader->create($width, $height);
 
-    $this->assertInternalType('resource', $image->get('image.resource'));
-    $this->assertFalse($image->get('image.mimeType'));
-    $this->assertEquals($width, $image->get('image.width'));
-    $this->assertEquals($height, $image->get('image.height'));
+    $this->assertInternalType('resource', $this->image->get('image.resource'));
+    $this->assertFalse($this->image->get('image.mimeType'));
+    $this->assertEquals($width, $this->image->get('image.width'));
+    $this->assertEquals($height, $this->image->get('image.height'));
   }
 
   /**
@@ -46,12 +46,12 @@ class GDTest extends \PHPUnit_Framework_TestCase
    */
   public function testLoadingFromFile($filepath, $mimeType, $width, $height)
   {
-    $image = $this->loader->open($filepath);
+    $this->loader->open($filepath);
 
-    $this->assertInternalType('resource', $image->get('image.resource'));
-    $this->assertEquals($mimeType, $image->get('image.mime_type'));
-    $this->assertEquals($width, $image->get('image.width'));
-    $this->assertEquals($height, $image->get('image.height'));
+    $this->assertInternalType('resource', $this->image->get('image.resource'));
+    $this->assertEquals($mimeType, $this->image->get('image.mime_type'));
+    $this->assertEquals($width, $this->image->get('image.width'));
+    $this->assertEquals($height, $this->image->get('image.height'));
   }
 
   /**

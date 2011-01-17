@@ -23,14 +23,12 @@ abstract class Loader extends Transformation
   public function create($width, $height)
   {
     $this->setMeta($this->doCreate($width, $height));
-    return $this->image;
   }
 
   public function open($filepath)
   {
     $this->image->set('image.filepath', $filepath);
     $this->setMeta($this->doOpen($filepath));
-    return $this->image;
   }
 
   abstract protected function doOpen($filepath);

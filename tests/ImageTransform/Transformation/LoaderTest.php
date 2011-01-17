@@ -16,7 +16,8 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
 {
   protected function setUp()
   {
-    $this->loader = $this->getMock('\ImageTransform\Transformation\Loader', array('doCreate', 'doOpen'), array(new Image()));
+    $this->image = new Image();
+    $this->loader = $this->getMock('\ImageTransform\Transformation\Loader', array('doCreate', 'doOpen'), array($this->image));
   }
 
   public function testNewLoader()
@@ -26,16 +27,16 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
 
   public function testCreation()
   {
-    $image = $this->loader->create(10, 20);
-    $this->assertInstanceOf('ImageTransform\Image', $image);
+    $this->loader->create(10, 20);
+    $this->assertInstanceOf('ImageTransform\Image', $this->image);
   }
 
   public function testLoadingFromFile()
   {
     $filepath = '/tmp/image.jpg';
 
-    $image = $this->loader->open($filepath);
-    $this->assertInstanceOf('ImageTransform\Image', $image);
-    $this->assertEquals($filepath, $image->get('image.filepath'));
+    $this->loader->open($filepath);
+    $this->assertInstanceOf('ImageTransform\Image', $this->image);
+    $this->assertEquals($filepath, $this->image->get('image.filepath'));
   }
 }

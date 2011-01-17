@@ -59,7 +59,7 @@ class Transformer
 
   public function __invoke(Image $image)
   {
-    return $this->process($image);
+    $this->process($image);
   }
 
   public function initImageResource($image)
