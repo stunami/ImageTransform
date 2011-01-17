@@ -14,31 +14,27 @@ use ImageTransform\Image\Loader;
 
 class LoaderTest extends \PHPUnit_Framework_TestCase
 {
-  public function testNewLoader()
+  protected function setUp()
   {
-    $loader = $this->getMock('\ImageTransform\Image\Loader', array('doCreate', 'doOpen'), array(new Image()));
-    $this->assertInstanceOf('ImageTransform\Image\Loader', $loader);
-
-    return $loader;
+    $this->loader = $this->getMock('\ImageTransform\Image\Loader', array('doCreate', 'doOpen'), array(new Image()));
   }
 
-  /**
-   * @depends testNewLoader
-   */
-  public function testCreation($loader)
+  public function testNewLoader()
   {
-    $image = $loader->create(10, 20);
+    $this->assertInstanceOf('ImageTransform\Image\Loader', $this->loader);
+  }
+
+  public function testCreation()
+  {
+    $image = $this->loader->create(10, 20);
     $this->assertInstanceOf('ImageTransform\Image', $image);
   }
 
-  /**
-   * @depends testNewLoader
-   */
-  public function testLoadingFromFile($loader)
+  public function testLoadingFromFile()
   {
     $filepath = '/tmp/image.jpg';
 
-    $image = $loader->open($filepath);
+    $image = $this->loader->open($filepath);
     $this->assertInstanceOf('ImageTransform\Image', $image);
     $this->assertEquals($filepath, $image->get('image.filepath'));
   }

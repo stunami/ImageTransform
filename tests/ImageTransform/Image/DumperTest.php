@@ -14,22 +14,21 @@ use ImageTransform\Image\Dumper;
 
 class DumperTest extends \PHPUnit_Framework_TestCase
 {
-  public function testNewDumper()
+  protected function setUp()
   {
-    $image = new Image();
-    $dumper = $this->getMock('\ImageTransform\Image\Dumper', array('doFlush'), array($image));
-    $this->assertInstanceOf('ImageTransform\Image\Dumper', $dumper);
-
-    return $dumper;
+    $this->image = new Image();
+    $this->dumper = $this->getMock('\ImageTransform\Image\Dumper', array('doFlush'), array($this->image));
   }
 
-  /**
-   * @depends testNewDumper
-   */
-  public function testDumpingToStdout($dumper)
+  public function testNewDumper()
+  {
+    $this->assertInstanceOf('ImageTransform\Image\Dumper', $this->dumper);
+  }
+
+  public function testDumpingToStdout()
   {
     ob_start();
-    $image = $dumper->flush();
+    $image = $this->dumper->flush();
     $this->assertInstanceOf('ImageTransform\Image', $image);
     $this->assertEmpty(ob_get_contents());
     ob_end_clean();
@@ -37,13 +36,10 @@ class DumperTest extends \PHPUnit_Framework_TestCase
 
   public function testSavingOverOriginal()
   {
-    $image = new Image();
-    $dumper = $this->getMock('\ImageTransform\Image\Dumper', array('doFlush'), array($image));
-
     $filepath = '/tmp/ImageTransformTestImage.jpg';
     $this->assertFileNotExists($filepath);
-    $image->set('image.filepath', $filepath);
-    $image = $dumper->save();
+    $this->image->set('image.filepath', $filepath);
+    $image = $this->dumper->save();
     $this->assertInstanceOf('ImageTransform\Image', $image);
     $this->assertFileExists($filepath);
 
@@ -51,23 +47,18 @@ class DumperTest extends \PHPUnit_Framework_TestCase
   }
 
   /**
-   * @depends testNewDumper
    * @expectedException \InvalidArgumentException
    */
   public function testSavingWithNoFilepath()
   {
-    $dumper = $this->getMock('\ImageTransform\Image\Dumper', array('doFlush'), array(new Image()));
-    $dumper->save();
+    $this->dumper->save();
   }
 
-  /**
-   * @depends testNewDumper
-   */
-  public function testSavingWithPassedFilepath($dumper)
+  public function testSavingWithPassedFilepath()
   {
     $filepath = '/tmp/ImageTransformTestImage.jpg';
     $this->assertFileNotExists($filepath);
-    $image = $dumper->save($filepath);
+    $image = $this->dumper->save($filepath);
     $this->assertInstanceOf('ImageTransform\Image', $image);
     $this->assertFileExists($filepath);
 
