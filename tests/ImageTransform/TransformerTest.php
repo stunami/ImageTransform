@@ -49,50 +49,11 @@ class TransformerTest extends \PHPUnit_Framework_TestCase
 
   /**
    * @depends testNewTransformationConfigured
-   * @expectedException ImageTransform\Transformation\Exception\TransformationNotFoundException
+   * @expectedException \BadMethodCallException
    */
   public function testFailedDelegation($transformer)
   {
     $transformer->nonExistentCallback();
-  }
-
-  /**
-   * @depends testSuccessfulDelegation
-   * @expectedException ImageTransform\Transformation\Exception\NoImageResourceException
-   */
-  public function testFailedProcessing($transformer)
-  {
-    $transformer->process(new Image());
-  }
-
-  /**
-   * @depends testSuccessfulDelegation
-   */
-  public function testSuccessfulProcessingByInvoking($transformer)
-  {
-    $stubTransformation = $this->getMock('Transformation', array('open'));
-    $stubTransformationClassName = get_class($stubTransformation);
-
-    $transformer = new Transformer(array($stubTransformationClassName));
-    $image = new Image(__DIR__.'/../fixtures/20x20-pattern.jpg');
-    $this->assertEquals(0, count($transformer->get('core.program_stack')));
-    $transformer($image);
-    $this->assertEquals(1, count($transformer->get('core.program_stack')));
-  }
-
-  /**
-   * @depends testSuccessfulDelegation
-   */
-  public function testSuccessfulProcessingImageFromFilepath($transformer)
-  {
-    $stubTransformation = $this->getMock('Transformation', array('open'));
-    $stubTransformationClassName = get_class($stubTransformation);
-
-    $transformer = new Transformer(array($stubTransformationClassName));
-    $image = new Image(__DIR__.'/../fixtures/20x20-pattern.jpg');
-    $this->assertEquals(0, count($transformer->get('core.program_stack')));
-    $transformer->process($image);
-    $this->assertEquals(1, count($transformer->get('core.program_stack')));
   }
 
   /**

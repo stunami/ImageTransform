@@ -9,9 +9,6 @@
 
 namespace ImageTransform;
 
-use \ImageTransform\Transformation\Exception\NoImageResourceException;
-use \ImageTransform\Transformation\Exception\TransformationNotFoundException;
-
 /**
  * Transformer class.
  *
@@ -44,8 +41,6 @@ class Transformer
 
   public function process(Image $image)
   {
-    $this->initImageResource($image);
-
     foreach($this->attributes['core.program_stack'] as $transformationData)
     {
       $className = $transformationData['className'];
@@ -60,22 +55,6 @@ class Transformer
   public function __invoke(Image $image)
   {
     $this->process($image);
-  }
-
-  public function initImageResource($image)
-  {
-    if(($filepath = $image->get('source.filepath')))
-    {
-      array_unshift($this->attributes['core.program_stack'], $this->findCallback('open', array($filepath)));
-    }
-    else if(($width = $image->get('source.width')) && ($height = $image->get('source.height')))
-    {
-      array_unshift($this->attributes['core.program_stack'], $this->findCallback('create', array($width, $height)));
-    }
-    else
-    {
-      throw new NoImageResourceException('Please specify filepath or width/height!');
-    }
   }
 
   /**
@@ -103,7 +82,7 @@ class Transformer
       }
     }
 
-    throw new TransformationNotFoundException();
+    throw new \BadMethodCallException();
   }
 
   /**
