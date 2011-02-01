@@ -9,6 +9,8 @@
 
 namespace ImageTransform;
 
+use ImageTransform\FileAccessAdapter;
+
 /**
  * Image class.
  *
@@ -55,6 +57,7 @@ class Image
 
   /**
    * Attribute mutator.
+   w
    *
    * @param string $key   Name of the attribute to set
    * @param array  $value Value to be set
@@ -73,12 +76,12 @@ class Image
    */
   public function __call($method, $arguments)
   {
-    if(!(self::$adapter instanceof ImageTransform\FileAccessAdapter))
+    if(!(self::$adapter instanceof \ImageTransform\FileAccessAdapter))
     {
       throw new \BadMethodCallException($method.'() can not be called as no adapter is set!');
     }
 
-    if(is_callable(array(self::$adapter, $method)))
+    if(!is_callable(array(self::$adapter, $method)))
     {
       throw new \BadMethodCallException($method.'() is not implemented!');
     }

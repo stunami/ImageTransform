@@ -10,6 +10,7 @@
 namespace ImageTransform\Tests;
 
 use ImageTransform\Image;
+use ImageTransform\FileAccessAdapter;
 
 class ImageTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,14 +20,45 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     $this->assertInstanceOf('ImageTransform\Image', $image);
   }
 
-  public function testNewImagePassingFilepath()
+  /**
+   * @expectedException BadMethodCallException
+   */
+  public function testImageCallWithoutAdapter()
+  {
+    $image = new Image();
+    $image->open('/path/to/some/file');
+  }
+
+  /**
+   * @expectedException BadMethodCallException
+   */
+  public function testImageCallToNotImplementedMethod()
+  {
+    $fileAccessAdapter = $this->getMock('\ImageTransform\FileAccessAdapter');
+
+    Image::setFileAccessAdapter($fileAccessAdapter);
+
+    $image = new Image();
+    $image->doesnotexist();
+  }
+
+  public function testNewImageWithImplicitCallToOpenByPassingAFilepath()
   {
     $filepath = __DIR__.'/../fixtures/20x20-pattern.jpg';
 
+    $fileAccessAdapter = $this->getMock('\ImageTransform\FileAccessAdapter');
+    $fileAccessAdapter->expects($this->once())
+      ->method('open')
+      ->with(
+        $this->isInstanceOf('\ImageTransform\Image'),
+        $this->equalTo($filepath)
+      );
+
+    Image::setFileAccessAdapter($fileAccessAdapter);
+
     $image = new Image($filepath);
 
-    $this->assertInstanceOf('ImageTransform\Image', $image);
-    $this->assertEquals($filepath, $image->get('source.filepath'));
+    $this->assertInstanceOf('\ImageTransform\Image', $image);
   }
 
   public function testAttributeAccess()
