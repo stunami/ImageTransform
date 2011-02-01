@@ -61,6 +61,23 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     $this->assertInstanceOf('\ImageTransform\Image', $image);
   }
 
+  public function testCallDelegation()
+  {
+    $fileAccessAdapter = $this->getMock('\ImageTransform\FileAccessAdapter', array('create', 'open', 'flush', 'save', 'saveAs', 'testMyArguments'));
+    $fileAccessAdapter->expects($this->once())
+      ->method('testMyArguments')
+      ->with(
+        $this->isInstanceOf('\ImageTransform\Image'),
+        $this->isTrue(),
+        $this->isFalse()
+      );
+
+    Image::setFileAccessAdapter($fileAccessAdapter);
+
+    $image = new Image();
+    $image->testMyArguments(true, false);
+  }
+
   public function testAttributeAccess()
   {
     $image = new Image();
