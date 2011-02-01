@@ -59,6 +59,24 @@ class TransformerTest extends \PHPUnit_Framework_TestCase
   /**
    * @depends testSuccessfulDelegation
    */
+  public function testSuccessfulProcessing($transformer)
+  {
+    $image = new Image();
+    $transformer->process($image);
+  }
+
+  /**
+   * @depends testSuccessfulDelegation
+   */
+  public function testSuccessfulProcessingByInvokation($transformer)
+  {
+    $image = new Image();
+    $transformer($image);
+  }
+
+  /**
+   * @depends testSuccessfulDelegation
+   */
   public function testSuccessfulProcessingImageFromWidthAndHeight($transformer)
   {
     $stubTransformation = $this->getMock('Transformation', array('create'));
