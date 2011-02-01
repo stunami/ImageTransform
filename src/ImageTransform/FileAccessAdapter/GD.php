@@ -9,6 +9,8 @@
 
 namespace ImageTransform\FileAccessAdapter;
 
+use ImageTransform\FileAccessAdapter;
+
 /**
  * File access for image resources using GD
  *
@@ -25,7 +27,7 @@ class GD implements FileAccessAdapter
    * @param integer              $width  Width of the image to be created
    * @param integer              $height Height of the image to be created
    */
-  public function create(ImageTransform\Image $image, $width, $height)
+  public function create(\ImageTransform\Image $image, $width, $height)
   {
     $resource = imagecreatetruecolor($width, $height);
 
@@ -42,7 +44,7 @@ class GD implements FileAccessAdapter
    * @param ImageTransform\Image $image    Instance to create a resource for
    * @param string               $filepath Location of the file to open
    */
-  public function open(ImageTransform\Image $image, $filepath)
+  public function open(\ImageTransform\Image $image, $filepath)
   {
     if (!is_readable($filepath))
     {
@@ -82,9 +84,9 @@ class GD implements FileAccessAdapter
    * @param ImageTransform\Image $image    Instance to create a resource for
    * @param string               $mimeType Mime type of the target file
    */
-  public function flush(ImageTransform\Image $image, $mimeType = false)
+  public function flush(\ImageTransform\Image $image, $mimeType = false)
   {
-    $this->saveAs($image, null, $mimeType);
+    $this->out($image, null, $mimeType);
   }
 
   /**
@@ -94,7 +96,7 @@ class GD implements FileAccessAdapter
    *
    * @param ImageTransform\Image $image  Instance to create a resource for
    */
-  public function save(ImageTransform\Image $image)
+  public function save(\ImageTransform\Image $image)
   {
     if (false === ($filepath = $image->get('image.filepath')))
     {
@@ -113,16 +115,30 @@ class GD implements FileAccessAdapter
    * @param string               $filepath Locastion where to save the resource
    * @param string               $mimeType Mime type of the target file
    */
-  public function saveAs(ImageTransform\Image $image, $filepath, $mimeType = false)
+  public function saveAs(\ImageTransform\Image $image, $filepath, $mimeType = false)
   {
-    if (!($resource = $this->image->get('image.resource')))
-    {
-      throw new \UnexpectedValueException('Could not read resource!');
-    }
-
     if (!is_writable($filepath))
     {
       throw new \InvalidArgumentException('File "'.$filepath.'" not writeable!');
+    }
+
+    $this->out($image, $filepath, $mimeType);
+  }
+
+  /**
+   * Save an Image resource under a given filepath
+   *
+   * @see ImageTransform\FileAccessAdapter
+   *
+   * @param ImageTransform\Image $image    Instance to create a resource for
+   * @param string               $filepath Locastion where to save the resource
+   * @param string               $mimeType Mime type of the target file
+   */
+  private function out(\ImageTransform\Image $image, $filepath, $mimeType = false)
+  {
+    if (!($resource = $image->get('image.resource')))
+    {
+      throw new \UnexpectedValueException('Could not read resource!');
     }
 
     if (false === $mimeType)
