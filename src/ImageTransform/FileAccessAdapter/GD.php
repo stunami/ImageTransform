@@ -117,7 +117,8 @@ class GD implements FileAccessAdapter
    */
   public function saveAs(\ImageTransform\Image $image, $filepath, $mimeType = false)
   {
-    if (!is_writable($filepath))
+    if ((file_exists($filepath) && !is_writable($filepath)) ||
+        (!file_exists($filepath) && !is_writable(dirname($filepath))))
     {
       throw new \InvalidArgumentException('File "'.$filepath.'" not writeable!');
     }
