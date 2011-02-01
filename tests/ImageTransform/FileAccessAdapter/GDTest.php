@@ -14,6 +14,9 @@ use ImageTransform\FileAccessAdapter\GD as FileAccessAdapter;
 
 class GDTest extends \PHPUnit_Framework_TestCase
 {
+  /**
+   * @covers \ImageTransform\FileAccessAdapter\GD::create
+   */
   public function testCreation()
   {
     $width = 100;
@@ -30,6 +33,7 @@ class GDTest extends \PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider fixtureImages
+   * @covers \ImageTransform\FileAccessAdapter\GD::open
    */
   public function testOpening($filepath, $mimeType, $width, $height)
   {
@@ -46,6 +50,7 @@ class GDTest extends \PHPUnit_Framework_TestCase
 
   /**
    * @expectedException \InvalidArgumentException
+   * @covers \ImageTransform\FileAccessAdapter\GD::open
    */
   public function testOpeningOfUnreadableFile()
   {
@@ -56,6 +61,7 @@ class GDTest extends \PHPUnit_Framework_TestCase
 
   /**
    * @expectedException \UnexpectedValueException
+   * @covers \ImageTransform\FileAccessAdapter\GD::open
    */
   public function testOpeningOfUnsupportedMimeType()
   {
@@ -64,11 +70,78 @@ class GDTest extends \PHPUnit_Framework_TestCase
     $fileAccessAdapter->open($image, __FILE__);
   }
 
+  /**
+   * @covers \ImageTransform\FileAccessAdapter\GD::flush
+   */
   public function testFlushing()
   {
     $image = new Image();
+    $fileAccessAdapter = $this->getMock('\ImageTransform\FileAccessAdapter\GD', array('out'));
+    $fileAccessAdapter->expects($this->once())->method('out');
+
+    $fileAccessAdapter->flush($image);
+  }
+
+  /**
+   * @covers \ImageTransform\FileAccessAdapter\GD::save
+   */
+  public function testSaving()
+  {
+    $image = new Image();
+    $image->set('image.filepath', '/does/not/exist');
+
+    $fileAccessAdapter = $this->getMock('\ImageTransform\FileAccessAdapter\GD', array('saveAs'));
+    $fileAccessAdapter->expects($this->once())->method('saveAs');
+    $fileAccessAdapter->save($image);
+  }
+
+  /**
+   * @expectedException \InvalidArgumentException
+   * @covers \ImageTransform\FileAccessAdapter\GD::save
+   */
+  public function testSavingWithNoFilepath()
+  {
+    $image = new Image();
+
+    $fileAccessAdapter = $this->getMock('\ImageTransform\FileAccessAdapter\GD', array('saveAs'));
+    $fileAccessAdapter->expects($this->never())->method('saveAs');
+    $fileAccessAdapter->save($image);
+  }
+
+  /**
+   * @covers \ImageTransform\FileAccessAdapter\GD::saveAs
+   */
+  public function testSavingAtGivenFilepath()
+  {
+    $image = new Image();
+
+    $fileAccessAdapter = $this->getMock('\ImageTransform\FileAccessAdapter\GD', array('out'));
+    $fileAccessAdapter->expects($this->once())->method('out');
+    $fileAccessAdapter->saveAs($image, __FILE__);
+  }
+
+  /**
+   * @expectedException \InvalidArgumentException
+   * @covers \ImageTransform\FileAccessAdapter\GD::saveAs
+   */
+  public function testSavingAtGivenUnwritableFilepath()
+  {
+    $image = new Image();
+
+    $fileAccessAdapter = $this->getMock('\ImageTransform\FileAccessAdapter\GD', array('out'));
+    $fileAccessAdapter->expects($this->never())->method('out');
+    $fileAccessAdapter->saveAs($image, '/does/not/exist');
+  }
+
+  /**
+   * @dataProvider fixtureImages
+   * @covers \ImageTransform\FileAccessAdapter\GD::out
+   */
+  public function testFlushingDifferentMimeTypes($filepath, $mimeType, $width, $height)
+  {
+    $image = new Image();
     $fileAccessAdapter = new FileAccessAdapter();
-    $fileAccessAdapter->open($image, __DIR__.'/../../fixtures/20x20-pattern.gif');
+    $fileAccessAdapter->open($image, $filepath);
 
     ob_start();
     $fileAccessAdapter->flush($image);
@@ -78,12 +151,27 @@ class GDTest extends \PHPUnit_Framework_TestCase
 
   /**
    * @expectedException \UnexpectedValueException
+   * @covers \ImageTransform\FileAccessAdapter\GD::out
    */
-  public function testFlushingWithNoResourceOpened()
+  public function testFlushingWhenNoResourceIsSet()
   {
     $image = new Image();
     $fileAccessAdapter = new FileAccessAdapter();
 
+    $fileAccessAdapter->flush($image);
+  }
+
+  /**
+   * @expectedException \UnexpectedValueException
+   * @covers \ImageTransform\FileAccessAdapter\GD::out
+   */
+  public function testFlushingUnsupportedMimeType()
+  {
+    $image = new Image();
+    $image->set('image.resource', true);
+    $image->set('image.resource', 'unsupported/mimetype');
+
+    $fileAccessAdapter = new FileAccessAdapter();
     $fileAccessAdapter->flush($image);
   }
 

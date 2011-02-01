@@ -134,7 +134,7 @@ class GD implements FileAccessAdapter
    * @param string               $filepath Locastion where to save the resource
    * @param string               $mimeType Mime type of the target file
    */
-  private function out(\ImageTransform\Image $image, $filepath, $mimeType = false)
+  protected function out(\ImageTransform\Image $image, $filepath, $mimeType = false)
   {
     if (!($resource = $image->get('image.resource')))
     {
