@@ -39,7 +39,7 @@ class Image
   {
     if(false !== $filepath)
     {
-      $this->open($this, $filepath);
+      $this->open($filepath);
     }
   }
 
@@ -86,6 +86,7 @@ class Image
       throw new \BadMethodCallException($method.'() is not implemented!');
     }
 
+    array_unshift($arguments, $this);
     call_user_func_array(array(self::$adapter, $method), $arguments);
 
     return $this;
