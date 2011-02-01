@@ -68,7 +68,7 @@ class TransformerTest extends \PHPUnit_Framework_TestCase
   /**
    * @depends testSuccessfulDelegation
    */
-  public function testSuccessfulProcessingByInvokation($transformer)
+  public function testSuccessfulProcessingByDirectInvokation($transformer)
   {
     $image = new Image();
     $transformer($image);
