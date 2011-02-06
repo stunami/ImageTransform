@@ -61,7 +61,7 @@ class TransformerTest extends \PHPUnit_Framework_TestCase
    */
   public function testSuccessfulProcessing($transformer)
   {
-    $image = new Image();
+    $image = $this->getMock('\ImageTransform\Image', array('create', 'open', 'flush', 'save', 'saveAs'));
     $transformer->process($image);
   }
 
@@ -70,7 +70,7 @@ class TransformerTest extends \PHPUnit_Framework_TestCase
    */
   public function testSuccessfulProcessingByDirectInvokation($transformer)
   {
-    $image = new Image();
+    $image = $this->getMock('\ImageTransform\Image', array('create', 'open', 'flush', 'save', 'saveAs'));
     $transformer($image);
   }
 
@@ -83,7 +83,7 @@ class TransformerTest extends \PHPUnit_Framework_TestCase
     $stubTransformationClassName = get_class($stubTransformation);
 
     $transformer = new Transformer(array($stubTransformationClassName));
-    $image = new Image();
+    $image = $this->getMock('\ImageTransform\Image', array('create', 'open', 'flush', 'save', 'saveAs'));
     $image->set('source.width', 20);
     $image->set('source.height', 20);
     $transformer->process($image);

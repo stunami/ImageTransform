@@ -16,7 +16,7 @@ class TransformationTest extends \PHPUnit_Framework_TestCase
 {
   public function testNewTransformation()
   {
-    $image = new Image();
+    $image = $this->getMock('\ImageTransform\Image', array('create', 'open', 'flush', 'save', 'saveAs'));
     $stubDelegate = $this->getMock('ImageTransform\Transformation', array(), array($image));
     $this->assertObjectHasAttribute('image', $stubDelegate);
   }

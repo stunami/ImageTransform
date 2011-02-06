@@ -18,13 +18,8 @@ use ImageTransform\FileAccessAdapter;
  *
  * @author Christian Schaefer <caefer@ical.ly>
  */
-class Image
+abstract class Image implements FileAccessAdapter
 {
-  /**
-   * @var ImageTransform\FileAccessAdapter $adapter
-   */
-  protected static $adapter;
-
   /**
    * @var array $attributes Key / value store to be used for meta information by delegates.
    */
@@ -65,40 +60,5 @@ class Image
   public function set($key, $value)
   {
     $this->attributes[$key] = $value;
-  }
-
-  /**
-   * Dispatches calls to self::$adapter
-   *
-   * @param  string $method Name of method called
-   * @param  array  $arguments Arguments passed to this call
-   * @return ImageTransform\Image
-   */
-  public function __call($method, $arguments)
-  {
-    if(!(self::$adapter instanceof \ImageTransform\FileAccessAdapter))
-    {
-      throw new \BadMethodCallException($method.'() can not be called as no adapter is set!');
-    }
-
-    if(!is_callable(array(self::$adapter, $method)))
-    {
-      throw new \BadMethodCallException($method.'() is not implemented!');
-    }
-
-    array_unshift($arguments, $this);
-    call_user_func_array(array(self::$adapter, $method), $arguments);
-
-    return $this;
-  }
-
-  /**
-   * Registers adapter for file access
-   *
-   * @param ImageTransform\FileAccessAdapter $adapter Instance implementing ImageTransform\FileAccessAdapter interface
-   */
-  public static function setFileAccessAdapter(\ImageTransform\FileAccessAdapter $adapter)
-  {
-    self::$adapter = $adapter;
   }
 }
