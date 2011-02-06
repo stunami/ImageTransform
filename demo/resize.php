@@ -4,16 +4,13 @@ namespace ImageTransform\Demo;
 
 require __DIR__.'/../src/autoload.php';
 
-use ImageTransform\Image;
-use ImageTransform\FileAccessAdapter\GD as FileAccessAdapter;
+use ImageTransform\Image\GD as Image;
 use ImageTransform\Transformer;
 use ImageTransform\Transformation\Resize;
 
 $transformer = new Transformer(array(
   'ImageTransform\Transformation\Resize\GD',
 ));
-
-Image::setFileAccessAdapter(new FileAccessAdapter());
 
 $transformer->resize(100, 100, Resize::PROPORTIONAL | Resize::MINIMUM);
 
