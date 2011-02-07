@@ -9,8 +9,6 @@
 
 namespace ImageTransform;
 
-use ImageTransform\FileAccessAdapter;
-
 /**
  * Image class.
  *
@@ -18,7 +16,7 @@ use ImageTransform\FileAccessAdapter;
  *
  * @author Christian Schaefer <caefer@ical.ly>
  */
-abstract class Image implements FileAccessAdapter
+abstract class Image
 {
   /**
    * @var array $attributes Key / value store to be used for meta information by delegates.
