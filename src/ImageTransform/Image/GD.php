@@ -10,13 +10,14 @@
 namespace ImageTransform\Image;
 
 use ImageTransform\Image;
+use ImageTransform\FileAccessAdapter;
 
 /**
  * Concrete Image class using GD
  *
  * @author Christian Schaefer <caefer@ical.ly>
  */
-class GD extends Image
+class GD extends Image implements FileAccessAdapter
 {
   /**
    * Create an image resource

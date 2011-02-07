@@ -15,6 +15,7 @@ class GDTest extends \PHPUnit_Framework_TestCase
 {
   /**
    * @covers \ImageTransform\Image\GD::create
+   * @covers \ImageTransform\FileAccessAdapter::create
    */
   public function testCreation()
   {
@@ -32,6 +33,7 @@ class GDTest extends \PHPUnit_Framework_TestCase
   /**
    * @dataProvider fixtureImages
    * @covers \ImageTransform\Image\GD::open
+   * @covers \ImageTransform\FileAccessAdapter::open
    */
   public function testOpening($filepath, $mimeType, $width, $height)
   {
@@ -47,6 +49,7 @@ class GDTest extends \PHPUnit_Framework_TestCase
   /**
    * @expectedException \InvalidArgumentException
    * @covers \ImageTransform\Image\GD::open
+   * @covers \ImageTransform\FileAccessAdapter::open
    */
   public function testOpeningOfUnreadableFile()
   {
@@ -57,6 +60,7 @@ class GDTest extends \PHPUnit_Framework_TestCase
   /**
    * @expectedException \UnexpectedValueException
    * @covers \ImageTransform\Image\GD::open
+   * @covers \ImageTransform\FileAccessAdapter::open
    */
   public function testOpeningOfUnsupportedMimeType()
   {
@@ -66,6 +70,7 @@ class GDTest extends \PHPUnit_Framework_TestCase
 
   /**
    * @covers \ImageTransform\Image\GD::flush
+   * @covers \ImageTransform\FileAccessAdapter::flush
    */
   public function testFlushing()
   {
@@ -77,6 +82,7 @@ class GDTest extends \PHPUnit_Framework_TestCase
 
   /**
    * @covers \ImageTransform\Image\GD::save
+   * @covers \ImageTransform\FileAccessAdapter::save
    */
   public function testSaving()
   {
@@ -90,6 +96,7 @@ class GDTest extends \PHPUnit_Framework_TestCase
   /**
    * @expectedException \InvalidArgumentException
    * @covers \ImageTransform\Image\GD::save
+   * @covers \ImageTransform\FileAccessAdapter::save
    */
   public function testSavingWithNoFilepath()
   {
@@ -99,6 +106,7 @@ class GDTest extends \PHPUnit_Framework_TestCase
 
   /**
    * @covers \ImageTransform\Image\GD::saveAs
+   * @covers \ImageTransform\FileAccessAdapter::saveAs
    */
   public function testSavingAtGivenFilepath()
   {
@@ -111,6 +119,7 @@ class GDTest extends \PHPUnit_Framework_TestCase
   /**
    * @expectedException \InvalidArgumentException
    * @covers \ImageTransform\Image\GD::saveAs
+   * @covers \ImageTransform\FileAccessAdapter::saveAs
    */
   public function testSavingAtGivenUnwritableFilepath()
   {
