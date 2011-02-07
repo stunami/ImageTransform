@@ -23,15 +23,23 @@ abstract class Transformation
   /**
    * @var \ImageTransform\Image $image Instance of the Image this Transformation is providing callbacks for
    */
-  protected $image;
+  protected $image = null;
 
   /**
-   * C'tor
+   * Sets the image property
    *
    * @param \ImageTransform\Image $image Image instance to perform operations on
    */
-  public function __construct(Image $image)
+  public function setImage(\ImageTransform\Image $image)
   {
     $this->image = $image;
+  }
+
+  /**
+   * Unsets the image property
+   */
+  public function unsetImage()
+  {
+    $this->image = null;
   }
 }

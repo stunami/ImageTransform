@@ -25,7 +25,13 @@ class GDTest extends \PHPUnit_Framework_TestCase
     $this->image->set('image.width', $width);
     $this->image->set('image.height', $height);
 
-    $this->resize = new Resize($this->image);
+    $this->resize = new Resize();
+    $this->resize->setImage($this->image);
+  }
+
+  protected function tearDown()
+  {
+    $this->resize->unsetImage();
   }
 
   public function testResizing()

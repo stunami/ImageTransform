@@ -18,17 +18,16 @@ class TransformerTest extends \PHPUnit_Framework_TestCase
   {
     $transformer = new Transformer(array());
     $this->assertInstanceOf('\ImageTransform\Transformer', $transformer);
-    $this->assertEmpty($transformer->get('core.callback_classes'));
+    $this->assertEmpty($transformer->getTransformations());
   }
 
   public function testNewTransformationConfigured()
   {
-    $stubTransformation = $this->getMock('Transformation', array('dummyCallback'));
-    $stubTransformationClassName = get_class($stubTransformation);
+    $stubTransformation = $this->getMock('\ImageTransform\Transformation', array('dummyCallback'));
 
-    $transformer = new Transformer(array($stubTransformationClassName));
+    $transformer = new Transformer(array($stubTransformation));
 
-    $this->assertArrayHasKey($stubTransformationClassName, $transformer->get('core.callback_classes'));
+    $this->assertArrayHasKey('dummyCallback', $transformer->getTransformations());
 
     return $transformer;
   }
@@ -38,11 +37,11 @@ class TransformerTest extends \PHPUnit_Framework_TestCase
    */
   public function testSuccessfulDelegation($transformer)
   {
-    $this->assertEquals(0, count($transformer->get('core.program_stack')));
+    $this->assertEquals(0, count($transformer->getStack()));
     $transformer->dummyCallback();
-    $this->assertEquals(1, count($transformer->get('core.program_stack')));
+    $this->assertEquals(1, count($transformer->getStack()));
     $transformer->dummyCallback();
-    $this->assertEquals(2, count($transformer->get('core.program_stack')));
+    $this->assertEquals(2, count($transformer->getStack()));
 
     return $transformer;
   }
@@ -72,28 +71,5 @@ class TransformerTest extends \PHPUnit_Framework_TestCase
   {
     $image = $this->getMock('\ImageTransform\Image', array('create', 'open', 'flush', 'save', 'saveAs'));
     $transformer($image);
-  }
-
-  /**
-   * @depends testSuccessfulDelegation
-   */
-  public function testSuccessfulProcessingImageFromWidthAndHeight($transformer)
-  {
-    $stubTransformation = $this->getMock('Transformation', array('create'));
-    $stubTransformationClassName = get_class($stubTransformation);
-
-    $transformer = new Transformer(array($stubTransformationClassName));
-    $image = $this->getMock('\ImageTransform\Image', array('create', 'open', 'flush', 'save', 'saveAs'));
-    $image->set('source.width', 20);
-    $image->set('source.height', 20);
-    $transformer->process($image);
-  }
-
-  public function testAttributeAccess()
-  {
-    $transformer = new Transformer(array());
-    $this->assertFalse($transformer->get('test.value'));
-    $transformer->set('test.value', 'barfoo');
-    $this->assertEquals('barfoo', $transformer->get('test.value'));
   }
 }

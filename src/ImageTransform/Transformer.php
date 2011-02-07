@@ -9,6 +9,9 @@
 
 namespace ImageTransform;
 
+use ImageTransform\Image;
+use ImageTransform\Transformation;
+
 /**
  * Transformer class.
  *
@@ -17,94 +20,112 @@ namespace ImageTransform;
 class Transformer
 {
   /**
-   * @var array $attributes Key / value store to be used for meta information by delegates.
+   * @var array $transformations Transformation instances that are available for callback
    */
-  protected $attributes = array(
-    'core.callback_classes' => array(),
-    'core.program_stack' => array()
-  );
+  protected $transformations = array();
+
+  /**
+   * @var array $stack Program stack of called transformations
+   */
+  protected $stack = array();
 
   /**
    * C'tor
    *
-   * @param array $classNames List of Transformation inheriting classes providing transformations.
+   * @param array $transformations Array of Transformation instances available for callback
    */
-  public function __construct($classNames = array())
+  public function __construct($transformations = array())
   {
-    $callbackClasses = array();
-    foreach($classNames as $className)
+    foreach($transformations as $transformation)
     {
-      $callbackClasses[$className] = get_class_methods($className);
+      $this->addTransformation($transformation);
     }
-    $this->set('core.callback_classes', $callbackClasses);
   }
 
-  public function process(Image $image)
+  /**
+   * Adds a Transformation to the available callbacks
+   *
+   * @param \ImageTransform\Transformation $transformation Transformation instance available for callback
+   */
+  public function addTransformation(Transformation $transformation)
   {
-    foreach($this->attributes['core.program_stack'] as $transformationData)
-    {
-      $className = $transformationData['className'];
-      $method = $transformationData['method'];
-      $arguments = $transformationData['arguments'];
+    $methods = get_class_methods($transformation);
+    unset($methods['setImage'], $methods['unset']);
 
-      $transformation = new $className($image);
+    foreach($methods as $method)
+    {
+      $this->transformations[$method] = $transformation;
+    }
+  }
+
+  /**
+   * Get a list of currently available Transformation callbacks
+   *
+   * @return array List of currently available Transformation callbacks
+   */
+  public function getTransformations()
+  {
+    return $this->transformations;
+  }
+
+  /**
+   * Get a list of currently called Transformations
+   *
+   * @return array List of currently called Transformation
+   */
+  public function getStack()
+  {
+    return $this->stack;
+  }
+
+  /**
+   * Process the stack of transformation on the given Image instance
+   *
+   * @param \ImageTransform\Image $image Image instance to be processed
+   */
+  public function process(\ImageTransform\Image $image)
+  {
+    foreach ($this->stack as $entry)
+    {
+      $method         = $entry['method'];
+      $arguments      = $entry['arguments'];
+      $transformation = $this->transformations[$method];
+
+      $transformation->setImage($image);
       call_user_func_array(array($transformation, $method), $arguments);
+      $transformation->unsetImage();
     }
   }
 
+  /**
+   * Shortcut for \ImageTransform\Transformer::process()
+   *
+   * @param \ImageTransform\Image $image Image instance to be processed
+   */
   public function __invoke(Image $image)
   {
     $this->process($image);
   }
 
   /**
-   * Delegation mechanism.
-   *
-   * Fetches all calls to Image instances and forwards them to the appropriate Transformation.
+   * Fetches all calls to the Transformer and puts them on a stack for later processing.
    *
    * @param  string  $method    Name of the method called
    * @param  array   $arguments Arguments passed with the call
-   * @return boolean
+   * @return \ImageTransform\Transformer
    */
   public function __call($method, $arguments)
   {
-    array_push($this->attributes['core.program_stack'], $this->findCallback($method, $arguments));
-    return $this;
-  }
-
-  public function findCallback($method, $arguments)
-  {
-    foreach ($this->get('core.callback_classes', array()) as $className => $callbacks)
+    if (!isset($this->transformations[$method]))
     {
-      if (in_array($method, $callbacks))
-      {
-        return array('className' => $className, 'method' => $method, 'arguments' => $arguments);
-      }
+      throw new \BadMethodCallException($method.' is not a valid callback!');
     }
 
-    throw new \BadMethodCallException();
-  }
+    $this->stack[] = array(
+      'method'    => $method,
+      'arguments' => $arguments
+    );
 
-  /**
-   * Attribute accessor.
-   *
-   * @param  string $key     Name of the attribute to return
-   * @param  array  $default Default value in case the key is unknown
-   * @return mixed           The value as stored in $this->attributes[$key] or the $default
-   */
-  public function get($key, $default = false)
-  {
-    return array_key_exists($key, $this->attributes) ? $this->attributes[$key] : $default;
-  }
-
-  /**
-   * Attribute mutator.
-   *
-   * @param  string $key   Name of the attribute to set
-   * @param  array  $value Value to be set
-   */
-  public function set($key, $value)
-  {
-    $this->attributes[$key] = $value;
+    return $this;
   }
 }

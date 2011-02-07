@@ -6,10 +6,10 @@ require __DIR__.'/../src/autoload.php';
 
 use ImageTransform\Image\GD as Image;
 use ImageTransform\Transformer;
-use ImageTransform\Transformation\Resize;
+use ImageTransform\Transformation\Resize\GD as Resize;
 
 $transformer = new Transformer(array(
-  'ImageTransform\Transformation\Resize\GD',
+  new Resize(),
 ));
 
 $transformer->resize(100, 100, Resize::PROPORTIONAL | Resize::MINIMUM);
