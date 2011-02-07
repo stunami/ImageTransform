@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-namespace ImageTransfrom\Test\Transformation\Transformation\Resize;
+namespace ImageTransfrom\Test\Transformation\Resize;
 
 use ImageTransform\Image;
 use ImageTransform\Transformation\Resize;

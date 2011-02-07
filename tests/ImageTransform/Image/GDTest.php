@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-namespace ImageTransform\Tests;
+namespace ImageTransform\Tests\Image;
 
 use ImageTransform\Image\GD as Image;
 
