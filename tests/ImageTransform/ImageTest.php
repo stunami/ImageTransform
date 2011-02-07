@@ -19,11 +19,17 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     $this->image = $this->getMock('\ImageTransform\Image', array('create', 'open', 'flush', 'save', 'saveAs'));
   }
 
+  /**
+   * @covers \ImageTransform\Image::__construct
+   */
   public function testNewImage()
   {
     $this->assertInstanceOf('ImageTransform\Image', $this->image);
   }
 
+  /**
+   * @covers \ImageTransform\Image::__construct
+   */
   public function testOpeningNewImage()
   {
     $filepath = '/path/to/some/file';
@@ -33,6 +39,10 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     $this->image->__construct($filepath);
   }
 
+  /**
+   * @covers \ImageTransform\Image::get
+   * @covers \ImageTransform\Image::set
+   */
   public function testAttributeAccess()
   {
     $this->assertFalse($this->image->get('test.value'));

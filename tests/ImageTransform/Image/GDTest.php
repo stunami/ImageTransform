@@ -14,7 +14,7 @@ use ImageTransform\Image\GD as Image;
 class GDTest extends \PHPUnit_Framework_TestCase
 {
   /**
-   * @covers \ImageTransform\FileAccessAdapter\GD::create
+   * @covers \ImageTransform\Image\GD::create
    */
   public function testCreation()
   {
@@ -31,7 +31,7 @@ class GDTest extends \PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider fixtureImages
-   * @covers \ImageTransform\FileAccessAdapter\GD::open
+   * @covers \ImageTransform\Image\GD::open
    */
   public function testOpening($filepath, $mimeType, $width, $height)
   {
@@ -46,7 +46,7 @@ class GDTest extends \PHPUnit_Framework_TestCase
 
   /**
    * @expectedException \InvalidArgumentException
-   * @covers \ImageTransform\FileAccessAdapter\GD::open
+   * @covers \ImageTransform\Image\GD::open
    */
   public function testOpeningOfUnreadableFile()
   {
@@ -56,7 +56,7 @@ class GDTest extends \PHPUnit_Framework_TestCase
 
   /**
    * @expectedException \UnexpectedValueException
-   * @covers \ImageTransform\FileAccessAdapter\GD::open
+   * @covers \ImageTransform\Image\GD::open
    */
   public function testOpeningOfUnsupportedMimeType()
   {
@@ -65,7 +65,7 @@ class GDTest extends \PHPUnit_Framework_TestCase
   }
 
   /**
-   * @covers \ImageTransform\FileAccessAdapter\GD::flush
+   * @covers \ImageTransform\Image\GD::flush
    */
   public function testFlushing()
   {
@@ -76,7 +76,7 @@ class GDTest extends \PHPUnit_Framework_TestCase
   }
 
   /**
-   * @covers \ImageTransform\FileAccessAdapter\GD::save
+   * @covers \ImageTransform\Image\GD::save
    */
   public function testSaving()
   {
@@ -89,7 +89,7 @@ class GDTest extends \PHPUnit_Framework_TestCase
 
   /**
    * @expectedException \InvalidArgumentException
-   * @covers \ImageTransform\FileAccessAdapter\GD::save
+   * @covers \ImageTransform\Image\GD::save
    */
   public function testSavingWithNoFilepath()
   {
@@ -98,7 +98,7 @@ class GDTest extends \PHPUnit_Framework_TestCase
   }
 
   /**
-   * @covers \ImageTransform\FileAccessAdapter\GD::saveAs
+   * @covers \ImageTransform\Image\GD::saveAs
    */
   public function testSavingAtGivenFilepath()
   {
@@ -110,7 +110,7 @@ class GDTest extends \PHPUnit_Framework_TestCase
 
   /**
    * @expectedException \InvalidArgumentException
-   * @covers \ImageTransform\FileAccessAdapter\GD::saveAs
+   * @covers \ImageTransform\Image\GD::saveAs
    */
   public function testSavingAtGivenUnwritableFilepath()
   {
@@ -120,7 +120,7 @@ class GDTest extends \PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider fixtureImages
-   * @covers \ImageTransform\FileAccessAdapter\GD::out
+   * @covers \ImageTransform\Image\GD::out
    */
   public function testFlushingDifferentMimeTypes($filepath, $mimeType, $width, $height)
   {
@@ -134,7 +134,7 @@ class GDTest extends \PHPUnit_Framework_TestCase
 
   /**
    * @expectedException \UnexpectedValueException
-   * @covers \ImageTransform\FileAccessAdapter\GD::out
+   * @covers \ImageTransform\Image\GD::out
    */
   public function testFlushingWhenNoResourceIsSet()
   {
@@ -144,14 +144,14 @@ class GDTest extends \PHPUnit_Framework_TestCase
 
   /**
    * @expectedException \UnexpectedValueException
-   * @covers \ImageTransform\FileAccessAdapter\GD::out
+   * @covers \ImageTransform\Image\GD::out
    */
   public function testFlushingUnsupportedMimeType()
   {
-    $filepath = __FILE__;
-    $image = new Image($filepath);
+    $image = new Image();
+    $image->set('image.resource', __FILE__);
 
-    $image->flush();
+    $image->flush('mime/unsupported');
   }
 
   public static function fixtureImages()
