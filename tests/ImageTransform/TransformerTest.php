@@ -23,7 +23,7 @@ class TransformerTest extends \PHPUnit_Framework_TestCase
 
   public function testNewTransformationConfigured()
   {
-    $stubTransformation = $this->getMock('\ImageTransform\Transformation', array('dummyCallback'));
+    $stubTransformation = $this->getMock('\Object', array('dummyCallback'));
 
     $transformer = new Transformer(array($stubTransformation));
 

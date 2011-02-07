@@ -9,34 +9,36 @@
 
 namespace ImageTransform\Transformation;
 
-use ImageTransform\Transformation;
+use ImageTransform\Image;
 
 /**
  * Abstract implementation of the resize transformation. Includes the calculation of the target size.
  *
  * @author Christian Schaefer <caefer@ical.ly>
  */
-abstract class Resize extends Transformation
+abstract class Resize
 {
   const PROPORTIONAL = 1;
   const NO_INFLATE   = 2;
   const NO_DEFLATE   = 4;
   const MINIMUM      = 8;
 
-  public function resize($targetWidth, $targetHeight, $flags = 0)
+  public function resize(\ImageTransform\Image $image, $targetWidth, $targetHeight, $flags = 0)
   {
-    $originalImage = $this->image->get('image.resource');
-    $originalWidth = $this->image->get('image.width');
-    $originalHeight = $this->image->get('image.height');
+    $originalImage = $image->get('image.resource');
+    $originalWidth = $image->get('image.width');
+    $originalHeight = $image->get('image.height');
 
     list($finalWidth, $finalHeight) = $this->computeFinalDimension($originalWidth, $originalHeight, $targetWidth, $targetHeight, $flags);
 
     if (($finalImage = $this->doResize($originalImage, $originalWidth, $originalHeight, $finalWidth, $finalHeight)))
     {
-      $this->image->set('image.resource', $finalImage);
-      $this->image->set('image.width', $finalWidth);
-      $this->image->set('image.height', $finalHeight);
+      $image->set('image.resource', $finalImage);
+      $image->set('image.width', $finalWidth);
+      $image->set('image.height', $finalHeight);
     }
+
+    return $image;
   }
 
   protected function computeFinalDimension($originalWidth, $originalHeight, $targetWidth, $targetHeight, $flags)

@@ -26,12 +26,6 @@ class GDTest extends \PHPUnit_Framework_TestCase
     $this->image->set('image.height', $height);
 
     $this->resize = new Resize();
-    $this->resize->setImage($this->image);
-  }
-
-  protected function tearDown()
-  {
-    $this->resize->unsetImage();
   }
 
   /**
@@ -42,7 +36,7 @@ class GDTest extends \PHPUnit_Framework_TestCase
     $width = 20;
     $height = 20;
 
-    $this->resize->resize($width, $height);
+    $this->image = $this->resize->resize($this->image, $width, $height);
     $this->assertEquals($width, $this->image->get('image.width'));
     $this->assertEquals($height, $this->image->get('image.height'));
     $this->assertNotEquals($this->resource, $this->image->get('image.resource'));

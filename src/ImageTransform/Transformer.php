@@ -10,7 +10,6 @@
 namespace ImageTransform;
 
 use ImageTransform\Image;
-use ImageTransform\Transformation;
 
 /**
  * Transformer class.
@@ -20,7 +19,7 @@ use ImageTransform\Transformation;
 class Transformer
 {
   /**
-   * @var array $transformations Transformation instances that are available for callback
+   * @var array $transformations transformations that are available for callback
    */
   protected $transformations = array();
 
@@ -32,7 +31,7 @@ class Transformer
   /**
    * C'tor
    *
-   * @param array $transformations Array of Transformation instances available for callback
+   * @param array $transformations Array of transformations available for callback
    */
   public function __construct($transformations = array())
   {
@@ -43,11 +42,11 @@ class Transformer
   }
 
   /**
-   * Adds a Transformation to the available callbacks
+   * Adds a transformation to the available callbacks
    *
-   * @param \ImageTransform\Transformation $transformation Transformation instance available for callback
+   * @param object $transformation transformation available for callback
    */
-  public function addTransformation(Transformation $transformation)
+  public function addTransformation($transformation)
   {
     $methods = get_class_methods($transformation);
     unset($methods['setImage'], $methods['unset']);
@@ -59,9 +58,9 @@ class Transformer
   }
 
   /**
-   * Get a list of currently available Transformation callbacks
+   * Get a list of currently available transformation callbacks
    *
-   * @return array List of currently available Transformation callbacks
+   * @return array List of currently available transformation callbacks
    */
   public function getTransformations()
   {
@@ -69,9 +68,9 @@ class Transformer
   }
 
   /**
-   * Get a list of currently called Transformations
+   * Get a list of currently called transformations
    *
-   * @return array List of currently called Transformation
+   * @return array List of currently called transformation
    */
   public function getStack()
   {
@@ -91,9 +90,9 @@ class Transformer
       $arguments      = $entry['arguments'];
       $transformation = $this->transformations[$method];
 
-      $transformation->setImage($image);
-      call_user_func_array(array($transformation, $method), $arguments);
-      $transformation->unsetImage();
+      array_unshift($arguments, $image);
+
+      $image = call_user_func_array(array($transformation, $method), $arguments);
     }
   }
 

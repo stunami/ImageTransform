@@ -18,13 +18,7 @@ class ResizeTest extends \PHPUnit_Framework_TestCase
   {
     $this->image = $this->getMock('\ImageTransform\Image', array('create', 'open', 'flush', 'save', 'saveAs'));
     $this->resize = $this->getMock('\ImageTransform\Transformation\Resize', array('doResize'));
-    $this->resize->setImage($this->image);
     $this->resize->expects($this->any())->method('doResize')->will($this->returnValue(true));
-  }
-
-  protected function tearDown()
-  {
-    $this->resize->unsetImage();
   }
 
   /**
@@ -37,7 +31,7 @@ class ResizeTest extends \PHPUnit_Framework_TestCase
     $this->image->set('image.width', $sourceDimensions[0]);
     $this->image->set('image.height', $sourceDimensions[1]);
 
-    $this->resize->resize($targetDimensions[0], $targetDimensions[1], $options);
+    $this->resize->resize($this->image, $targetDimensions[0], $targetDimensions[1], $options);
 
     $this->assertEquals($resultDimensions[0], $this->image->get('image.width'));
     $this->assertEquals($resultDimensions[1], $this->image->get('image.height'));

@@ -10,6 +10,7 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="true"
+         verbose="true"
          testSuiteLoaderClass="PHPUnit_Runner_StandardTestSuiteLoader"
          strict="true">
 
