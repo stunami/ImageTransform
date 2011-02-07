@@ -14,10 +14,10 @@ Load an image, resize it to 80 x 60 pixels.
 
     $image = new Image('image1.jpg');
 
-    $transformer->resize(80, 60)
+    $transformation->resize(80, 60)
                 ->process($image);
 
     $image->save();
 
-Methods of `ImageTransform\Transformer` are added via so called `Transformations`.
+Methods of `ImageTransform\Transformation` are added via so called `Transformations`.
 

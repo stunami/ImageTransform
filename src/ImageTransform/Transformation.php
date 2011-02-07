@@ -12,11 +12,11 @@ namespace ImageTransform;
 use ImageTransform\Image;
 
 /**
- * Transformer class.
+ * Transformation class.
  *
  * @author Christian Schaefer <caefer@ical.ly>
  */
-class Transformer
+class Transformation
 {
   /**
    * @var array $transformations transformations that are available for callback
@@ -97,7 +97,7 @@ class Transformer
   }
 
   /**
-   * Shortcut for \ImageTransform\Transformer::process()
+   * Shortcut for \ImageTransform\Transformation::process()
    *
    * @param \ImageTransform\Image $image Image instance to be processed
    */
@@ -107,11 +107,11 @@ class Transformer
   }
 
   /**
-   * Fetches all calls to the Transformer and puts them on a stack for later processing.
+   * Fetches all calls to the Transformation and puts them on a stack for later processing.
    *
    * @param  string  $method    Name of the method called
    * @param  array   $arguments Arguments passed with the call
-   * @return \ImageTransform\Transformer
+   * @return \ImageTransform\Transformation
    */
   public function __call($method, $arguments)
   {
