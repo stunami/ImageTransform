@@ -34,6 +34,9 @@ class GDTest extends \PHPUnit_Framework_TestCase
     $this->resize->unsetImage();
   }
 
+  /**
+   * @covers \ImageTransform\Transformation\Resize\GD::doResize
+   */
   public function testResizing()
   {
     $width = 20;

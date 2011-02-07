@@ -29,6 +29,8 @@ class ResizeTest extends \PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider transformations
+   * @covers \ImageTransform\Transformation\Resize::resize
+   * @covers \ImageTransform\Transformation\Resize::computeFinalDimension
    */
   public function testComputingDimansions($sourceDimensions, $targetDimensions, $resultDimensions, $options)
   {
