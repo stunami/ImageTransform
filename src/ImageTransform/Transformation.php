@@ -48,7 +48,8 @@ class Transformation
   {
     foreach ($this->stack as $entry)
     {
-      extract($entry);
+      $callback = $entry['callback'];
+      $arguments = $entry['arguments'];
 
       array_unshift($arguments, $image);
 
