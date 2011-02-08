@@ -52,7 +52,7 @@ class Transformation
 
       array_unshift($arguments, $image);
 
-      $image = call_user_func_array($callback, $arguments);
+      call_user_func_array($callback, $arguments);
     }
   }
 
@@ -84,7 +84,7 @@ class Transformation
     }
     catch(\OutOfBoundsException $e)
     {
-      throw new \BadMethodCallException($method.' is not a valid callback!');
+      throw new \BadMethodCallException($method.' is not a valid callback! ('.$e->getMessage().')');
     }
 
     return $this;
