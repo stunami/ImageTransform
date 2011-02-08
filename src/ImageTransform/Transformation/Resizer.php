@@ -16,7 +16,7 @@ use ImageTransform\Image;
  *
  * @author Christian Schaefer <caefer@ical.ly>
  */
-abstract class Resize
+abstract class Resizer
 {
   const PROPORTIONAL = 1;
   const NO_INFLATE   = 2;

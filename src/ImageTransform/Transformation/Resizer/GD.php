@@ -7,16 +7,16 @@
  * file that was distributed with this source code.
  */
 
-namespace ImageTransform\Transformation\Resize;
+namespace ImageTransform\Transformation\Resizer;
 
-use ImageTransform\Transformation\Resize;
+use ImageTransform\Transformation\Resizer;
 
 /**
  * Concrete GD implementation of the resize transformation
  *
  * @author Christian Schaefer <caefer@ical.ly>
  */
-class GD extends Resize
+class GD extends Resizer
 {
   protected function doResize($originalImage, $originalWidth, $originalHeight, $targetWidth, $targetHeight)
   {

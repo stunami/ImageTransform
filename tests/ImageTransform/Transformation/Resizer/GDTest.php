@@ -7,10 +7,10 @@
  * file that was distributed with this source code.
  */
 
-namespace ImageTransform\Tests\Transformation\Resize;
+namespace ImageTransform\Tests\Transformation\Resizer;
 
 use ImageTransform\Image;
-use ImageTransform\Transformation\Resize\GD as Resize;
+use ImageTransform\Transformation\Resizer\GD as Resizer;
 
 class GDTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,11 +25,11 @@ class GDTest extends \PHPUnit_Framework_TestCase
     $this->image->set('image.width', $width);
     $this->image->set('image.height', $height);
 
-    $this->resize = new Resize();
+    $this->resize = new Resizer();
   }
 
   /**
-   * @covers \ImageTransform\Transformation\Resize\GD::doResize
+   * @covers \ImageTransform\Transformation\Resizer\GD::doResize
    */
   public function testResizing()
   {
