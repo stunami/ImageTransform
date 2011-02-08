@@ -14,29 +14,46 @@ use ImageTransform\Image;
 
 class TransformationTest extends \PHPUnit_Framework_TestCase
 {
-  public function testNewTransformation()
+  /**
+   * @expectedException \OutOfBoundsException
+   * @covers \ImageTransform\Transformation::getTransformation
+   */
+  public function testUnaddedTransformation()
   {
-    $transformation = new Transformation(array());
-    $this->assertInstanceOf('\ImageTransform\Transformation', $transformation);
-    $this->assertEmpty($transformation->getTransformations());
-  }
-
-  public function testNewTransformationConfigured()
-  {
-    $stubTransformation = $this->getMock('\Object', array('dummyCallback'));
-
-    $transformation = new Transformation(array($stubTransformation));
-
-    $this->assertArrayHasKey('dummyCallback', $transformation->getTransformations());
-
-    return $transformation;
+    $methodName = 'dummyCallback';
+    Transformation::getTransformation($methodName);
   }
 
   /**
-   * @depends testNewTransformationConfigured
+   * @depends testUnaddedTransformation
+   * @covers \ImageTransform\Transformation::addTransformation
+   * @covers \ImageTransform\Transformation::getTransformation
    */
-  public function testSuccessfulDelegation($transformation)
+  public function testAddingTransformation()
   {
+    $methodName = 'dummyCallback';
+    $stubTransformation = $this->getMock('\Object', array($methodName));
+
+    Transformation::addTransformation($stubTransformation);
+
+    $callback = Transformation::getTransformation($methodName);
+    $this->assertInternalType('array', $callback);
+    $this->assertEquals($stubTransformation, $callback[0]);
+    $this->assertEquals($methodName, $callback[1]);
+  }
+
+  /**
+   * @covers \ImageTransform\Transformation::__call
+   */
+  public function testSuccessfulDelegation()
+  {
+    $methodName = 'dummyCallback';
+    $stubTransformation = $this->getMock('\Object', array($methodName));
+
+    Transformation::addTransformation($stubTransformation);
+
+    $transformation = new Transformation();
+
     $this->assertEquals(0, count($transformation->getStack()));
     $transformation->dummyCallback();
     $this->assertEquals(1, count($transformation->getStack()));
@@ -47,16 +64,20 @@ class TransformationTest extends \PHPUnit_Framework_TestCase
   }
 
   /**
-   * @depends testNewTransformationConfigured
+   * @depends testUnaddedTransformation
    * @expectedException \BadMethodCallException
+   * @covers \ImageTransform\Transformation::__call
    */
   public function testFailedDelegation($transformation)
   {
-    $transformation->nonExistentCallback();
+    $methodName = 'dummyCallback';
+    $transformation = new Transformation();
+    $transformation->$methodName();
   }
 
   /**
    * @depends testSuccessfulDelegation
+   * @covers \ImageTransform\Transformation::process
    */
   public function testSuccessfulProcessing($transformation)
   {
@@ -65,11 +86,14 @@ class TransformationTest extends \PHPUnit_Framework_TestCase
   }
 
   /**
-   * @depends testSuccessfulDelegation
+   * @covers \ImageTransform\Transformation::__invoke
    */
-  public function testSuccessfulProcessingByDirectInvokation($transformation)
+  public function testSuccessfulProcessingByDirectInvokation()
   {
     $image = $this->getMock('\ImageTransform\Image', array('create', 'open', 'flush', 'save', 'saveAs'));
+    $transformation = $this->getMock('\ImageTransform\Transformation', array('process'));
+    $transformation->expects($this->once())->method('process')->with($this->equalTo($image));
+
     $transformation($image);
   }
 }

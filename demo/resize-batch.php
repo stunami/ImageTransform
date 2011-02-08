@@ -8,12 +8,16 @@ use ImageTransform\Image\GD as Image;
 use ImageTransform\Transformation;
 use ImageTransform\Transformation\Resize\GD as Resize;
 
-$transformation = new Transformation(array(
-  new Resize(),
-));
+// REGISTER TRANSFORMATION CALLBACKS
+Transformation::addTransformation(new Resize());
 
+// INSTANTIATION
+$transformation = new Transformation();
+
+// CONFIGURING TRANSFORMATION STACK
 $transformation->resize(100, 100, Resize::PROPORTIONAL | Resize::MINIMUM);
 
+// PROCESSING IMAGES
 $files = glob(__DIR__.'/images/*.jpg');
 foreach($files as $filepath)
 {

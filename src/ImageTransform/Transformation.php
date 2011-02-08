@@ -20,52 +20,14 @@ class Transformation
 {
   /**
    * @var array $transformations transformations that are available for callback
+   * @static
    */
-  protected $transformations = array();
+  protected static $transformations = array();
 
   /**
    * @var array $stack Program stack of called transformations
    */
   protected $stack = array();
-
-  /**
-   * C'tor
-   *
-   * @param array $transformations Array of transformations available for callback
-   */
-  public function __construct($transformations = array())
-  {
-    foreach($transformations as $transformation)
-    {
-      $this->addTransformation($transformation);
-    }
-  }
-
-  /**
-   * Adds a transformation to the available callbacks
-   *
-   * @param object $transformation transformation available for callback
-   */
-  public function addTransformation($transformation)
-  {
-    $methods = get_class_methods($transformation);
-    unset($methods['setImage'], $methods['unset']);
-
-    foreach($methods as $method)
-    {
-      $this->transformations[$method] = $transformation;
-    }
-  }
-
-  /**
-   * Get a list of currently available transformation callbacks
-   *
-   * @return array List of currently available transformation callbacks
-   */
-  public function getTransformations()
-  {
-    return $this->transformations;
-  }
 
   /**
    * Get a list of currently called transformations
@@ -86,13 +48,11 @@ class Transformation
   {
     foreach ($this->stack as $entry)
     {
-      $method         = $entry['method'];
-      $arguments      = $entry['arguments'];
-      $transformation = $this->transformations[$method];
+      extract($entry);
 
       array_unshift($arguments, $image);
 
-      $image = call_user_func_array(array($transformation, $method), $arguments);
+      $image = call_user_func_array($callback, $arguments);
     }
   }
 
@@ -115,16 +75,53 @@ class Transformation
    */
   public function __call($method, $arguments)
   {
-    if (!isset($this->transformations[$method]))
+    try
+    {
+      $this->stack[] = array(
+        'callback'  => static::getTransformation($method),
+        'arguments' => $arguments
+      );
+    }
+    catch(\OutOfBoundsException $e)
     {
       throw new \BadMethodCallException($method.' is not a valid callback!');
     }
 
-    $this->stack[] = array(
-      'method'    => $method,
-      'arguments' => $arguments
-    );
-
     return $this;
+  }
+
+  /**
+   * Adds a transformation to the available callbacks
+   *
+   * @static
+   *
+   * @param object $transformation transformation available for callback
+   */
+  public static function addTransformation($transformation)
+  {
+    $methods = get_class_methods($transformation);
+    unset($methods['setImage'], $methods['unset']);
+
+    foreach($methods as $method)
+    {
+      self::$transformations[$method] = $transformation;
+    }
+  }
+
+  /**
+   * Get a list of currently available transformation callbacks
+   *
+   * @static
+   *
+   * @return array List of currently available transformation callbacks
+   */
+  public static function getTransformation($method)
+  {
+    if (!isset(self::$transformations[$method]))
+    {
+      throw new \OutOfBoundsException('No transformation registered for "'.$method.'"');
+    }
+
+    return array(self::$transformations[$method], $method);
   }
 }
