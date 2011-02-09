@@ -44,6 +44,7 @@ class TransformationTest extends \PHPUnit_Framework_TestCase
 
   /**
    * @covers \ImageTransform\Transformation::__call
+   * @covers \ImageTransform\Transformation::getStack
    */
   public function testSuccessfulDelegation()
   {
