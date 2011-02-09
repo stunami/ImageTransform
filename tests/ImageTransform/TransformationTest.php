@@ -81,7 +81,7 @@ class TransformationTest extends \PHPUnit_Framework_TestCase
    */
   public function testSuccessfulProcessing($transformation)
   {
-    $image = $this->getMock('\ImageTransform\Image', array('create', 'open', 'flush', 'save', 'saveAs'));
+    $image = $this->getMock('\ImageTransform\Image', array('create', 'open', 'flush', 'save', 'saveAs', 'initialize'));
     $transformation->process($image);
   }
 
@@ -90,7 +90,7 @@ class TransformationTest extends \PHPUnit_Framework_TestCase
    */
   public function testSuccessfulProcessingByDirectInvokation()
   {
-    $image = $this->getMock('\ImageTransform\Image', array('create', 'open', 'flush', 'save', 'saveAs'));
+    $image = $this->getMock('\ImageTransform\Image', array('create', 'open', 'flush', 'save', 'saveAs', 'initialize'));
     $transformation = $this->getMock('\ImageTransform\Transformation', array('process'));
     $transformation->expects($this->once())->method('process')->with($this->equalTo($image));
 

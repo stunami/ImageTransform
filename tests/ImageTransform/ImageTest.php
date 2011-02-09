@@ -16,7 +16,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
 {
   protected function setUp()
   {
-    $this->image = $this->getMock('\ImageTransform\Image', array('create', 'open', 'flush', 'save', 'saveAs'));
+    $this->image = $this->getMock('\ImageTransform\Image', array('create', 'open', 'flush', 'save', 'saveAs', 'initialize'));
   }
 
   /**

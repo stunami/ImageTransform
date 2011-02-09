@@ -16,7 +16,7 @@ class ResizerTest extends \PHPUnit_Framework_TestCase
 {
   protected function setUp()
   {
-    $this->image = $this->getMock('\ImageTransform\Image', array('create', 'open', 'flush', 'save', 'saveAs'));
+    $this->image = $this->getMock('\ImageTransform\Image', array('create', 'open', 'flush', 'save', 'saveAs', 'initialize'));
     $this->resize = $this->getMock('\ImageTransform\Transformation\Resizer', array('doResize'));
     $this->resize->expects($this->any())->method('doResize')->will($this->returnValue(true));
   }

@@ -20,7 +20,7 @@ class GDTest extends \PHPUnit_Framework_TestCase
     $height = 10;
     $this->resource = imagecreatetruecolor($width, $height);
 
-    $this->image = $this->getMock('\ImageTransform\Image', array('create', 'open', 'flush', 'save', 'saveAs'));
+    $this->image = $this->getMock('\ImageTransform\Image', array('create', 'open', 'flush', 'save', 'saveAs', 'initialize'));
     $this->image->set('image.resource', $this->resource);
     $this->image->set('image.width', $width);
     $this->image->set('image.height', $height);
