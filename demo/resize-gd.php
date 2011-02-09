@@ -17,11 +17,8 @@ $transformation = new Transformation();
 // CONFIGURING TRANSFORMATION STACK
 $transformation->resize(100, 100, Resizer::PROPORTIONAL | Resizer::MINIMUM);
 
-// PROCESSING IMAGES
-$files = glob(__DIR__.'/images/*.jpg');
-foreach($files as $filepath)
-{
-  $image = new Image($filepath);
-  $transformation($image);
-  $image->saveAs(__DIR__.'/_resized-batch-'.basename($filepath));
-}
+// PROCESSING IMAGE
+$filepath = __DIR__.'/images/green-hornet.jpg';
+$image = new Image($filepath);
+$transformation->process($image);
+$image->saveAs(__DIR__.'/_resized-gd.jpg');
