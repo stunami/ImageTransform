@@ -20,6 +20,17 @@ use ImageTransform\FileAccessAdapter;
 class GD extends Image implements FileAccessAdapter
 {
   /**
+   * Initializes image-api specific code
+   */
+  protected function initialize()
+  {
+    if (!extension_loaded('gd'))
+    {
+      throw new \RuntimeException('The image processing library GD is not enabled. See PHP Manual for installation instructions.');
+    }
+  }
+
+  /**
    * Create an image resource
    *
    * @see ImageTransform\FileAccessAdapter
@@ -122,9 +133,7 @@ class GD extends Image implements FileAccessAdapter
   }
 
   /**
-   * Save an Image resource under a given filepath
-   *
-   * @see ImageTransform\FileAccessAdapter
+   * Save an Image resource under a given filepath or stdout
    *
    * @param string               $filepath Locastion where to save the resource
    * @param string               $mimeType Mime type of the target file

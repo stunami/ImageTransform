@@ -30,11 +30,18 @@ abstract class Image
    */
   public function __construct($filepath = false)
   {
+    $this->initialize();
+
     if(false !== $filepath)
     {
       $this->open($filepath);
     }
   }
+
+  /**
+   * Initializes image-api specific code
+   */
+  abstract protected function initialize();
 
   /**
    * Attribute accessor.
