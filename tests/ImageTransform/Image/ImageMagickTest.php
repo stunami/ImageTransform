@@ -14,6 +14,20 @@ use ImageTransform\Image\ImageMagick as Image;
 class ImageMagickTest extends \PHPUnit_Framework_TestCase
 {
   /**
+   * @covers \ImageTransform\Image\ImageMagick::initialize
+   */
+  public function testInitialization()
+  {
+    if (!extension_loaded('imagick'))
+    {
+      $this->setExpectedException('\RuntimeException');
+    }
+
+    $image = new Image();
+    $this->assertInstanceof('\ImageTransform\Image', $image);
+  }
+
+  /**
    * @covers \ImageTransform\Image\ImageMagick::create
    * @covers \ImageTransform\FileAccessAdapter::create
    */

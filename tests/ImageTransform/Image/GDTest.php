@@ -14,6 +14,20 @@ use ImageTransform\Image\GD as Image;
 class GDTest extends \PHPUnit_Framework_TestCase
 {
   /**
+   * @covers \ImageTransform\Image\GD::initialize
+   */
+  public function testInitialization()
+  {
+    if (!extension_loaded('gd'))
+    {
+      $this->setExpectedException('\RuntimeException');
+    }
+
+    $image = new Image();
+    $this->assertInstanceof('\ImageTransform\Image', $image);
+  }
+
+  /**
    * @covers \ImageTransform\Image\GD::create
    * @covers \ImageTransform\FileAccessAdapter::create
    */
