@@ -5,20 +5,22 @@ namespace ImageTransform\Demo;
 require __DIR__.'/../src/autoload.php';
 
 use ImageTransform\Image\GD as Image;
-use ImageTransform\Transformation;
-use ImageTransform\Transformation\Resizer\GD as Resizer;
 
-// REGISTER TRANSFORMATION CALLBACKS
-Transformation::addTransformation(new Resizer());
+use ImageTransform\Processor\GD as Processor;
 
 // INSTANTIATION
-$transformation = new Transformation();
+$processor = new Processor();
+$processor->addTransformations(array(array('method' => 'resize', 'class' => '\\ImageTransform\\Transformation\\Resizer\\GD')));
+$processor->addTransformation('resize', '\\ImageTransform\\Transformation\\Resizer\\GD');
 
 // CONFIGURING TRANSFORMATION STACK
-$transformation->resize(100, 100, Resizer::PROPORTIONAL | Resizer::MINIMUM);
+$processor->resize(101, 101);
+
+$more = clone $processor;
+$more->resize(50, 50);
 
 // PROCESSING IMAGE
 $filepath = __DIR__.'/images/green-hornet.jpg';
 $image = new Image($filepath);
-$transformation->process($image);
+$more->process($image);
 $image->saveAs(__DIR__.'/_resized-gd.jpg');
