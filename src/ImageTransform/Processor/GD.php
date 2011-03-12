@@ -11,9 +11,7 @@ namespace ImageTransform\Processor;
 
 use ImageTransform\Processor;
 
-use ImageTransform\Transformation\GDInterface;
-
-class GD extends Processor implements ProcessorInterface
+class GD extends Processor implements GDInterface
 {
   public function isValidClass($class)
   {

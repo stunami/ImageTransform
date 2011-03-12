@@ -2,6 +2,6 @@
 
 namespace ImageTransform\Processor;
 
-interface GDInterface extends TranformerInterface
+interface GDInterface extends ProcessorInterface
 {
 }
