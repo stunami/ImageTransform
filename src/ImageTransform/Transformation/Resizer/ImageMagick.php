@@ -10,13 +10,14 @@
 namespace ImageTransform\Transformation\Resizer;
 
 use ImageTransform\Transformation\Resizer;
+use \ImageTransform\Transformation\ImageMagickInterface;
 
 /**
  * Concrete ImageMagick implementation of the resize transformation
  *
  * @author Christian Schaefer <caefer@ical.ly>
  */
-class ImageMagick extends Resizer
+class ImageMagick extends Resizer implements ImageMagickInterface
 {
   protected function doResize($originalImage, $originalWidth, $originalHeight, $targetWidth, $targetHeight)
   {

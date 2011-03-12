@@ -10,13 +10,14 @@
 namespace ImageTransform\Transformation\Resizer;
 
 use ImageTransform\Transformation\Resizer;
+use ImageTransform\Transformation\GDInterface;
 
 /**
  * Concrete GD implementation of the resize transformation
  *
  * @author Christian Schaefer <caefer@ical.ly>
  */
-class GD extends Resizer
+class GD extends Resizer implements GDInterface
 {
   protected function doResize($originalImage, $originalWidth, $originalHeight, $targetWidth, $targetHeight)
   {
